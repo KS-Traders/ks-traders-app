@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple Hair Colour — KS Traders Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @media print {
+      header, .tab-btn, #exportControls, #chartsContainer, #kpiContainer, #inventoryCards, #stockInForm, #saleForm, .no-print {
+        display: none !important;
+      }
+      #tab-salesLog { display: block !important; }
+      body { background: white !important; color: black !important; }
+      table { width: 100% !important; border: 1px solid #cbd5e1 !important; }
+      th, td { border: 1px solid #cbd5e1 !important; padding: 6px !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen">
+  <!-- Top Navigation Bar -->
+  <header class="bg-indigo-800 text-white p-4 shadow-md sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🍏</span>
+        <div>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">Apple Hair Colour — KS Traders</h1>
+          <p class="text-xs text-indigo-200">Unified Management Dashboard</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 text-xs sm:text-sm bg-indigo-900/90 px-3 py-1.5 rounded-lg border border-indigo-700">
+        <label for="partnerSelect" class="text-indigo-200 font-medium">Logged in:</label>
+        <select id="partnerSelect" class="bg-indigo-950 text-white rounded px-2 py-1 outline-none font-semibold">
+          <option value="Khalid Saleem">Khalid Saleem</option>
+          <option value="Asif Ali">Asif Ali</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="max-w-6xl mx-auto p-3 sm:p-6 space-y-5">
+    <!-- Tabs Navigation -->
+    <div class="flex bg-white p-1.5 rounded-xl shadow-sm border border-slate-200 gap-1 overflow-x-auto pb-1.5">
+      <button onclick="switchTab('inventory')" id="tabBtn-inventory" class="tab-btn px-4 py-2 text-xs sm:text-sm font-bold rounded-lg bg-indigo-600 text-white whitespace-nowrap transition">
+        📦 Stock & Inventory
+      </button>
+      <button onclick="switchTab('cartOrders')" id="tabBtn-cartOrders" class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-50 rounded-lg whitespace-nowrap transition flex items-center gap-1.5">
+        🛒 Cart & Online Orders
+        <span id="badgePendingOrders" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold hidden">0</span>
+      </button>
+      <button onclick="switchTab('newSale')" id="tabBtn-newSale" class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-50 rounded-lg whitespace-nowrap transition">
+        ➕ Record Sale / Advance
+      </button>
+      <button onclick="switchTab('stockIn')" id="tabBtn-stockIn" class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-50 rounded-lg whitespace-nowrap transition">
+        📥 Inward Stock
+      </button>
+      <button onclick="switchTab('salesLog')" id="tabBtn-salesLog" class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-50 rounded-lg whitespace-nowrap transition">
+        📊 Analytics & History
+      </button>
+    </div>
+
+    <!-- 1. INVENTORY TAB -->
+    <section id="tab-inventory" class="tab-content block space-y-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-800">Current Stock by Shade</h2>
+          <p class="text-xs text-slate-500">Live inventory synchronized across all devices</p>
+        </div>
+        <button onclick="loadInventory()" class="text-xs bg-white hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm transition">
+          ↻ Refresh
+        </button>
+      </div>
+      <div id="inventoryCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-6 text-center text-slate-400 col-span-full">Loading inventory...</div>
+      </div>
+    </section>
+
+    <!-- 2. CART & ONLINE ORDERS TAB -->
+    <section id="tab-cartOrders" class="tab-content hidden space-y-4">
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">Online Cart Orders & Advance Bookings</h2>
+            <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call and click Dispatch to deduct stock.</p>
+          </div>
+          <button onclick="loadCartOrders()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg transition">
+            ↻ Refresh
+          </button>
+        </div>
+
+        <!-- Filter Sub-Tabs -->
+        <div class="flex bg-slate-100 p-1 rounded-lg gap-1 overflow-x-auto text-xs font-semibold">
+          <button onclick="filterCartOrders('pending')" id="cfilter-pending" class="cfilter-btn flex-1 py-1.5 px-2 rounded-md bg-white text-indigo-700 shadow-sm">
+            Pending / Advance (<span id="cCount-pending">0</span>)
+          </button>
+          <button onclick="filterCartOrders('confirmed')" id="cfilter-confirmed" class="cfilter-btn flex-1 py-1.5 px-2 rounded-md text-slate-600 hover:text-slate-900">
+            Confirmed (<span id="cCount-confirmed">0</span>)
+          </button>
+          <button onclick="filterCartOrders('dispatched')" id="cfilter-dispatched" class="cfilter-btn flex-1 py-1.5 px-2 rounded-md text-slate-600 hover:text-slate-900">
+            Dispatched (<span id="cCount-dispatched">0</span>)
+          </button>
+          <button onclick="filterCartOrders('all')" id="cfilter-all" class="cfilter-btn flex-1 py-1.5 px-2 rounded-md text-slate-600 hover:text-slate-900">
+            All (<span id="cCount-all">0</span>)
+          </button>
+        </div>
+
+        <div id="cartOrdersContainer" class="space-y-4">
+          <div class="p-8 text-center text-slate-400">Loading orders...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. DIRECT SALE TAB -->
+    <section id="tab-newSale" class="tab-content hidden">
+      <div class="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 max-w-xl mx-auto space-y-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-800">Manual Sale or Advance Booking</h2>
+          <p class="text-xs text-slate-500">Record an order directly taken on WhatsApp, phone call, or in-person.</p>
+        </div>
+        <form id="saleForm" onsubmit="submitSale(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Customer Name *</label>
+            <input type="text" id="custName" required class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" placeholder="e.g. Tariq Mehmood" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Phone Number *</label>
+              <input type="tel" id="custPhone" required class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" placeholder="0300-1234567" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Order Status *</label>
+              <select id="orderStatusSelect" class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600 font-medium">
+                <option value="Dispatched">Dispatched (Immediate Deduct)</option>
+                <option value="Advance Booking">Advance Booking (Hold for Dispatch)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Delivery Address & City</label>
+            <textarea id="custAddress" rows="2" class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" placeholder="Full shipping address"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Select Shade *</label>
+            <select id="saleProduct" required onchange="updateDefaultPrice()" class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600"></select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Quantity *</label>
+              <input type="number" id="saleQty" min="1" value="1" required class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Sold Price (Per Unit) *</label>
+              <input type="number" step="0.01" id="salePrice" required class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" />
+            </div>
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition shadow-sm text-sm">
+            Save Order
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 4. INWARD STOCK TAB (Zeroed Defaults) -->
+    <section id="tab-stockIn" class="tab-content hidden">
+      <div class="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 max-w-xl mx-auto space-y-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-800">Add Inward Shipment (Stock In)</h2>
+          <p class="text-xs text-slate-500">Record incoming stock batches into inventory.</p>
+        </div>
+        <form id="stockInForm" onsubmit="submitStockIn(event)" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Select Shade *</label>
+            <select id="stockInProduct" required class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600"></select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Quantity Received *</label>
+              <input type="number" id="stockInQty" min="1" required class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" placeholder="Enter quantity" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Purchase Cost Per Unit (Rs.) *</label>
+              <input type="number" step="0.01" id="stockInCost" required min="0" class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" placeholder="Enter unit cost" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Batch / Supplier Note</label>
+            <input type="text" id="stockInNotes" class="w-full border rounded-lg p-2.5 text-sm outline-indigo-600" placeholder="e.g. 24 packs x 6 units batch" />
+          </div>
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition shadow-sm text-sm">
+            Add to Inventory
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 5. ANALYTICS & HISTORY TAB (Stock-Linked Financials) -->
+    <section id="tab-salesLog" class="tab-content hidden space-y-6">
+      <div id="kpiContainer" class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-[11px] uppercase font-bold text-slate-500">Dispatched Units</p>
+          <p id="statUnits" class="text-xl sm:text-2xl font-black text-slate-800 mt-1">0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-[11px] uppercase font-bold text-slate-500">Total Revenue</p>
+          <p id="statRevenue" class="text-xl sm:text-2xl font-black text-indigo-600 mt-1">Rs. 0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-[11px] uppercase font-bold text-slate-500">Total Stock Value (Cost)</p>
+          <p id="statCost" class="text-xl sm:text-2xl font-black text-slate-700 mt-1">Rs. 0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-[11px] uppercase font-bold text-slate-500">Realized Gross Profit</p>
+          <p id="statProfit" class="text-xl sm:text-2xl font-black text-emerald-600 mt-1">Rs. 0</p>
+        </div>
+      </div>
+
+      <div id="chartsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-700 mb-3">Dispatched Units by Shade</h3>
+          <div class="h-60"><canvas id="salesBarChart"></canvas></div>
+        </div>
+        <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-700 mb-3">Current Stock Breakdown</h3>
+          <div class="h-60 flex justify-center"><canvas id="stockPieChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-800">Finalized Sales History (Dispatched)</h2>
+            <p class="text-xs text-slate-500">Only orders marked 'Dispatched' are included here</p>
+          </div>
+          <div id="exportControls" class="flex flex-wrap items-center gap-2">
+            <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)" />
+            <button onclick="document.getElementById('csvFileInput').click()" class="text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg transition shadow-sm">
+              📤 Import CSV
+            </button>
+            <button onclick="exportToCSV()" class="text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg transition shadow-sm">
+              📥 Export CSV
+            </button>
+            <button onclick="window.print()" class="text-xs font-semibold bg-slate-700 hover:bg-slate-800 text-white px-3 py-1.5 rounded-lg transition shadow-sm">
+              📄 Print / PDF
+            </button>
+            <button onclick="loadSalesAndAnalytics()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg transition">
+              ↻ Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="border-b bg-slate-50 text-slate-600 uppercase text-[11px]">
+                <th class="p-3">Date</th>
+                <th class="p-3">Customer</th>
+                <th class="p-3">Phone</th>
+                <th class="p-3">Shade</th>
+                <th class="p-3">Qty</th>
+                <th class="p-3">Price</th>
+                <th class="p-3">Total</th>
+                <th class="p-3">Address</th>
+                <th class="p-3">Handled By</th>
+                <th class="p-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="salesTableBody" class="divide-y divide-slate-100">
+              <tr><td colspan="10" class="p-4 text-center text-slate-400">Loading history...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: Edit Product Stock & Prices -->
+  <div id="editProductModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 id="editModalTitle" class="text-sm font-bold text-slate-800">Edit Shade Details</h3>
+        <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+      </div>
+      <form onsubmit="saveEditedProduct(event)" class="space-y-3">
+        <input type="hidden" id="editProductId" />
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Shade Name</label>
+          <input type="text" id="editShadeName" readonly class="w-full bg-slate-100 border rounded-lg p-2 text-xs font-semibold text-slate-600 outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Current Stock Quantity</label>
+          <input type="number" id="editStockQty" required min="0" class="w-full border rounded-lg p-2 text-sm outline-indigo-600 font-bold" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Cost Price (Rs.)</label>
+            <input type="number" id="editCostPrice" step="0.01" required min="0" class="w-full border rounded-lg p-2 text-sm outline-indigo-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Retail Price (Rs.)</label>
+            <input type="number" id="editRetailPrice" step="0.01" required min="0" class="w-full border rounded-lg p-2 text-sm outline-indigo-600 font-semibold text-emerald-700" />
+          </div>
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeEditModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 rounded-lg text-xs transition">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg text-xs transition shadow">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://izilpbtlktaltsklegyr.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_DYM-TBqQpmcGfL9jr-b26w_0pFX_JQa";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let productsList = [];
+    let allOrdersData = [];
+    let dispatchedSalesData = [];
+    let cartFilterMode = 'pending';
+    let barChartInstance = null;
+    let pieChartInstance = null;
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('bg-indigo-600', 'text-white', 'font-bold');
+        el.classList.add('text-slate-600', 'font-semibold');
+      });
+      document.getElementById('tab-' + tab).classList.remove('hidden');
+      const activeBtn = document.getElementById('tabBtn-' + tab);
+      activeBtn.classList.add('bg-indigo-600', 'text-white', 'font-bold');
+      activeBtn.classList.remove('text-slate-600', 'font-semibold');
+
+      if (tab === 'inventory') loadInventory();
+      if (tab === 'cartOrders') loadCartOrders();
+      if (tab === 'salesLog') loadSalesAndAnalytics();
+    }
+
+    // 1. INVENTORY (Live stock, manual edit & reset controls)
+    async function loadInventory() {
+      const { data, error } = await client.from('products').select('*').order('id');
+      if (error) return alert("Error loading stock: " + error.message);
+      productsList = data;
+      renderProductsDropdowns();
+
+      const container = document.getElementById('inventoryCards');
+      container.innerHTML = data.map(item => `
+        <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-bold text-slate-800 text-xs sm:text-sm leading-snug">${item.shade_name}</h3>
+              <span class="px-2 py-0.5 text-[11px] font-bold rounded ${item.current_stock <= 0 ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">
+                ${item.current_stock <= 0 ? 'Out of Stock' : 'In Stock'}
+              </span>
+            </div>
+            <p class="text-2xl sm:text-3xl font-extrabold my-2 text-indigo-700">
+              ${item.current_stock} <span class="text-xs font-normal text-slate-500">units</span>
+            </p>
+          </div>
+
+          <div class="border-t border-slate-100 pt-3 mt-2">
+            <div class="flex justify-between text-xs text-slate-500 mb-3">
+              <span>Cost: <strong>Rs. ${item.cost_price}</strong></span>
+              <span>Retail: <strong class="text-emerald-700">Rs. ${item.default_sale_price}</strong></span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1.5 pt-1">
+              <button onclick="openEditModal(${item.id})" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-1.5 rounded-lg border border-indigo-200 flex items-center justify-center gap-1 transition">
+                ✏️ Edit / Price
+              </button>
+              <button onclick="resetStockToZero(${item.id}, '${item.shade_name.replace(/'/g, "\\'")}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold py-1.5 rounded-lg border border-rose-200 flex items-center justify-center gap-1 transition">
+                🗑️ Reset (0)
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openEditModal(productId) {
+      const prod = productsList.find(p => p.id === productId);
+      if (!prod) return;
+      document.getElementById('editProductId').value = prod.id;
+      document.getElementById('editShadeName').value = prod.shade_name;
+      document.getElementById('editStockQty').value = prod.current_stock;
+      document.getElementById('editCostPrice').value = prod.cost_price;
+      document.getElementById('editRetailPrice').value = prod.default_sale_price;
+      document.getElementById('editProductModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editProductModal').classList.add('hidden');
+    }
+
+    async function saveEditedProduct(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('editProductId').value);
+      const stock = parseInt(document.getElementById('editStockQty').value);
+      const cost = parseFloat(document.getElementById('editCostPrice').value);
+      const retail = parseFloat(document.getElementById('editRetailPrice').value);
+
+      const { error } = await client.from('products').update({
+        current_stock: stock,
+        cost_price: cost,
+        default_sale_price: retail
+      }).eq('id', id);
+
+      if (error) return alert("Error updating shade: " + error.message);
+
+      alert("Updated successfully!");
+      closeEditModal();
+      loadInventory();
+    }
+
+    async function resetStockToZero(productId, shadeName) {
+      if (!confirm(`Are you sure you want to reset stock for "${shadeName}" back to 0 units?`)) return;
+
+      const { error } = await client.from('products').update({
+        current_stock: 0
+      }).eq('id', productId);
+
+      if (error) return alert("Error resetting stock: " + error.message);
+
+      alert(`Stock for ${shadeName} reset to 0!`);
+      loadInventory();
+    }
+
+    function renderProductsDropdowns() {
+      const saleSelect = document.getElementById('saleProduct');
+      const stockInSelect = document.getElementById('stockInProduct');
+      const safeOptions = productsList.map(p => `<option value="${p.id}">${p.shade_name} (Stock: ${p.current_stock})</option>`).join('');
+      saleSelect.innerHTML = safeOptions;
+      stockInSelect.innerHTML = safeOptions;
+      updateDefaultPrice();
+    }
+
+    function updateDefaultPrice() {
+      const selectedId = parseInt(document.getElementById('saleProduct').value);
+      const prod = productsList.find(p => p.id === selectedId);
+      if (prod) document.getElementById('salePrice').value = prod.default_sale_price || 0;
+    }
+
+    // 2. CART ORDERS
+    async function loadCartOrders() {
+      const { data, error } = await client.from('sales_orders').select('*').order('id', { ascending: false });
+      if (error) return alert("Error loading cart orders: " + error.message);
+      allOrdersData = data || [];
+      renderCartOrders();
+    }
+
+    function groupCartOrders(orders) {
+      const groups = {};
+      orders.forEach(order => {
+        const key = order.order_batch_id || `${order.customer_phone}_${order.created_at ? order.created_at.slice(0, 16) : order.id}`;
+        if (!groups[key]) {
+          groups[key] = {
+            batch_id: order.order_batch_id || `#${order.id}`,
+            customer_name: order.customer_name || 'Customer',
+            customer_phone: order.customer_phone || '',
+            customer_address: order.customer_address || 'No address provided',
+            created_at: order.created_at,
+            order_status: order.order_status || 'Advance Booking',
+            sold_by: order.sold_by || 'Online Storefront',
+            items: [],
+            total_package_amount: 0,
+            order_ids: []
+          };
+        }
+        groups[key].items.push({
+          shade_name: order.shade_name,
+          quantity: order.quantity,
+          price: order.sold_price_per_unit,
+          total: order.total_amount
+        });
+        groups[key].total_package_amount += parseFloat(order.total_amount || 0);
+        groups[key].order_ids.push(order.id);
+      });
+      return Object.values(groups);
+    }
+
+    function filterCartOrders(filter) {
+      cartFilterMode = filter;
+      document.querySelectorAll('.cfilter-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-indigo-700', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+      const activeBtn = document.getElementById('cfilter-' + filter);
+      activeBtn.classList.add('bg-white', 'text-indigo-700', 'shadow-sm');
+      activeBtn.classList.remove('text-slate-600');
+      renderCartOrders();
+    }
+
+    function renderCartOrders() {
+      const grouped = groupCartOrders(allOrdersData);
+
+      const pendingCount = grouped.filter(g => g.order_status === 'Advance Booking' || g.order_status === 'Pending').length;
+      const confirmedCount = grouped.filter(g => g.order_status === 'Confirmed').length;
+      const dispatchedCount = grouped.filter(g => g.order_status === 'Dispatched').length;
+
+      document.getElementById('cCount-pending').innerText = pendingCount;
+      document.getElementById('cCount-confirmed').innerText = confirmedCount;
+      document.getElementById('cCount-dispatched').innerText = dispatchedCount;
+      document.getElementById('cCount-all').innerText = grouped.length;
+
+      const badge = document.getElementById('badgePendingOrders');
+      if (pendingCount > 0) {
+        badge.innerText = pendingCount;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      let filtered = grouped;
+      if (cartFilterMode === 'pending') filtered = grouped.filter(g => g.order_status === 'Advance Booking' || g.order_status === 'Pending');
+      if (cartFilterMode === 'confirmed') filtered = grouped.filter(g => g.order_status === 'Confirmed');
+      if (cartFilterMode === 'dispatched') filtered = grouped.filter(g => g.order_status === 'Dispatched');
+
+      const container = document.getElementById('cartOrdersContainer');
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">No orders under this view.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(group => {
+        const cleanPhone = group.customer_phone.replace(/[^0-9]/g, '');
+        const whatsappNumber = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
+        const dateStr = group.created_at ? new Date(group.created_at).toLocaleString() : 'Recent';
+
+        let badgeColor = 'bg-amber-100 text-amber-800';
+        if (group.order_status === 'Confirmed') badgeColor = 'bg-blue-100 text-blue-800';
+        if (group.order_status === 'Dispatched') badgeColor = 'bg-emerald-100 text-emerald-800';
+        if (group.order_status === 'Cancelled') badgeColor = 'bg-rose-100 text-rose-800';
+
+        return `
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 sm:p-5 space-y-3">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-bold text-slate-800">${group.customer_name}</h3>
+                  <span class="text-xs px-2.5 py-0.5 font-bold rounded-full ${badgeColor}">
+                    ${group.order_status}
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">Placed: ${dateStr} • Ref: <span class="font-mono text-slate-600">${group.batch_id}</span></p>
+              </div>
+              <div class="text-left sm:text-right">
+                <span class="text-xs text-slate-400 font-medium">Total Bill:</span>
+                <p class="text-lg sm:text-xl font-black text-emerald-700">Rs. ${group.total_package_amount.toLocaleString()}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              <div class="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                <p><strong class="text-slate-700">Phone:</strong> ${group.customer_phone}</p>
+                <p><strong class="text-slate-700">Address:</strong> ${group.customer_address}</p>
+                <p><strong class="text-slate-700">Source:</strong> ${group.sold_by}</p>
+                <div class="pt-2 flex gap-2">
+                  <a href="https://wa.me/${whatsappNumber}?text=Assalam-o-Alaikum%20${encodeURIComponent(group.customer_name)},%20we%20received%20your%20order%20for%20Apple%20Hair%20Colour%20from%20KS%20Traders." target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 shadow-sm">
+                    💬 WhatsApp
+                  </a>
+                  <a href="tel:${group.customer_phone}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1">
+                    📞 Call
+                  </a>
+                </div>
+              </div>
+
+              <div class="border border-slate-100 rounded-lg p-3 bg-slate-50 text-xs">
+                <p class="font-bold text-slate-700 uppercase tracking-wide text-[10px] mb-1.5">Order Items:</p>
+                <div class="divide-y divide-slate-200">
+                  ${group.items.map(item => `
+                    <div class="py-1 flex justify-between items-center">
+                      <div>
+                        <span class="font-semibold text-slate-800">${item.shade_name}</span>
+                        <span class="text-slate-500 block text-[11px]">Qty: ${item.quantity} × Rs. ${item.price}</span>
+                      </div>
+                      <span class="font-bold text-slate-800">Rs. ${item.total}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            ${group.order_status !== 'Cancelled' ? `
+              <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                ${group.order_status !== 'Confirmed' && group.order_status !== 'Dispatched' ? `
+                  <button onclick="changeGroupOrderStatus('${group.order_ids.join(',')}', 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+                    ✓ Confirm Booking
+                  </button>
+                ` : ''}
+
+                ${group.order_status !== 'Dispatched' ? `
+                  <button onclick="changeGroupOrderStatus('${group.order_ids.join(',')}', 'Dispatched')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition">
+                    🚚 Dispatch (Deduct Stock)
+                  </button>
+                ` : `
+                  <span class="text-xs text-emerald-700 font-bold bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">
+                    Dispatched & Finalized
+                  </span>
+                `}
+
+                ${group.order_status !== 'Dispatched' ? `
+                  <button onclick="changeGroupOrderStatus('${group.order_ids.join(',')}', 'Cancelled')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+                    Cancel Order
+                  </button>
+                ` : ''}
+
+                <button onclick="deleteOrdersPermanently('${group.order_ids.join(',')}')" class="bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-500 text-xs px-2.5 py-1.5 rounded-lg transition ml-1">
+                  🗑️ Delete
+                </button>
+              </div>
+            ` : `
+              <div class="flex justify-between items-center pt-1 border-t border-slate-100">
+                <span class="text-xs text-rose-500 font-semibold italic">Cancelled</span>
+                <button onclick="deleteOrdersPermanently('${group.order_ids.join(',')}')" class="text-xs text-slate-400 hover:text-rose-600">🗑 Delete Record</button>
+              </div>
+            `}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function changeGroupOrderStatus(idsString, newStatus) {
+      const partner = document.getElementById('partnerSelect').value;
+      const ids = idsString.split(',').map(id => parseInt(id));
+
+      if (newStatus === 'Dispatched') {
+        if (!confirm("Dispatch this order? Stock will be automatically deducted in Supabase.")) return;
+      }
+
+      const { error } = await client.from('sales_orders').update({
+        order_status: newStatus,
+        sold_by: partner + ` (${newStatus})`
+      }).in('id', ids);
+
+      if (error) return alert("Error updating status: " + error.message);
+      alert(`Order updated to ${newStatus}!`);
+      loadCartOrders();
+      loadInventory();
+    }
+
+    async function deleteOrdersPermanently(idsString) {
+      if (!confirm("Permanently delete this order record? This cannot be undone.")) return;
+      const ids = idsString.split(',').map(id => parseInt(id));
+
+      const { error } = await client.from('sales_orders').delete().in('id', ids);
+      if (error) return alert("Error deleting: " + error.message);
+
+      alert("Order deleted!");
+      loadCartOrders();
+      loadInventory();
+    }
+
+    // 3. DIRECT SALE
+    async function submitSale(e) {
+      e.preventDefault();
+      const partner = document.getElementById('partnerSelect').value;
+      const prodId = parseInt(document.getElementById('saleProduct').value);
+      const prod = productsList.find(p => p.id === prodId);
+      const qty = parseInt(document.getElementById('saleQty').value);
+      const status = document.getElementById('orderStatusSelect').value;
+
+      const price = parseFloat(document.getElementById('salePrice').value);
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+
+      const { data: custData } = await client.from('customers').insert([{ name, phone, address }]).select().single();
+
+      const { error: saleErr } = await client.from('sales_orders').insert([{
+        customer_id: custData ? custData.id : null,
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: address,
+        product_id: prod.id,
+        shade_name: prod.shade_name,
+        quantity: qty,
+        sold_price_per_unit: price,
+        total_amount: qty * price,
+        sold_by: partner,
+        order_status: status
+      }]);
+
+      if (saleErr) return alert("Failed to save: " + saleErr.message);
+
+      alert(status === 'Dispatched' ? "Sale recorded and stock deducted!" : "Advance booking recorded successfully!");
+      document.getElementById('saleForm').reset();
+      switchTab(status === 'Dispatched' ? 'inventory' : 'cartOrders');
+    }
+
+    // 4. INWARD STOCK
+    async function submitStockIn(e) {
+      e.preventDefault();
+      const partner = document.getElementById('partnerSelect').value;
+      const prodId = parseInt(document.getElementById('stockInProduct').value);
+      const qty = parseInt(document.getElementById('stockInQty').value);
+      const cost = parseFloat(document.getElementById('stockInCost').value);
+      const notes = document.getElementById('stockInNotes').value;
+
+      const { error } = await client.from('stock_in_log').insert([{
+        product_id: prodId,
+        quantity: qty,
+        unit_cost: cost,
+        notes: notes,
+        added_by: partner
+      }]);
+
+      if (error) return alert("Failed to add stock: " + error.message);
+
+      alert("Stock successfully added!");
+      document.getElementById('stockInForm').reset();
+      switchTab('inventory');
+    }
+
+    // 5. SALES LOG & DYNAMIC STOCK-LINKED ANALYTICS
+    async function loadSalesAndAnalytics() {
+      // 1. Fetch Dispatched Sales
+      const { data: sales, error: salesErr } = await client.from('sales_orders')
+        .select('*')
+        .eq('order_status', 'Dispatched')
+        .order('id', { ascending: false });
+
+      if (salesErr) return alert("Error loading sales: " + salesErr.message);
+      dispatchedSalesData = sales || [];
+
+      // 2. Fetch Latest Products to dynamically calculate warehouse valuation
+      const { data: prods, error: prodErr } = await client.from('products').select('*');
+      if (!prodErr && prods) {
+        productsList = prods;
+      }
+
+      let totalUnits = 0;
+      let totalRevenue = 0;
+      let costOfGoodsSold = 0;
+      const shadeSalesMap = {};
+
+      dispatchedSalesData.forEach(s => {
+        totalUnits += s.quantity;
+        const revenue = parseFloat(s.total_amount || 0);
+        totalRevenue += revenue;
+        shadeSalesMap[s.shade_name] = (shadeSalesMap[s.shade_name] || 0) + s.quantity;
+
+        // Calculate unit cost for sold items
+        const matchedProd = productsList.find(p => p.id === s.product_id || p.shade_name === s.shade_name);
+        const unitCost = matchedProd ? parseFloat(matchedProd.cost_price || 0) : 0;
+        costOfGoodsSold += (s.quantity * unitCost);
+      });
+
+      // Calculate Total Value of CURRENT LIVE WAREHOUSE STOCK (Directly linked!)
+      let currentLiveStockCost = 0;
+      productsList.forEach(p => {
+        currentLiveStockCost += (p.current_stock * parseFloat(p.cost_price || 0));
+      });
+
+      // Display Linked Financial Metrics
+      document.getElementById('statUnits').innerText = totalUnits;
+      document.getElementById('statRevenue').innerText = 'Rs. ' + totalRevenue.toLocaleString();
+      document.getElementById('statCost').innerText = 'Rs. ' + currentLiveStockCost.toLocaleString();
+      
+      // Realized Gross Profit on Dispatched Orders
+      const realizedProfit = totalRevenue - costOfGoodsSold;
+      const profitEl = document.getElementById('statProfit');
+      profitEl.innerText = 'Rs. ' + realizedProfit.toLocaleString();
+      profitEl.className = realizedProfit >= 0 
+        ? "text-xl sm:text-2xl font-black text-emerald-600 mt-1" 
+        : "text-xl sm:text-2xl font-black text-rose-600 mt-1";
+
+      // Render Sales Table
+      const tbody = document.getElementById('salesTableBody');
+      if (dispatchedSalesData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-slate-400">No dispatched sales recorded yet.</td></tr>`;
+      } else {
+        tbody.innerHTML = dispatchedSalesData.map(s => `
+          <tr class="hover:bg-slate-50">
+            <td class="p-3 text-xs text-slate-500">${s.created_at ? new Date(s.created_at).toLocaleDateString() : '-'}</td>
+            <td class="p-3 font-medium">${s.customer_name}</td>
+            <td class="p-3 text-slate-600">${s.customer_phone}</td>
+            <td class="p-3">${s.shade_name}</td>
+            <td class="p-3 font-semibold">${s.quantity}</td>
+            <td class="p-3">Rs. ${s.sold_price_per_unit}</td>
+            <td class="p-3 font-bold text-emerald-700">Rs. ${s.total_amount}</td>
+            <td class="p-3 text-xs text-slate-500 max-w-xs truncate">${s.customer_address || '-'}</td>
+            <td class="p-3 text-xs font-semibold text-indigo-700">${s.sold_by}</td>
+            <td class="p-3 text-right">
+              <button onclick="deleteSingleSale(${s.id})" class="text-xs text-slate-400 hover:text-rose-600 p-1">🗑️</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Bar Chart: Units Sold
+      const barLabels = Object.keys(shadeSalesMap);
+      const barValues = Object.values(shadeSalesMap);
+
+      if (barChartInstance) barChartInstance.destroy();
+      const ctxBar = document.getElementById('salesBarChart').getContext('2d');
+      barChartInstance = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: barLabels.length ? barLabels : ['No sales'],
+          datasets: [{
+            label: 'Dispatched Units',
+            data: barValues.length ? barValues : [0],
+            backgroundColor: '#4f46e5',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // Pie Chart: Current Live Stock
+      const pieLabels = productsList.map(p => p.shade_name);
+      const pieValues = productsList.map(p => p.current_stock);
+
+      if (pieChartInstance) pieChartInstance.destroy();
+      const ctxPie = document.getElementById('stockPieChart').getContext('2d');
+      pieChartInstance = new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+          labels: pieLabels,
+          datasets: [{
+            data: pieValues,
+            backgroundColor: ['#1e293b', '#78350f', '#b45309', '#881337']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+
+    async function deleteSingleSale(saleId) {
+      if (!confirm("Delete this sale record? Note: This will not automatically add stock back.")) return;
+      const { error } = await client.from('sales_orders').delete().eq('id', saleId);
+      if (error) return alert("Error deleting sale: " + error.message);
+      loadSalesAndAnalytics();
+    }
+
+    function exportToCSV() {
+      if (!dispatchedSalesData || dispatchedSalesData.length === 0) return alert("No dispatched sales to export!");
+      const headers = ["Order ID", "Date", "Customer Name", "Phone", "Delivery Address", "Shade", "Quantity", "Unit Price", "Total Amount", "Handled By"];
+      const rows = dispatchedSalesData.map(s => [
+        s.id,
+        s.created_at ? new Date(s.created_at).toLocaleDateString() : '',
+        `"${(s.customer_name || '').replace(/"/g, '""')}"`,
+        `"${(s.customer_phone || '').replace(/"/g, '""')}"`,
+        `"${(s.customer_address || '').replace(/"/g, '""')}"`,
+        `"${(s.shade_name || '').replace(/"/g, '""')}"`,
+        s.quantity,
+        s.sold_price_per_unit,
+        s.total_amount,
+        `"${(s.sold_by || '').replace(/"/g, '""')}"`
+      ]);
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Apple_Hair_Colour_Sales_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function handleCSVImport(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const text = e.target.result;
+        const lines = text.split("\n").filter(l => l.trim().length > 0);
+        if (lines.length < 2) return alert("CSV is empty or invalid.");
+
+        const partner = document.getElementById('partnerSelect').value;
+        let successCount = 0;
+
+        for (let i = 1; i < lines.length; i++) {
+          const parts = lines[i].split(",").map(p => p.trim().replace(/^"|"$/g, ''));
+          if (parts.length >= 7) {
+            const customer_name = parts[1] || parts[0];
+            const customer_phone = parts[2] || '';
+            const customer_address = parts[3] || '';
+            const shade_name = parts[4] || 'Apple Hair Colour - Natural Black';
+            const quantity = parseInt(parts[5]) || 1;
+            const sold_price_per_unit = parseFloat(parts[6]) || 0;
+            const total_amount = quantity * sold_price_per_unit;
+
+            const matchedProd = productsList.find(p => p.shade_name.toLowerCase().includes(shade_name.toLowerCase())) || productsList[0];
+
+            await client.from('sales_orders').insert([{
+              customer_name,
+              customer_phone,
+              customer_address,
+              product_id: matchedProd ? matchedProd.id : 1,
+              shade_name: matchedProd ? matchedProd.shade_name : shade_name,
+              quantity,
+              sold_price_per_unit,
+              total_amount,
+              sold_by: partner + ' (CSV Import)',
+              order_status: 'Dispatched'
+            }]);
+            successCount++;
+          }
+        }
+        alert(`Successfully imported ${successCount} sales records!`);
+        loadSalesAndAnalytics();
+      };
+      reader.readAsText(file);
+    }
+
+    loadInventory();
+  </script>
+</body>
+</html>
