@@ -70,7 +70,7 @@
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
 
-    <!-- 1. TAB: STOCK & INVENTORY (WITH TOTAL STOCK VALUE IN TOP RIGHT CORNER) -->
+    <!-- 1. TAB: STOCK & INVENTORY (TOTAL STOCK VALUE IN TOP RIGHT CORNER) -->
     <section id="view-inventory" class="space-y-4">
       <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
@@ -215,17 +215,16 @@
       </div>
     </section>
 
-    <!-- 5. TAB: ANALYTICS & HISTORY (WITH IMPORT CSV, EXPORT PDF, EXPORT CSV) -->
+    <!-- 5. TAB: ANALYTICS & HISTORY -->
     <section id="view-analytics" class="hidden space-y-6">
       
       <!-- Import / Export Toolbar -->
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
         <div>
           <h3 class="text-sm font-bold text-slate-800">Data Management & Reports</h3>
-          <p class="text-xs text-slate-400">Export reports for records or import orders from backup spreadsheet</p>
+          <p class="text-xs text-slate-400">Export general orders, print PDF, or extract confirmed customers list</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <!-- Hidden File Input for CSV Import -->
           <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)" />
           
           <button onclick="document.getElementById('csvFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
@@ -237,7 +236,7 @@
           </button>
 
           <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-            📊 Export CSV
+            📊 Export All Orders CSV
           </button>
         </div>
       </div>
@@ -271,6 +270,7 @@
         </div>
       </div>
 
+      <!-- Charts Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <h4 class="text-sm font-bold text-slate-800 mb-4">Orders Status Breakdown</h4>
@@ -281,6 +281,47 @@
           <div class="h-64"><canvas id="shadeBreakdownChart"></canvas></div>
         </div>
       </div>
+
+      <!-- NEW: CONFIRMED CUSTOMERS DIRECTORY & CSV EXTRACT -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed Orders & Customers Directory</h3>
+              <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Confirmed</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Directory of customers with verified and confirmed bookings ready for dispatch or marketing.</p>
+          </div>
+
+          <!-- Specific Extract CSV Button for Confirmed Customers -->
+          <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
+            📥 Extract Confirmed Customers (CSV)
+          </button>
+        </div>
+
+        <!-- Confirmed Customers Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
+                <th class="py-3 px-3">Order Ref</th>
+                <th class="py-3 px-3">Customer Name</th>
+                <th class="py-3 px-3">Phone / WhatsApp</th>
+                <th class="py-3 px-3">Address & City</th>
+                <th class="py-3 px-3">Shade & Qty</th>
+                <th class="py-3 px-3 text-right">Bill (Rs.)</th>
+                <th class="py-3 px-3 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody id="confirmedCustomersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+              <tr>
+                <td colspan="7" class="text-center py-8 text-slate-400">Loading confirmed customers...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </section>
 
   </main>
@@ -406,6 +447,7 @@
         allOrders = data;
         renderOrders();
         updateCounts();
+        renderConfirmedCustomersTable();
       }
     }
 
@@ -431,7 +473,10 @@
           btn.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5";
         }
       });
-      if (tabId === 'analytics') updateAnalytics();
+      if (tabId === 'analytics') {
+        updateAnalytics();
+        renderConfirmedCustomersTable();
+      }
     }
 
     function filterOrders(filter) {
@@ -612,7 +657,6 @@
         `;
       }).join('');
 
-      // Top-Right Corner Total Stock Value Calculation
       document.getElementById('totalStockValueHeader').innerText = 'Rs. ' + totalStockValueRetail.toLocaleString();
       document.getElementById('totalUnitsFormula').innerText = `${totalUnitsInStock} total units (${unitsBreakdown.join(' + ')}) × Rs. 2,500`;
     }
@@ -898,7 +942,100 @@
       });
     }
 
-    // EXPORT TO CSV
+    // RENDER CONFIRMED CUSTOMERS TABLE
+    function renderConfirmedCustomersTable() {
+      const tbody = document.getElementById('confirmedCustomersTableBody');
+      const badge = document.getElementById('confirmedCustomersBadge');
+      
+      // Filter for Confirmed (and Dispatched) customers
+      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
+
+      badge.innerText = `${confirmedList.length} Confirmed / Active`;
+
+      if (confirmedList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No confirmed orders found yet. Confirm bookings in the Orders tab to see them listed here.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = confirmedList.map(o => {
+        const cleanPhone = (o.customer_phone || '').replace(/[^0-9]/g, '');
+        const formattedPhone = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
+        const total = o.total_amount || (o.quantity * (o.sold_price_per_unit || 2500));
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-3 font-mono font-bold text-slate-500">#${o.id}</td>
+            <td class="py-3 px-3 font-bold text-slate-900">${o.customer_name || 'Customer'}</td>
+            <td class="py-3 px-3">
+              <div class="flex items-center gap-1.5">
+                <span class="font-semibold text-slate-800">${o.customer_phone || 'N/A'}</span>
+                <a href="https://wa.me/${formattedPhone}" target="_blank" class="text-emerald-600 hover:text-emerald-700 font-bold" title="WhatsApp Chat">💬</a>
+                <a href="tel:${o.customer_phone}" class="text-slate-400 hover:text-slate-600" title="Call">📞</a>
+              </div>
+            </td>
+            <td class="py-3 px-3 text-slate-600 max-w-xs truncate" title="${o.customer_address || ''}">${o.customer_address || 'N/A'}</td>
+            <td class="py-3 px-3 text-slate-700">
+              <span class="font-semibold">${o.shade_name || 'Apple Hair Colour'}</span>
+              <span class="text-slate-400 text-xs block">Qty: ${o.quantity}</span>
+            </td>
+            <td class="py-3 px-3 text-right font-black text-emerald-700">Rs. ${Number(total).toLocaleString()}</td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2 py-0.5 rounded-full text-xs font-bold ${o.order_status === 'Dispatched' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
+                ${o.order_status}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // EXPORT CONFIRMED CUSTOMERS SPECIFIC CSV
+    function exportConfirmedCustomersCSV() {
+      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
+
+      if (confirmedList.length === 0) {
+        return alert("No confirmed customers available to export yet. Please confirm bookings first.");
+      }
+
+      const headers = [
+        "Order ID",
+        "Customer Name",
+        "Phone / WhatsApp",
+        "Complete Delivery Address",
+        "Ordered Shade",
+        "Quantity",
+        "Unit Price (PKR)",
+        "Total Bill (PKR)",
+        "Sales Source",
+        "Current Status",
+        "Booking Date"
+      ];
+
+      const rows = confirmedList.map(o => [
+        o.id,
+        `"${(o.customer_name || '').replace(/"/g, '""')}"`,
+        `"${(o.customer_phone || '').replace(/"/g, '""')}"`,
+        `"${(o.customer_address || '').replace(/"/g, '""')}"`,
+        `"${(o.shade_name || '').replace(/"/g, '""')}"`,
+        o.quantity,
+        o.sold_price_per_unit || 2500,
+        o.total_amount || (o.quantity * (o.sold_price_per_unit || 2500)),
+        `"${(o.sold_by || 'Online Storefront').replace(/"/g, '""')}"`,
+        o.order_status,
+        o.created_at ? new Date(o.created_at).toLocaleDateString() : ''
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `KS_Traders_Confirmed_Customers_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // EXPORT ALL ORDERS TO CSV
     function exportToCSV() {
       if (allOrders.length === 0) return alert("No orders available to export.");
 
@@ -917,11 +1054,11 @@
         o.order_status
       ]);
 
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `KS_Traders_Orders_${new Date().toISOString().slice(0,10)}.csv`);
+      link.setAttribute("download", `KS_Traders_All_Orders_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
