@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KS Traders — Admin Dashboard</title>
+  <title>KS Traders — Admin & Accounts Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,8 +14,8 @@
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     @media print {
       body * { visibility: hidden; }
-      #view-analytics, #view-analytics * { visibility: visible; }
-      #view-analytics { position: absolute; left: 0; top: 0; width: 100%; }
+      .print-area, .print-area * { visibility: visible; }
+      .print-area { position: absolute; left: 0; top: 0; width: 100%; }
       header, .no-print { display: none !important; }
     }
   </style>
@@ -28,8 +28,8 @@
       <div class="flex items-center gap-3">
         <span class="text-2xl">🍏</span>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight">KS Traders — Admin Dashboard</h1>
-          <p class="text-[11px] text-slate-400">Apple Hair Colour Inventory & Sales Tracking (Hyderabad)</p>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight">KS Traders — Admin & Accounts Dashboard</h1>
+          <p class="text-[11px] text-slate-400">Apple Hair Colour Inventory, Orders & Financial Ledger (Hyderabad)</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
@@ -43,14 +43,14 @@
     </div>
   </header>
 
-  <!-- The 5 Navigation Tabs -->
+  <!-- 6 Navigation Tabs -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 no-print">
     <div class="flex flex-wrap gap-2">
-      <button onclick="switchTab('inventory')" id="tab-inventory" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">
+      <button onclick="switchTab('inventory')" id="tab-inventory" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
         📦 Stock & Inventory
       </button>
 
-      <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+      <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">
         🛒 Cart & Online Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
       </button>
 
@@ -65,20 +65,23 @@
       <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
         📊 Analytics & History
       </button>
+
+      <button onclick="switchTab('accounts')" id="tab-accounts" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+        💰 Accounts & Expenses
+      </button>
     </div>
   </div>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
 
-    <!-- 1. TAB: STOCK & INVENTORY (TOTAL STOCK VALUE IN TOP RIGHT CORNER) -->
-    <section id="view-inventory" class="space-y-4">
+    <!-- TAB 1: STOCK & INVENTORY -->
+    <section id="view-inventory" class="hidden space-y-4">
       <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
           <div>
             <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Current Stock & Product Pricing</h2>
             <p class="text-xs text-slate-500 mt-0.5">Inventory counts, cost prices and retail selling prices.</p>
           </div>
-          <!-- Top Right Corner Badge for Total Stock Value -->
           <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400/80 px-5 py-3 rounded-2xl shadow-sm text-right flex items-center gap-4">
             <span class="text-3xl">💎</span>
             <div>
@@ -90,15 +93,12 @@
             </div>
           </div>
         </div>
-
-        <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <!-- Populated by JS -->
-        </div>
+        <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
       </div>
     </section>
 
-    <!-- 2. TAB: CART & ONLINE ORDERS -->
-    <section id="view-orders" class="hidden space-y-4">
+    <!-- TAB 2: CART & ONLINE ORDERS -->
+    <section id="view-orders" class="space-y-4">
       <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
@@ -131,7 +131,7 @@
       </div>
     </section>
 
-    <!-- 3. TAB: RECORD SALE / ADVANCE -->
+    <!-- TAB 3: RECORD SALE / ADVANCE -->
     <section id="view-record-sale" class="hidden space-y-4">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-2xl mx-auto space-y-4">
         <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">➕ Record Manual Direct Sale / Advance Booking</h2>
@@ -189,7 +189,7 @@
       </div>
     </section>
 
-    <!-- 4. TAB: INWARD STOCK -->
+    <!-- TAB 4: INWARD STOCK -->
     <section id="view-inward" class="hidden space-y-4">
       <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-xl mx-auto space-y-4">
         <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">📥 Inward Stock (Add New Supply)</h2>
@@ -215,10 +215,10 @@
       </div>
     </section>
 
-    <!-- 5. TAB: ANALYTICS & HISTORY -->
-    <section id="view-analytics" class="hidden space-y-6">
+    <!-- TAB 5: ANALYTICS & HISTORY -->
+    <section id="view-analytics" class="hidden space-y-6 print-area">
       
-      <!-- Import / Export Toolbar -->
+      <!-- Toolbar -->
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
         <div>
           <h3 class="text-sm font-bold text-slate-800">Data Management & Reports</h3>
@@ -231,7 +231,7 @@
             📥 Import CSV
           </button>
 
-          <button onclick="exportToPDF()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+          <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
             📄 Export PDF
           </button>
 
@@ -241,7 +241,7 @@
         </div>
       </div>
 
-      <!-- Analytics Stats Cards -->
+      <!-- KPI Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="bg-white p-5 rounded-2xl border-2 border-emerald-300 shadow-sm">
           <p class="text-xs font-bold text-emerald-800 uppercase">Stock Valuation (Retail)</p>
@@ -249,76 +249,241 @@
           <p class="text-[11px] text-emerald-600 font-semibold mt-1">Live in-stock inventory</p>
         </div>
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Total Sales Dispatched</p>
+          <p class="text-xs font-bold text-slate-500 uppercase">Total Sales Booked</p>
           <h3 id="statTotalSales" class="text-2xl font-black text-slate-900 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-emerald-600 font-semibold mt-1">Delivered orders</p>
+          <p class="text-[11px] text-emerald-600 font-semibold mt-1">All confirmed & dispatched</p>
         </div>
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <p class="text-xs font-bold text-slate-500 uppercase">Net Gross Profit</p>
           <h3 id="statTotalProfit" class="text-2xl font-black text-emerald-600 mt-1">Rs. 0</h3>
           <p class="text-[11px] text-slate-400 mt-1">Revenue - Unit Cost</p>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Units Sold</p>
-          <h3 id="statUnitsSold" class="text-2xl font-black text-blue-600 mt-1">0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Dispatched count</p>
+        <div class="bg-white p-5 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
+          <p class="text-xs font-bold text-indigo-900 uppercase">Total Cash Received</p>
+          <h3 id="statTotalCashReceived" class="text-2xl font-black text-indigo-700 mt-1">Rs. 0</h3>
+          <p class="text-[11px] text-indigo-600 font-semibold mt-1">Actual verified collected cash</p>
         </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Pending Value</p>
-          <h3 id="statPendingValue" class="text-2xl font-black text-amber-600 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Advance / In Pipeline</p>
+        <div class="bg-white p-5 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
+          <p class="text-xs font-bold text-amber-900 uppercase">Pending Cash Collection</p>
+          <h3 id="statPendingValue" class="text-2xl font-black text-amber-700 mt-1">Rs. 0</h3>
+          <p class="text-[11px] text-amber-600 font-semibold mt-1">Pending from courier / customer</p>
         </div>
       </div>
 
-      <!-- Charts Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <h4 class="text-sm font-bold text-slate-800 mb-4">Orders Status Breakdown</h4>
-          <div class="h-64"><canvas id="orderStatusChart"></canvas></div>
+          <div class="relative w-full h-64">
+            <canvas id="orderStatusChart"></canvas>
+          </div>
         </div>
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <h4 class="text-sm font-bold text-slate-800 mb-4">Sales by Shade</h4>
-          <div class="h-64"><canvas id="shadeBreakdownChart"></canvas></div>
+          <div class="relative w-full h-64 flex items-center justify-center">
+            <canvas id="shadeBreakdownChart"></canvas>
+          </div>
         </div>
       </div>
 
-      <!-- NEW: CONFIRMED CUSTOMERS DIRECTORY & CSV EXTRACT -->
+      <!-- Table -->
       <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed Orders & Customers Directory</h3>
-              <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Confirmed</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed & Dispatched Orders — Payment & Cash Collection</h3>
+              <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Active Orders</span>
             </div>
-            <p class="text-xs text-slate-500 mt-0.5">Directory of customers with verified and confirmed bookings ready for dispatch or marketing.</p>
+            <p class="text-xs text-slate-500 mt-0.5">Toggle Payment Status (Received/Pending) or enter manual Net Cash received after courier charges.</p>
           </div>
 
-          <!-- Specific Extract CSV Button for Confirmed Customers -->
-          <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
+          <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">
             📥 Extract Confirmed Customers (CSV)
           </button>
         </div>
 
-        <!-- Confirmed Customers Table -->
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
               <tr class="bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
                 <th class="py-3 px-3">Order Ref</th>
-                <th class="py-3 px-3">Customer Name</th>
-                <th class="py-3 px-3">Phone / WhatsApp</th>
-                <th class="py-3 px-3">Address & City</th>
-                <th class="py-3 px-3">Shade & Qty</th>
-                <th class="py-3 px-3 text-right">Bill (Rs.)</th>
-                <th class="py-3 px-3 text-center">Status</th>
+                <th class="py-3 px-3">Customer Details</th>
+                <th class="py-3 px-3">Total Bill</th>
+                <th class="py-3 px-3">Delivery Route</th>
+                <th class="py-3 px-3">Payment Status</th>
+                <th class="py-3 px-3">Net Cash Received (Rs.)</th>
+                <th class="py-3 px-3 text-center no-print">Action</th>
               </tr>
             </thead>
             <tbody id="confirmedCustomersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
               <tr>
-                <td colspan="7" class="text-center py-8 text-slate-400">Loading confirmed customers...</td>
+                <td colspan="7" class="text-center py-8 text-slate-400">Loading orders...</td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 6: ACCOUNTS & EXPENSES -->
+    <section id="view-accounts" class="hidden space-y-6">
+      
+      <!-- Financial Overview Banner -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-indigo-300">KS Traders Business Accounts</span>
+          <h2 class="text-xl font-black mt-0.5">Accounts & Operational Expenses Ledger</h2>
+          <p class="text-xs text-slate-300 mt-1">Real-time accounting of customer cash collections, external courier fees, packaging & internal transfers.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center">
+            <span class="text-[11px] text-slate-300 font-semibold block">Customer Cash Collected</span>
+            <span id="statAccCashReceived" class="text-xl font-black text-emerald-400">Rs. 0</span>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center">
+            <span class="text-[11px] text-slate-300 font-semibold block">Total Expenses Incurred</span>
+            <span id="statAccTotalExpenses" class="text-xl font-black text-rose-400">Rs. 0</span>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center">
+            <span class="text-[11px] text-slate-300 font-semibold block">Net Operating Balance</span>
+            <span id="statAccNetBalance" class="text-xl font-black text-cyan-300">Rs. 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Expense Categories Breakdown -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-bold text-slate-500 uppercase">Courier Delivery Charges</p>
+          <h3 id="statTotalDeliveryExpense" class="text-2xl font-black text-rose-600 mt-1">Rs. 0</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Out-of-Hyderabad parcels paid</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-bold text-slate-500 uppercase">Supply Freight & Transport</p>
+          <h3 id="statTotalFreightExpense" class="text-2xl font-black text-amber-600 mt-1">Rs. 0</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Stock received cargo charges</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-bold text-slate-500 uppercase">Paid by Asif Ali</p>
+          <h3 id="statPaidByAsif" class="text-2xl font-black text-blue-700 mt-1">Rs. 0</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Couriers & on-ground expenses</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <p class="text-xs font-bold text-slate-500 uppercase">Paid by Khalid Saleem</p>
+          <h3 id="statPaidByKhalid" class="text-2xl font-black text-purple-700 mt-1">Rs. 0</h3>
+          <p class="text-[11px] text-slate-400 mt-1">Supplies & direct payments</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Form -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+          <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
+            <span>💳</span> Record Expense / Settlement
+          </h3>
+          <form onsubmit="handleRecordExpense(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Expense Type *</label>
+              <select id="expenseType" onchange="handleExpenseTypeChange()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
+                <option value="Delivery Charges Paid">🚚 Courier / Delivery Charges Paid</option>
+                <option value="Supply Freight & Cargo">📦 Supply / Stock Freight Received</option>
+                <option value="Internal Partner Transfer">🤝 Internal Reimbursement (Khalid ➔ Asif or vice versa)</option>
+                <option value="Miscellaneous Payment">🏷️ Miscellaneous (Packaging, Tape, Stationery)</option>
+                <option value="Other Payment">📝 Other Expense (Specify)</option>
+              </select>
+            </div>
+
+            <div id="partnerTransferDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
+              <label class="block text-xs font-bold text-indigo-900">Transfer Direction (Reimbursement):</label>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <span class="block text-[10px] text-slate-500 font-semibold">Sent By:</span>
+                  <select id="partnerTransferFrom" class="w-full border rounded-lg p-1.5 font-bold bg-white">
+                    <option value="Khalid Saleem">Khalid Saleem</option>
+                    <option value="Asif Ali">Asif Ali</option>
+                  </select>
+                </div>
+                <div>
+                  <span class="block text-[10px] text-slate-500 font-semibold">Received By:</span>
+                  <select id="partnerTransferTo" class="w-full border rounded-lg p-1.5 font-bold bg-white">
+                    <option value="Asif Ali">Asif Ali</option>
+                    <option value="Khalid Saleem">Khalid Saleem</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div id="specifyDetailDiv" class="hidden">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Specify Description *</label>
+              <input type="text" id="expenseSpecifyDesc" placeholder="e.g. Hyderabad delivery fuel, poster printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Amount (Rs.) *</label>
+                <input type="number" id="expenseAmount" min="1" required placeholder="e.g. 800" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-black text-rose-600 focus:outline-emerald-600" />
+              </div>
+              <div id="regularPaidByDiv">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Paid By</label>
+                <select id="expensePaidBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                  <option value="Asif Ali">Asif Ali</option>
+                  <option value="Khalid Saleem">Khalid Saleem</option>
+                  <option value="Business Cash Box">Business Cash Box</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Customer Name / Orders)</label>
+              <input type="text" id="expenseNotes" placeholder="e.g. Paid for Shafi & Ali Ahmed courier" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+            </div>
+
+            <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
+              Save Entry to Ledger
+            </button>
+          </form>
+        </div>
+
+        <!-- Ledger Table -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:col-span-2 space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Expenses & Settlements Ledger</h3>
+              <p class="text-xs text-slate-400">All business payments, freight, couriers and partner reimbursements</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="exportAccountsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                📊 Export CSV
+              </button>
+              <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                📄 Export PDF
+              </button>
+              <button onclick="loadExpenses()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">
+                🔄
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto max-h-[440px] overflow-y-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead class="sticky top-0 bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
+                <tr>
+                  <th class="py-2.5 px-3">Date</th>
+                  <th class="py-2.5 px-3">Type</th>
+                  <th class="py-2.5 px-3">Notes & Reference</th>
+                  <th class="py-2.5 px-3">Paid By / To</th>
+                  <th class="py-2.5 px-3 text-right">Amount (Rs.)</th>
+                  <th class="py-2.5 px-3 text-center no-print">Action</th>
+                </tr>
+              </thead>
+              <tbody id="expensesTableBody" class="divide-y divide-slate-100 font-medium">
+                <tr>
+                  <td colspan="6" class="text-center py-8 text-slate-400">Loading ledger...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -432,13 +597,27 @@
 
     let allOrders = [];
     let allProducts = [];
+    let allExpenses = [];
     let currentFilter = 'All';
     let statusChartInstance = null;
     let shadeChartInstance = null;
 
+    // Guaranteed Sequential Load
     async function loadAllData() {
-      await Promise.all([loadOrders(), loadProducts()]);
+      // Products loaded first so inventory valuation is always calculated properly
+      await loadProducts();
+      await loadOrders();
+      await loadExpenses();
       updateAnalytics();
+    }
+
+    async function loadProducts() {
+      const { data, error } = await client.from('products').select('*').order('id');
+      if (!error && data) {
+        allProducts = data;
+        renderInventory();
+        populateShadeSelects();
+      }
     }
 
     async function loadOrders() {
@@ -451,17 +630,16 @@
       }
     }
 
-    async function loadProducts() {
-      const { data, error } = await client.from('products').select('*').order('id');
+    async function loadExpenses() {
+      const { data, error } = await client.from('expenses_account').select('*').order('id', { ascending: false });
       if (!error && data) {
-        allProducts = data;
-        renderInventory();
-        populateShadeSelects();
+        allExpenses = data;
+        renderExpenses();
       }
     }
 
     function switchTab(tabId) {
-      const tabs = ['inventory', 'orders', 'record-sale', 'inward', 'analytics'];
+      const tabs = ['inventory', 'orders', 'record-sale', 'inward', 'analytics', 'accounts'];
       tabs.forEach(t => {
         const view = document.getElementById('view-' + t);
         const btn = document.getElementById('tab-' + t);
@@ -473,9 +651,15 @@
           btn.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5";
         }
       });
+
       if (tabId === 'analytics') {
-        updateAnalytics();
-        renderConfirmedCustomersTable();
+        setTimeout(() => {
+          updateAnalytics();
+          renderConfirmedCustomersTable();
+        }, 100);
+      }
+      if (tabId === 'accounts') {
+        renderExpenses();
       }
     }
 
@@ -589,7 +773,7 @@
               ` : ''}
 
               ${order.order_status !== 'Dispatched' ? `
-                <button onclick="dispatchOrder(${order.id}, ${order.product_id},${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
                   🚚 Dispatch (Deduct Stock)
                 </button>
               ` : ''}
@@ -708,7 +892,10 @@
         sold_price_per_unit: price,
         total_amount: total,
         sold_by: document.getElementById('manualSoldBy').value,
-        order_status: 'Advance Booking'
+        order_status: 'Advance Booking',
+        payment_status: 'Pending',
+        received_cash_amount: null,
+        delivery_channel: address.toLowerCase().includes('hyderabad') ? 'Hyderabad In-Person' : 'Courier Service'
       };
 
       const { error } = await client.from('sales_orders').insert([payload]);
@@ -746,7 +933,6 @@
       }
     }
 
-    // ORDER EDIT MODAL
     function openEditOrderModal(orderId) {
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
@@ -837,7 +1023,6 @@
       else await loadAllData();
     }
 
-    // PRODUCT EDIT MODAL
     function openProductModal(prodId) {
       const prod = allProducts.find(p => p.id === prodId);
       if (!prod) return;
@@ -870,90 +1055,133 @@
       }
     }
 
-    // ANALYTICS & EXPORT / IMPORT LOGIC
+    // ANALYTICS & CHARTS CALCULATION (PERFECTED ACCURACY)
     function updateAnalytics() {
-      let dispatchedSales = 0, netProfit = 0, unitsSold = 0, pendingValue = 0, stockValueRetail = 0;
-      let shadeBlackCount = 0, shadeBrownCount = 0;
-      let pendingOrdersCount = 0, confirmedOrdersCount = 0, dispatchedOrdersCount = 0;
+      let totalSalesBooked = 0;
+      let netProfit = 0;
+      let totalCashReceived = 0;
+      let pendingCashCollection = 0;
+      let stockValueRetail = 0;
 
+      let shadeBlackCount = 0;
+      let shadeBrownCount = 0;
+      let pendingOrdersCount = 0;
+      let confirmedOrdersCount = 0;
+      let dispatchedOrdersCount = 0;
+
+      // 1. Calculate Orders KPIs
       allOrders.forEach(order => {
-        const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
+        const orderTotal = parseFloat(order.total_amount) || (order.quantity * (order.sold_price_per_unit || 2500));
         const shade = (order.shade_name || '').toLowerCase();
+        const payStatus = order.payment_status || 'Pending';
 
-        if (order.order_status === 'Dispatched') {
-          dispatchedSales += total;
-          unitsSold += (order.quantity || 1);
+        // Count toward total sales (excluding cancelled)
+        if (order.order_status !== 'Cancelled') {
+          totalSalesBooked += orderTotal;
+
           const prod = allProducts.find(p => p.id === order.product_id);
           const cost = prod ? (prod.cost_price_per_unit || 0) : 0;
-          netProfit += total - ((order.quantity || 1) * cost);
+          netProfit += orderTotal - ((order.quantity || 1) * cost);
 
-          dispatchedOrdersCount++;
           if (shade.includes('black')) shadeBlackCount += (order.quantity || 1);
           if (shade.includes('brown')) shadeBrownCount += (order.quantity || 1);
-        } else if (order.order_status === 'Confirmed') {
-          pendingValue += total;
-          confirmedOrdersCount++;
-        } else if (order.order_status === 'Advance Booking' || order.order_status === 'Pending') {
-          pendingValue += total;
-          pendingOrdersCount++;
+        }
+
+        // Count order status bars
+        if (order.order_status === 'Dispatched') dispatchedOrdersCount++;
+        else if (order.order_status === 'Confirmed') confirmedOrdersCount++;
+        else if (order.order_status === 'Advance Booking' || order.order_status === 'Pending') pendingOrdersCount++;
+
+        // CASH CALCULATION: Look at payment_status & received_cash_amount directly!
+        let cashCollectedForThisOrder = 0;
+        if (payStatus === 'Received') {
+          if (order.received_cash_amount !== null && order.received_cash_amount !== undefined && order.received_cash_amount !== '') {
+            cashCollectedForThisOrder = parseFloat(order.received_cash_amount) || 0;
+          } else {
+            cashCollectedForThisOrder = orderTotal; // default to order bill if marked Received
+          }
+          totalCashReceived += cashCollectedForThisOrder;
+        } else {
+          // If payment is pending, add to pending collection!
+          pendingCashCollection += orderTotal;
         }
       });
 
+      // 2. Calculate Stock Valuation from live products
       allProducts.forEach(prod => {
-        const currentQty = prod.current_stock || 0;
-        const currentPrice = prod.default_sale_price || 2500;
+        const currentQty = parseInt(prod.current_stock) || 0;
+        const currentPrice = parseFloat(prod.default_sale_price) || 2500;
         stockValueRetail += currentQty * currentPrice;
       });
 
-      document.getElementById('statTotalSales').innerText = 'Rs. ' + dispatchedSales.toLocaleString();
-      document.getElementById('statTotalProfit').innerText = 'Rs. ' + netProfit.toLocaleString();
-      document.getElementById('statUnitsSold').innerText = unitsSold;
-      document.getElementById('statPendingValue').innerText = 'Rs. ' + pendingValue.toLocaleString();
+      // 3. Update DOM Cards
       document.getElementById('statStockValuePKR').innerText = 'Rs. ' + stockValueRetail.toLocaleString();
+      document.getElementById('statTotalSales').innerText = 'Rs. ' + totalSalesBooked.toLocaleString();
+      document.getElementById('statTotalProfit').innerText = 'Rs. ' + netProfit.toLocaleString();
+      document.getElementById('statTotalCashReceived').innerText = 'Rs. ' + totalCashReceived.toLocaleString();
+      document.getElementById('statPendingValue').innerText = 'Rs. ' + pendingCashCollection.toLocaleString();
 
-      const ctx1 = document.getElementById('orderStatusChart').getContext('2d');
-      if (statusChartInstance) statusChartInstance.destroy();
-      statusChartInstance = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-          labels: ['Pending / Advance', 'Confirmed', 'Dispatched'],
-          datasets: [{
-            label: 'Orders',
-            data: [pendingOrdersCount, confirmedOrdersCount, dispatchedOrdersCount],
-            backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
-            borderRadius: 8
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-      });
+      // 4. Render Charts
+      const canvas1 = document.getElementById('orderStatusChart');
+      if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        if (statusChartInstance) statusChartInstance.destroy();
+        statusChartInstance = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: ['Pending / Advance', 'Confirmed', 'Dispatched'],
+            datasets: [{
+              label: 'Orders Count',
+              data: [pendingOrdersCount, confirmedOrdersCount, dispatchedOrdersCount],
+              backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+          }
+        });
+      }
 
-      const ctx2 = document.getElementById('shadeBreakdownChart').getContext('2d');
-      if (shadeChartInstance) shadeChartInstance.destroy();
-      shadeChartInstance = new Chart(ctx2, {
-        type: 'doughnut',
-        data: {
-          labels: ['Natural Black', 'Dark Brown'],
-          datasets: [{
-            data: [shadeBlackCount || 1, shadeBrownCount || 1],
-            backgroundColor: ['#0f172a', '#b45309']
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
+      const canvas2 = document.getElementById('shadeBreakdownChart');
+      if (canvas2) {
+        const ctx2 = canvas2.getContext('2d');
+        if (shadeChartInstance) shadeChartInstance.destroy();
+
+        const totalShades = shadeBlackCount + shadeBrownCount;
+        const dataValues = totalShades > 0 ? [shadeBlackCount, shadeBrownCount] : [1, 1];
+
+        shadeChartInstance = new Chart(ctx2, {
+          type: 'doughnut',
+          data: {
+            labels: ['Natural Black', 'Dark Brown'],
+            datasets: [{
+              data: dataValues,
+              backgroundColor: ['#0f172a', '#b45309']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+          }
+        });
+      }
     }
 
-    // RENDER CONFIRMED CUSTOMERS TABLE
+    // CONFIRMED & DISPATCHED ORDERS LIST
     function renderConfirmedCustomersTable() {
       const tbody = document.getElementById('confirmedCustomersTableBody');
       const badge = document.getElementById('confirmedCustomersBadge');
       
-      // Filter for Confirmed (and Dispatched) customers
       const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
-
-      badge.innerText = `${confirmedList.length} Confirmed / Active`;
+      badge.innerText = `${confirmedList.length} Active Orders`;
 
       if (confirmedList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No confirmed orders found yet. Confirm bookings in the Orders tab to see them listed here.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No confirmed or dispatched orders found.</td></tr>`;
         return;
       }
 
@@ -961,54 +1189,303 @@
         const cleanPhone = (o.customer_phone || '').replace(/[^0-9]/g, '');
         const formattedPhone = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
         const total = o.total_amount || (o.quantity * (o.sold_price_per_unit || 2500));
+        const paymentStatus = o.payment_status || 'Pending';
+        const receivedVal = (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : '';
+        const deliveryChannel = o.delivery_channel || ( (o.customer_address || '').toLowerCase().includes('hyderabad') ? 'Hyderabad In-Person' : 'Courier Service' );
 
         return `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-3 font-mono font-bold text-slate-500">#${o.id}</td>
-            <td class="py-3 px-3 font-bold text-slate-900">${o.customer_name || 'Customer'}</td>
+          <tr class="hover:bg-slate-50 transition border-b">
+            <td class="py-3 px-3 font-mono font-bold text-slate-600">#${o.id}</td>
+            <td class="py-3 px-3">
+              <p class="font-bold text-slate-900">${o.customer_name || 'Customer'}</p>
+              <div class="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                <span>${o.customer_phone || 'N/A'}</span>
+                <a href="https://wa.me/${formattedPhone}" target="_blank" class="text-emerald-600 font-bold" title="WhatsApp">💬</a>
+                <a href="tel:${o.customer_phone}" class="text-slate-400" title="Call">📞</a>
+              </div>
+              <p class="text-[11px] text-slate-400 truncate max-w-xs mt-0.5" title="${o.customer_address || ''}">${o.customer_address || ''}</p>
+            </td>
+            <td class="py-3 px-3">
+              <p class="font-black text-emerald-700 text-sm">Rs. ${Number(total).toLocaleString()}</p>
+              <span class="text-[10px] text-slate-400 font-semibold block">${o.shade_name || 'Apple Colour'} (${o.quantity} units)</span>
+            </td>
+
+            <!-- Delivery Route -->
+            <td class="py-3 px-3">
+              <select onchange="updateDeliveryChannel(${o.id}, this.value)" class="border rounded-lg px-2 py-1 text-xs font-semibold bg-white">
+                <option value="Hyderabad In-Person" ${deliveryChannel === 'Hyderabad In-Person' ? 'selected' : ''}>🛵 Hyderabad (In-Person)</option>
+                <option value="Courier Service" ${deliveryChannel === 'Courier Service' ? 'selected' : ''}>📦 Courier (Out-of-Hyd)</option>
+              </select>
+            </td>
+
+            <!-- Payment Status -->
+            <td class="py-3 px-3">
+              <select id="statusSelect-${o.id}" class="border rounded-lg px-2.5 py-1 text-xs font-bold ${paymentStatus === 'Received' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-amber-50 text-amber-800 border-amber-300'}">
+                <option value="Pending" ${paymentStatus === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
+                <option value="Received" ${paymentStatus === 'Received' ? 'selected' : ''}>✅ Received</option>
+              </select>
+            </td>
+
+            <!-- Net Manual Cash Received Input -->
             <td class="py-3 px-3">
               <div class="flex items-center gap-1.5">
-                <span class="font-semibold text-slate-800">${o.customer_phone || 'N/A'}</span>
-                <a href="https://wa.me/${formattedPhone}" target="_blank" class="text-emerald-600 hover:text-emerald-700 font-bold" title="WhatsApp Chat">💬</a>
-                <a href="tel:${o.customer_phone}" class="text-slate-400 hover:text-slate-600" title="Call">📞</a>
+                <span class="text-xs font-bold text-slate-400">Rs.</span>
+                <input type="number" id="cashInput-${o.id}" value="${receivedVal}" placeholder="${total}" class="w-24 border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-bold text-slate-800 focus:outline-emerald-600 bg-white" />
               </div>
             </td>
-            <td class="py-3 px-3 text-slate-600 max-w-xs truncate" title="${o.customer_address || ''}">${o.customer_address || 'N/A'}</td>
-            <td class="py-3 px-3 text-slate-700">
-              <span class="font-semibold">${o.shade_name || 'Apple Hair Colour'}</span>
-              <span class="text-slate-400 text-xs block">Qty: ${o.quantity}</span>
-            </td>
-            <td class="py-3 px-3 text-right font-black text-emerald-700">Rs. ${Number(total).toLocaleString()}</td>
-            <td class="py-3 px-3 text-center">
-              <span class="px-2 py-0.5 rounded-full text-xs font-bold ${o.order_status === 'Dispatched' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
-                ${o.order_status}
-              </span>
+
+            <td class="py-3 px-3 text-center no-print">
+              <button id="saveBtn-${o.id}" onclick="saveOrderPaymentRow(${o.id}, ${total})" class="bg-slate-900 hover:bg-black text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1 mx-auto">
+                💾 Save
+              </button>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    // EXPORT CONFIRMED CUSTOMERS SPECIFIC CSV
-    function exportConfirmedCustomersCSV() {
-      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
+    async function updateDeliveryChannel(orderId, channel) {
+      await client.from('sales_orders').update({ delivery_channel: channel }).eq('id', orderId);
+      const order = allOrders.find(o => o.id === orderId);
+      if (order) order.delivery_channel = channel;
+    }
 
-      if (confirmedList.length === 0) {
-        return alert("No confirmed customers available to export yet. Please confirm bookings first.");
+    // RELIABLE PAYMENT SAVE FUNCTION
+    async function saveOrderPaymentRow(orderId, defaultTotal) {
+      const btn = document.getElementById(`saveBtn-${orderId}`);
+      btn.innerText = "⏳ Saving...";
+      btn.disabled = true;
+
+      const statusSelect = document.getElementById(`statusSelect-${orderId}`);
+      const newStatus = statusSelect.value;
+      const cashInput = document.getElementById(`cashInput-${orderId}`);
+      
+      let amountVal = cashInput.value !== '' ? parseFloat(cashInput.value) : null;
+      if (newStatus === 'Received' && (amountVal === null || isNaN(amountVal))) {
+        amountVal = defaultTotal;
+        cashInput.value = defaultTotal;
       }
 
+      const updateData = { 
+        payment_status: newStatus,
+        received_cash_amount: amountVal
+      };
+
+      const { error } = await client.from('sales_orders').update(updateData).eq('id', orderId);
+
+      btn.disabled = false;
+      if (error) {
+        btn.innerText = "💾 Save";
+        alert("Error saving: " + error.message);
+      } else {
+        btn.innerText = "✓ Saved!";
+        setTimeout(() => { btn.innerText = "💾 Save"; }, 1500);
+
+        // Update local object immediately
+        const order = allOrders.find(o => o.id === orderId);
+        if (order) {
+          order.payment_status = newStatus;
+          order.received_cash_amount = amountVal;
+        }
+
+        updateAnalytics();
+        renderExpenses();
+      }
+    }
+
+    // ACCOUNTS & EXPENSES LOGIC
+    function handleExpenseTypeChange() {
+      const type = document.getElementById('expenseType').value;
+      const specifyDiv = document.getElementById('specifyDetailDiv');
+      const partnerTransferDiv = document.getElementById('partnerTransferDiv');
+      const regularPaidByDiv = document.getElementById('regularPaidByDiv');
+
+      if (type === 'Other Payment') {
+        specifyDiv.classList.remove('hidden');
+        document.getElementById('expenseSpecifyDesc').required = true;
+      } else {
+        specifyDiv.classList.add('hidden');
+        document.getElementById('expenseSpecifyDesc').required = false;
+      }
+
+      if (type === 'Internal Partner Transfer') {
+        partnerTransferDiv.classList.remove('hidden');
+        regularPaidByDiv.classList.add('hidden');
+      } else {
+        partnerTransferDiv.classList.add('hidden');
+        regularPaidByDiv.classList.remove('hidden');
+      }
+    }
+
+    async function handleRecordExpense(e) {
+      e.preventDefault();
+      const btn = document.getElementById('saveExpenseBtn');
+      btn.disabled = true;
+      btn.innerText = "Saving Entry...";
+
+      const type = document.getElementById('expenseType').value;
+      const amount = parseFloat(document.getElementById('expenseAmount').value);
+      const specifyDesc = document.getElementById('expenseSpecifyDesc').value.trim();
+      const notes = document.getElementById('expenseNotes').value.trim();
+
+      let paidBy = document.getElementById('expensePaidBy').value;
+      let paidTo = null;
+
+      if (type === 'Internal Partner Transfer') {
+        paidBy = document.getElementById('partnerTransferFrom').value;
+        paidTo = document.getElementById('partnerTransferTo').value;
+      }
+
+      let finalDescription = type;
+      if (type === 'Internal Partner Transfer') {
+        finalDescription = `Reimbursement: ${paidBy} paid to ${paidTo}` + (notes ? ` (${notes})` : '');
+      } else if (type === 'Other Payment') {
+        finalDescription = specifyDesc ? `Other: ${specifyDesc}` : 'Other Payment';
+        if (notes) finalDescription += ` [${notes}]`;
+      } else {
+        if (notes) finalDescription += ` (${notes})`;
+      }
+
+      const payload = {
+        expense_type: type,
+        amount: amount,
+        paid_by: paidBy,
+        paid_to: paidTo,
+        notes: finalDescription
+      };
+
+      const { error } = await client.from('expenses_account').insert([payload]);
+      btn.disabled = false;
+      btn.innerText = "Save Entry to Ledger";
+
+      if (error) {
+        alert("Error saving record: " + error.message);
+      } else {
+        alert("Expense / Transfer record saved successfully!");
+        document.getElementById('expenseAmount').value = '';
+        document.getElementById('expenseSpecifyDesc').value = '';
+        document.getElementById('expenseNotes').value = '';
+        handleExpenseTypeChange();
+        await loadExpenses();
+      }
+    }
+
+    function renderExpenses() {
+      const tbody = document.getElementById('expensesTableBody');
+      let totalDelivery = 0;
+      let totalFreight = 0;
+      let totalBusinessExpenses = 0;
+      let paidByAsif = 0;
+      let paidByKhalid = 0;
+
+      allExpenses.forEach(exp => {
+        const amt = parseFloat(exp.amount) || 0;
+        
+        if (exp.paid_by === 'Asif Ali') paidByAsif += amt;
+        if (exp.paid_by === 'Khalid Saleem') paidByKhalid += amt;
+
+        if (exp.expense_type === 'Delivery Charges Paid') {
+          totalDelivery += amt;
+          totalBusinessExpenses += amt;
+        } else if (exp.expense_type === 'Supply Freight & Cargo') {
+          totalFreight += amt;
+          totalBusinessExpenses += amt;
+        } else if (exp.expense_type === 'Miscellaneous Payment' || exp.expense_type === 'Other Payment') {
+          totalBusinessExpenses += amt;
+        }
+      });
+
+      // Total Cash Received from Orders
+      let totalCustomerCash = 0;
+      allOrders.forEach(o => {
+        if (o.payment_status === 'Received') {
+          if (o.received_cash_amount !== null && o.received_cash_amount !== undefined && o.received_cash_amount !== '') {
+            totalCustomerCash += parseFloat(o.received_cash_amount) || 0;
+          } else {
+            totalCustomerCash += parseFloat(o.total_amount) || 0;
+          }
+        }
+      });
+
+      const netOperatingBalance = totalCustomerCash - totalBusinessExpenses;
+
+      document.getElementById('statAccCashReceived').innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
+      document.getElementById('statAccTotalExpenses').innerText = 'Rs. ' + totalBusinessExpenses.toLocaleString();
+      document.getElementById('statAccNetBalance').innerText = 'Rs. ' + netOperatingBalance.toLocaleString();
+
+      document.getElementById('statTotalDeliveryExpense').innerText = 'Rs. ' + totalDelivery.toLocaleString();
+      document.getElementById('statTotalFreightExpense').innerText = 'Rs. ' + totalFreight.toLocaleString();
+      document.getElementById('statPaidByAsif').innerText = 'Rs. ' + paidByAsif.toLocaleString();
+      document.getElementById('statPaidByKhalid').innerText = 'Rs. ' + paidByKhalid.toLocaleString();
+
+      if (allExpenses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No records found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = allExpenses.map(exp => {
+        let partnerBadge = `<span class="font-bold text-slate-800">${exp.paid_by || 'Asif Ali'}</span>`;
+        if (exp.expense_type === 'Internal Partner Transfer' && exp.paid_to) {
+          partnerBadge = `<span class="bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded-md font-bold text-xs">${exp.paid_by} ➔ ${exp.paid_to}</span>`;
+        }
+
+        const isTransfer = exp.expense_type === 'Internal Partner Transfer';
+
+        return `
+          <tr class="hover:bg-slate-50 transition border-b">
+            <td class="py-2.5 px-3 text-slate-500 font-medium">${exp.created_at ? new Date(exp.created_at).toLocaleDateString() : 'Today'}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${exp.expense_type}</td>
+            <td class="py-2.5 px-3 text-slate-600">${exp.notes || '—'}</td>
+            <td class="py-2.5 px-3">${partnerBadge}</td>
+            <td class="py-2.5 px-3 text-right font-black ${isTransfer ? 'text-indigo-600' : 'text-rose-600'}">
+              Rs. ${Number(exp.amount).toLocaleString()}
+            </td>
+            <td class="py-2.5 px-3 text-center no-print">
+              <button onclick="deleteExpense(${exp.id})" class="text-slate-400 hover:text-rose-600 text-xs font-bold" title="Delete">🗑</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function deleteExpense(expenseId) {
+      if (!confirm("Are you sure you want to delete this record?")) return;
+      const { error } = await client.from('expenses_account').delete().eq('id', expenseId);
+      if (error) alert("Error: " + error.message);
+      else await loadExpenses();
+    }
+
+    // EXPORTS
+    function exportAccountsCSV() {
+      if (allExpenses.length === 0) return alert("No expenses to export.");
+
+      const headers = ["ID", "Date", "Expense Type", "Description / Notes", "Paid By", "Paid To", "Amount (PKR)"];
+      const rows = allExpenses.map(e => [
+        e.id,
+        e.created_at ? new Date(e.created_at).toLocaleDateString() : '',
+        `"${(e.expense_type || '').replace(/"/g, '""')}"`,
+        `"${(e.notes || '').replace(/"/g, '""')}"`,
+        `"${(e.paid_by || '').replace(/"/g, '""')}"`,
+        `"${(e.paid_to || '').replace(/"/g, '""')}"`,
+        e.amount
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const link = document.createElement("a");
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", `KS_Traders_Accounts_Expenses_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportConfirmedCustomersCSV() {
+      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
+      if (confirmedList.length === 0) return alert("No confirmed orders to export.");
+
       const headers = [
-        "Order ID",
-        "Customer Name",
-        "Phone / WhatsApp",
-        "Complete Delivery Address",
-        "Ordered Shade",
-        "Quantity",
-        "Unit Price (PKR)",
-        "Total Bill (PKR)",
-        "Sales Source",
-        "Current Status",
-        "Booking Date"
+        "Order ID", "Customer Name", "Phone / WhatsApp", "Address", "Shade", "Quantity", 
+        "Total Bill (PKR)", "Delivery Route", "Payment Status", "Net Cash Received (PKR)", "Booking Date"
       ];
 
       const rows = confirmedList.map(o => [
@@ -1018,28 +1495,26 @@
         `"${(o.customer_address || '').replace(/"/g, '""')}"`,
         `"${(o.shade_name || '').replace(/"/g, '""')}"`,
         o.quantity,
-        o.sold_price_per_unit || 2500,
-        o.total_amount || (o.quantity * (o.sold_price_per_unit || 2500)),
-        `"${(o.sold_by || 'Online Storefront').replace(/"/g, '""')}"`,
-        o.order_status,
+        o.total_amount || (o.quantity * 2500),
+        o.delivery_channel || 'Courier Service',
+        o.payment_status || 'Pending',
+        (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : (o.payment_status === 'Received' ? o.total_amount : '0'),
         o.created_at ? new Date(o.created_at).toLocaleDateString() : ''
       ]);
 
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `KS_Traders_Confirmed_Customers_${new Date().toISOString().slice(0,10)}.csv`);
+      link.setAttribute("href", encodeURI(csvContent));
+      link.setAttribute("download", `KS_Traders_Confirmed_Orders_Ledger_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // EXPORT ALL ORDERS TO CSV
     function exportToCSV() {
       if (allOrders.length === 0) return alert("No orders available to export.");
 
-      const headers = ["Order ID", "Date", "Customer Name", "Phone", "Address", "Shade", "Quantity", "Unit Price", "Total Bill", "Sold By", "Status"];
+      const headers = ["Order ID", "Date", "Customer Name", "Phone", "Address", "Shade", "Quantity", "Total Bill", "Sold By", "Status", "Delivery Route", "Payment Status", "Net Received Cash"];
       const rows = allOrders.map(o => [
         o.id,
         o.created_at ? new Date(o.created_at).toLocaleDateString() : '',
@@ -1048,28 +1523,23 @@
         `"${(o.customer_address || '').replace(/"/g, '""')}"`,
         `"${(o.shade_name || '').replace(/"/g, '""')}"`,
         o.quantity,
-        o.sold_price_per_unit,
         o.total_amount,
         `"${(o.sold_by || '').replace(/"/g, '""')}"`,
-        o.order_status
+        o.order_status,
+        o.delivery_channel || 'Courier Service',
+        o.payment_status || 'Pending',
+        (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : (o.payment_status === 'Received' ? o.total_amount : '0')
       ]);
 
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", encodeURI(csvContent));
       link.setAttribute("download", `KS_Traders_All_Orders_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // EXPORT TO PDF
-    function exportToPDF() {
-      window.print();
-    }
-
-    // IMPORT CSV FILE
     async function handleCSVImport(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -1093,18 +1563,18 @@
               sold_price_per_unit: parseFloat(cols[7]) || 2500,
               total_amount: parseFloat(cols[8]) || 2500,
               sold_by: cols[9] || 'Imported CSV',
-              order_status: cols[10] || 'Advance Booking'
+              order_status: cols[10] || 'Advance Booking',
+              payment_status: 'Pending',
+              received_cash_amount: null
             });
           }
         }
 
-        if (rowsToInsert.length === 0) return alert("Could not parse rows from CSV.");
-
-        if (confirm(`Found ${rowsToInsert.length} orders in CSV. Import them into Supabase database?`)) {
+        if (confirm(`Found ${rowsToInsert.length} orders in CSV. Import them into Supabase?`)) {
           const { error } = await client.from('sales_orders').insert(rowsToInsert);
-          if (error) alert("Import Error: " + error.message);
+          if (error) alert("Error: " + error.message);
           else {
-            alert(`Successfully imported ${rowsToInsert.length} orders!`);
+            alert(`Imported ${rowsToInsert.length} orders!`);
             await loadAllData();
           }
         }
@@ -1112,6 +1582,7 @@
       reader.readAsText(file);
     }
 
+    // Start App
     loadAllData();
   </script>
 </body>
