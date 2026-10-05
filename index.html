@@ -22,474 +22,517 @@
 </head>
 <body class="bg-[#f1f5f9] text-slate-800 min-h-screen">
 
-  <!-- Top Brand Navigation Bar -->
-  <header class="bg-[#0f172a] text-white shadow-md sticky top-0 z-30 no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
-      <div class="flex items-center gap-3">
-        <span class="text-2xl">🍏</span>
+  <!-- LOGIN OVERLAY SCREEN -->
+  <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0f172a]/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 text-center space-y-5">
+      <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">
+        🍏
+      </div>
+      <div>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">KS Traders Admin</h2>
+        <p class="text-xs text-slate-500 mt-1">Please sign in to access the dashboard & accounts</p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight">KS Traders — Admin & Accounts Dashboard</h1>
-          <p class="text-[11px] text-slate-400">Apple Hair Colour Inventory, Orders & Financial Ledger (Hyderabad)</p>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
+          <input type="text" id="loginUsername" required placeholder="asif or khalid" autocomplete="username" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:outline-emerald-600 focus:ring-2 focus:ring-emerald-500/20" />
         </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <a href="order.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow transition flex items-center gap-1.5">
-          🛒 Open Customer Store
-        </a>
-        <button onclick="loadAllData()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 transition flex items-center gap-1">
-          🔄 Refresh Data
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+          <input type="password" id="loginPassword" required placeholder="Enter password" autocomplete="current-password" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:outline-emerald-600 focus:ring-2 focus:ring-emerald-500/20" />
+        </div>
+
+        <p id="loginErrorMsg" class="text-xs text-rose-600 font-bold hidden text-center">Invalid username or password.</p>
+
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">
+          Sign In to Dashboard
         </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- 6 Navigation Tabs -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 no-print">
-    <div class="flex flex-wrap gap-2">
-      <button onclick="switchTab('inventory')" id="tab-inventory" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-        📦 Stock & Inventory
-      </button>
-
-      <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">
-        🛒 Cart & Online Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
-      </button>
-
-      <button onclick="switchTab('record-sale')" id="tab-record-sale" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-        ➕ Record Sale / Advance
-      </button>
-
-      <button onclick="switchTab('inward')" id="tab-inward" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-        📥 Inward Stock
-      </button>
-
-      <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-        📊 Analytics & History
-      </button>
-
-      <button onclick="switchTab('accounts')" id="tab-accounts" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-        💰 Accounts & Expenses
-      </button>
+      </form>
+      <p class="text-[11px] text-slate-400">Authorized access for Asif Ali & Khalid Saleem only</p>
     </div>
   </div>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
+  <!-- MAIN APP CONTAINER (Protected) -->
+  <div id="mainDashboardApp" class="hidden">
 
-    <!-- TAB 1: STOCK & INVENTORY -->
-    <section id="view-inventory" class="hidden space-y-4">
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
+    <!-- Top Brand Navigation Bar -->
+    <header class="bg-[#0f172a] text-white shadow-md sticky top-0 z-30 no-print">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">🍏</span>
           <div>
-            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Current Stock & Product Pricing</h2>
-            <p class="text-xs text-slate-500 mt-0.5">Inventory counts, cost prices and retail selling prices.</p>
-          </div>
-          <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400/80 px-5 py-3 rounded-2xl shadow-sm text-right flex items-center gap-4">
-            <span class="text-3xl">💎</span>
-            <div>
-              <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Total Retail Stock Value</span>
-              <div class="flex items-baseline gap-1.5 justify-end">
-                <span id="totalStockValueHeader" class="text-xl sm:text-2xl font-black text-emerald-700">Rs. 0</span>
-              </div>
-              <p class="text-[10px] text-emerald-600 font-semibold" id="totalUnitsFormula">Calculating stock...</p>
-            </div>
+            <h1 class="text-base sm:text-lg font-bold tracking-tight">KS Traders — Admin & Accounts Dashboard</h1>
+            <p class="text-[11px] text-slate-400">Apple Hair Colour Inventory, Orders & Financial Ledger (Hyderabad)</p>
           </div>
         </div>
-        <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
-      </div>
-    </section>
-
-    <!-- TAB 2: CART & ONLINE ORDERS -->
-    <section id="view-orders" class="space-y-4">
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-slate-900">Online Cart Orders & Advance Bookings</h2>
-            <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call and click Dispatch to deduct stock.</p>
-          </div>
-          <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">
+        <div class="flex items-center gap-2">
+          <span id="loggedInBadge" class="bg-indigo-900/60 text-indigo-300 border border-indigo-700 text-[11px] font-bold px-2.5 py-1 rounded-lg">
+            👤 Partner
+          </span>
+          <a href="order.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow transition flex items-center gap-1.5">
+            🛒 Open Store
+          </a>
+          <button onclick="loadAllData()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 transition flex items-center gap-1">
             🔄 Refresh
           </button>
-        </div>
-
-        <div class="bg-slate-50 p-1.5 rounded-xl border border-slate-200 flex flex-wrap gap-1">
-          <button onclick="filterOrders('Pending / Advance')" id="subFilter-Pending" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-            Pending / Advance (<span id="count-pending">0</span>)
+          <button onclick="handleAdminLogout()" class="bg-rose-900/80 hover:bg-rose-800 text-rose-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-rose-700 transition flex items-center gap-1">
+            🚪 Logout
           </button>
-          <button onclick="filterOrders('Confirmed')" id="subFilter-Confirmed" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-            Confirmed (<span id="count-confirmed">0</span>)
-          </button>
-          <button onclick="filterOrders('Dispatched')" id="subFilter-Dispatched" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-            Dispatched (<span id="count-dispatched">0</span>)
-          </button>
-          <button onclick="filterOrders('All')" id="subFilter-All" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition">
-            All (<span id="count-all">0</span>)
-          </button>
-        </div>
-
-        <div id="ordersCardsList" class="space-y-4 pt-2">
-          <div class="p-12 text-center text-slate-400">Loading orders...</div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- TAB 3: RECORD SALE / ADVANCE -->
-    <section id="view-record-sale" class="hidden space-y-4">
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-2xl mx-auto space-y-4">
-        <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">➕ Record Manual Direct Sale / Advance Booking</h2>
-        <form onsubmit="handleManualSale(event)" class="space-y-3.5">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Customer Name *</label>
-            <input type="text" id="manualCustName" required placeholder="Customer Full Name" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <!-- 6 Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 no-print">
+      <div class="flex flex-wrap gap-2">
+        <button onclick="switchTab('inventory')" id="tab-inventory" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+          📦 Stock & Inventory
+        </button>
+
+        <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">
+          🛒 Cart & Online Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
+        </button>
+
+        <button onclick="switchTab('record-sale')" id="tab-record-sale" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+          ➕ Record Sale / Advance
+        </button>
+
+        <button onclick="switchTab('inward')" id="tab-inward" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+          📥 Inward Stock
+        </button>
+
+        <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+          📊 Analytics & History
+        </button>
+
+        <button onclick="switchTab('accounts')" id="tab-accounts" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
+          💰 Accounts & Expenses
+        </button>
+      </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
+
+      <!-- TAB 1: STOCK & INVENTORY -->
+      <section id="view-inventory" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Phone / WhatsApp *</label>
-              <input type="tel" id="manualCustPhone" required placeholder="0336-1234567" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+              <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Current Stock & Product Pricing</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Inventory counts, cost prices and retail selling prices.</p>
             </div>
+            <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400/80 px-5 py-3 rounded-2xl shadow-sm text-right flex items-center gap-4">
+              <span class="text-3xl">💎</span>
+              <div>
+                <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Total Retail Stock Value</span>
+                <div class="flex items-baseline gap-1.5 justify-end">
+                  <span id="totalStockValueHeader" class="text-xl sm:text-2xl font-black text-emerald-700">Rs. 0</span>
+                </div>
+                <p class="text-[10px] text-emerald-600 font-semibold" id="totalUnitsFormula">Calculating stock...</p>
+              </div>
+            </div>
+          </div>
+          <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CART & ONLINE ORDERS -->
+      <section id="view-orders" class="space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Sold By / Partner</label>
-              <select id="manualSoldBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
-                <option value="Khalid Saleem">Khalid Saleem</option>
-                <option value="Asif Ali">Asif Ali</option>
-                <option value="Online Storefront">Online Storefront</option>
-              </select>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">Online Cart Orders & Advance Bookings</h2>
+              <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call and click Dispatch to deduct stock.</p>
             </div>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address <span class="text-slate-400 font-normal">(Optional)</span></label>
-            <input type="email" id="manualCustEmail" placeholder="customer@example.com" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Complete Address / City</label>
-            <input type="text" id="manualAddress" required placeholder="Address or City" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Select Shade *</label>
-              <select id="manualShadeSelect" onchange="autoFillPrice()" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600"></select>
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity</label>
-              <input type="number" id="manualQty" value="1" min="1" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Price Per Unit (Rs.)</label>
-              <input type="number" id="manualPrice" value="2500" min="0" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold text-emerald-700 focus:outline-emerald-600" />
-            </div>
-          </div>
-          <div class="flex justify-between items-center bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-            <span class="text-xs font-bold text-slate-700">Total Calculation:</span>
-            <span id="manualTotalText" class="text-base font-black text-emerald-700">Rs. 2,500</span>
-          </div>
-          <div class="pt-2">
-            <button type="submit" id="saveManualSaleBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-              Save & Record Sale (Advance Booking)
+            <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">
+              🔄 Refresh
             </button>
           </div>
-        </form>
-      </div>
-    </section>
 
-    <!-- TAB 4: INWARD STOCK -->
-    <section id="view-inward" class="hidden space-y-4">
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-xl mx-auto space-y-4">
-        <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">📥 Inward Stock (Add New Supply)</h2>
-        <form onsubmit="handleInwardStock(event)" class="space-y-3.5">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Select Shade *</label>
-            <select id="inwardShadeSelect" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600"></select>
+          <div class="bg-slate-50 p-1.5 rounded-xl border border-slate-200 flex flex-wrap gap-1">
+            <button onclick="filterOrders('Pending / Advance')" id="subFilter-Pending" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
+              Pending / Advance (<span id="count-pending">0</span>)
+            </button>
+            <button onclick="filterOrders('Confirmed')" id="subFilter-Confirmed" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
+              Confirmed (<span id="count-confirmed">0</span>)
+            </button>
+            <button onclick="filterOrders('Dispatched')" id="subFilter-Dispatched" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
+              Dispatched (<span id="count-dispatched">0</span>)
+            </button>
+            <button onclick="filterOrders('All')" id="subFilter-All" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition">
+              All (<span id="count-all">0</span>)
+            </button>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+          <div id="ordersCardsList" class="space-y-4 pt-2">
+            <div class="p-12 text-center text-slate-400">Loading orders...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: RECORD SALE / ADVANCE -->
+      <section id="view-record-sale" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-2xl mx-auto space-y-4">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">➕ Record Manual Direct Sale / Advance Booking</h2>
+          <form onsubmit="handleManualSale(event)" class="space-y-3.5">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity Added (Units)</label>
-              <input type="number" id="inwardQty" min="1" required placeholder="e.g. 50" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Customer Name *</label>
+              <input type="text" id="manualCustName" required placeholder="Customer Full Name" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Cost Price Per Unit (Rs.)</label>
-              <input type="number" id="inwardCostPrice" min="0" required placeholder="Cost price" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
-            </div>
-          </div>
-          <button type="submit" id="saveInwardBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-            Confirm Inward Stock & Update Inventory
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- TAB 5: ANALYTICS & HISTORY -->
-    <section id="view-analytics" class="hidden space-y-6 print-area">
-      
-      <!-- Toolbar -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
-        <div>
-          <h3 class="text-sm font-bold text-slate-800">Data Management & Reports</h3>
-          <p class="text-xs text-slate-400">Export general orders, print PDF, or extract confirmed customers list</p>
-        </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)" />
-          
-          <button onclick="document.getElementById('csvFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-            📥 Import CSV
-          </button>
-
-          <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-            📄 Export PDF
-          </button>
-
-          <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-            📊 Export All Orders CSV
-          </button>
-        </div>
-      </div>
-
-      <!-- KPI Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="bg-white p-5 rounded-2xl border-2 border-emerald-300 shadow-sm">
-          <p class="text-xs font-bold text-emerald-800 uppercase">Stock Valuation (Retail)</p>
-          <h3 id="statStockValuePKR" class="text-2xl font-black text-emerald-700 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-emerald-600 font-semibold mt-1">Live in-stock inventory</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Total Sales Booked</p>
-          <h3 id="statTotalSales" class="text-2xl font-black text-slate-900 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-emerald-600 font-semibold mt-1">All confirmed & dispatched</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Net Gross Profit</p>
-          <h3 id="statTotalProfit" class="text-2xl font-black text-emerald-600 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Revenue - Unit Cost</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
-          <p class="text-xs font-bold text-indigo-900 uppercase">Total Cash Received</p>
-          <h3 id="statTotalCashReceived" class="text-2xl font-black text-indigo-700 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-indigo-600 font-semibold mt-1">Actual verified collected cash</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
-          <p class="text-xs font-bold text-amber-900 uppercase">Pending Cash Collection</p>
-          <h3 id="statPendingValue" class="text-2xl font-black text-amber-700 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-amber-600 font-semibold mt-1">Pending from courier / customer</p>
-        </div>
-      </div>
-
-      <!-- Charts -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <h4 class="text-sm font-bold text-slate-800 mb-4">Orders Status Breakdown</h4>
-          <div class="relative w-full h-64">
-            <canvas id="orderStatusChart"></canvas>
-          </div>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <h4 class="text-sm font-bold text-slate-800 mb-4">Sales by Shade</h4>
-          <div class="relative w-full h-64 flex items-center justify-center">
-            <canvas id="shadeBreakdownChart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Table -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed & Dispatched Orders — Payment & Cash Collection</h3>
-              <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Active Orders</span>
-            </div>
-            <p class="text-xs text-slate-500 mt-0.5">Toggle Payment Status (Received/Pending) or enter manual Net Cash received after courier charges.</p>
-          </div>
-
-          <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">
-            📥 Extract Confirmed Customers (CSV)
-          </button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs sm:text-sm">
-            <thead>
-              <tr class="bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
-                <th class="py-3 px-3">Order Ref</th>
-                <th class="py-3 px-3">Customer Details</th>
-                <th class="py-3 px-3">Total Bill</th>
-                <th class="py-3 px-3">Delivery Route</th>
-                <th class="py-3 px-3">Payment Status</th>
-                <th class="py-3 px-3">Net Cash Received (Rs.)</th>
-                <th class="py-3 px-3 text-center no-print">Action</th>
-              </tr>
-            </thead>
-            <tbody id="confirmedCustomersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
-              <tr>
-                <td colspan="7" class="text-center py-8 text-slate-400">Loading orders...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- TAB 6: ACCOUNTS & EXPENSES -->
-    <section id="view-accounts" class="hidden space-y-6">
-      
-      <!-- Financial Overview Banner -->
-      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-widest text-indigo-300">KS Traders Business Accounts</span>
-          <h2 class="text-xl font-black mt-0.5">Accounts & Operational Expenses Ledger</h2>
-          <p class="text-xs text-slate-300 mt-1">Real-time accounting of customer cash collections, external courier fees, packaging & internal transfers.</p>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center">
-            <span class="text-[11px] text-slate-300 font-semibold block">Customer Cash Collected</span>
-            <span id="statAccCashReceived" class="text-xl font-black text-emerald-400">Rs. 0</span>
-          </div>
-          <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center">
-            <span class="text-[11px] text-slate-300 font-semibold block">Total Expenses Incurred</span>
-            <span id="statAccTotalExpenses" class="text-xl font-black text-rose-400">Rs. 0</span>
-          </div>
-          <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center">
-            <span class="text-[11px] text-slate-300 font-semibold block">Net Operating Balance</span>
-            <span id="statAccNetBalance" class="text-xl font-black text-cyan-300">Rs. 0</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Expense Categories Breakdown -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Courier Delivery Charges</p>
-          <h3 id="statTotalDeliveryExpense" class="text-2xl font-black text-rose-600 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Out-of-Hyderabad parcels paid</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Supply Freight & Transport</p>
-          <h3 id="statTotalFreightExpense" class="text-2xl font-black text-amber-600 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Stock received cargo charges</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Paid by Asif Ali</p>
-          <h3 id="statPaidByAsif" class="text-2xl font-black text-blue-700 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Couriers & on-ground expenses</p>
-        </div>
-        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500 uppercase">Paid by Khalid Saleem</p>
-          <h3 id="statPaidByKhalid" class="text-2xl font-black text-purple-700 mt-1">Rs. 0</h3>
-          <p class="text-[11px] text-slate-400 mt-1">Supplies & direct payments</p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Form -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-          <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
-            <span>💳</span> Record Expense / Settlement
-          </h3>
-          <form onsubmit="handleRecordExpense(event)" class="space-y-3.5">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Expense Type *</label>
-              <select id="expenseType" onchange="handleExpenseTypeChange()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
-                <option value="Delivery Charges Paid">🚚 Courier / Delivery Charges Paid</option>
-                <option value="Supply Freight & Cargo">📦 Supply / Stock Freight Received</option>
-                <option value="Internal Partner Transfer">🤝 Internal Reimbursement (Khalid ➔ Asif or vice versa)</option>
-                <option value="Miscellaneous Payment">🏷️ Miscellaneous (Packaging, Tape, Stationery)</option>
-                <option value="Other Payment">📝 Other Expense (Specify)</option>
-              </select>
-            </div>
-
-            <div id="partnerTransferDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
-              <label class="block text-xs font-bold text-indigo-900">Transfer Direction (Reimbursement):</label>
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div>
-                  <span class="block text-[10px] text-slate-500 font-semibold">Sent By:</span>
-                  <select id="partnerTransferFrom" class="w-full border rounded-lg p-1.5 font-bold bg-white">
-                    <option value="Khalid Saleem">Khalid Saleem</option>
-                    <option value="Asif Ali">Asif Ali</option>
-                  </select>
-                </div>
-                <div>
-                  <span class="block text-[10px] text-slate-500 font-semibold">Received By:</span>
-                  <select id="partnerTransferTo" class="w-full border rounded-lg p-1.5 font-bold bg-white">
-                    <option value="Asif Ali">Asif Ali</option>
-                    <option value="Khalid Saleem">Khalid Saleem</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div id="specifyDetailDiv" class="hidden">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Specify Description *</label>
-              <input type="text" id="expenseSpecifyDesc" placeholder="e.g. Hyderabad delivery fuel, poster printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Amount (Rs.) *</label>
-                <input type="number" id="expenseAmount" min="1" required placeholder="e.g. 800" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-black text-rose-600 focus:outline-emerald-600" />
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Phone / WhatsApp *</label>
+                <input type="tel" id="manualCustPhone" required placeholder="0336-1234567" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
-              <div id="regularPaidByDiv">
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Paid By</label>
-                <select id="expensePaidBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
-                  <option value="Asif Ali">Asif Ali</option>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Sold By / Partner</label>
+                <select id="manualSoldBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
                   <option value="Khalid Saleem">Khalid Saleem</option>
-                  <option value="Business Cash Box">Business Cash Box</option>
+                  <option value="Asif Ali">Asif Ali</option>
+                  <option value="Online Storefront">Online Storefront</option>
                 </select>
               </div>
             </div>
-
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Customer Name / Orders)</label>
-              <input type="text" id="expenseNotes" placeholder="e.g. Paid for Shafi & Ali Ahmed courier" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address <span class="text-slate-400 font-normal">(Optional)</span></label>
+              <input type="email" id="manualCustEmail" placeholder="customer@example.com" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
             </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Complete Address / City</label>
+              <input type="text" id="manualAddress" required placeholder="Address or City" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Select Shade *</label>
+                <select id="manualShadeSelect" onchange="autoFillPrice()" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity</label>
+                <input type="number" id="manualQty" value="1" min="1" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Price Per Unit (Rs.)</label>
+                <input type="number" id="manualPrice" value="2500" min="0" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold text-emerald-700 focus:outline-emerald-600" />
+              </div>
+            </div>
+            <div class="flex justify-between items-center bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <span class="text-xs font-bold text-slate-700">Total Calculation:</span>
+              <span id="manualTotalText" class="text-base font-black text-emerald-700">Rs. 2,500</span>
+            </div>
+            <div class="pt-2">
+              <button type="submit" id="saveManualSaleBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
+                Save & Record Sale (Advance Booking)
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
 
-            <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-              Save Entry to Ledger
+      <!-- TAB 4: INWARD STOCK -->
+      <section id="view-inward" class="hidden space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-xl mx-auto space-y-4">
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">📥 Inward Stock (Add New Supply)</h2>
+          <form onsubmit="handleInwardStock(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Select Shade *</label>
+              <select id="inwardShadeSelect" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600"></select>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity Added (Units)</label>
+                <input type="number" id="inwardQty" min="1" required placeholder="e.g. 50" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Cost Price Per Unit (Rs.)</label>
+                <input type="number" id="inwardCostPrice" min="0" required placeholder="Cost price" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
+              </div>
+            </div>
+            <button type="submit" id="saveInwardBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
+              Confirm Inward Stock & Update Inventory
             </button>
           </form>
         </div>
+      </section>
 
-        <!-- Ledger Table -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:col-span-2 space-y-4">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
-            <div>
-              <h3 class="text-base font-bold text-slate-900">Expenses & Settlements Ledger</h3>
-              <p class="text-xs text-slate-400">All business payments, freight, couriers and partner reimbursements</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <button onclick="exportAccountsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                📊 Export CSV
-              </button>
-              <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                📄 Export PDF
-              </button>
-              <button onclick="loadExpenses()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">
-                🔄
-              </button>
+      <!-- TAB 5: ANALYTICS & HISTORY -->
+      <section id="view-analytics" class="hidden space-y-6 print-area">
+        
+        <!-- Toolbar -->
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Data Management & Reports</h3>
+            <p class="text-xs text-slate-400">Export general orders, print PDF, or extract confirmed customers list</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)" />
+            
+            <button onclick="document.getElementById('csvFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              📥 Import CSV
+            </button>
+
+            <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              📄 Export PDF
+            </button>
+
+            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              📊 Export All Orders CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="bg-white p-5 rounded-2xl border-2 border-emerald-300 shadow-sm">
+            <p class="text-xs font-bold text-emerald-800 uppercase">Stock Valuation (Retail)</p>
+            <h3 id="statStockValuePKR" class="text-2xl font-black text-emerald-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Live in-stock inventory</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-500 uppercase">Total Sales Booked</p>
+            <h3 id="statTotalSales" class="text-2xl font-black text-slate-900 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-1">All active customer orders</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-500 uppercase">Net Gross Profit</p>
+            <h3 id="statTotalProfit" class="text-2xl font-black text-emerald-600 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Revenue - Unit Cost</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
+            <p class="text-xs font-bold text-indigo-900 uppercase">Total Cash Received</p>
+            <h3 id="statTotalCashReceived" class="text-2xl font-black text-indigo-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-indigo-600 font-semibold mt-1">Verified cash collected</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
+            <p class="text-xs font-bold text-amber-900 uppercase">Pending Cash Collection</p>
+            <h3 id="statPendingValue" class="text-2xl font-black text-amber-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-amber-600 font-semibold mt-1">Awaiting customer/courier cash</p>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <h4 class="text-sm font-bold text-slate-800 mb-4">Orders Status Breakdown</h4>
+            <div class="relative w-full h-64">
+              <canvas id="orderStatusChart"></canvas>
             </div>
           </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <h4 class="text-sm font-bold text-slate-800 mb-4">Sales by Shade</h4>
+            <div class="relative w-full h-64 flex items-center justify-center">
+              <canvas id="shadeBreakdownChart"></canvas>
+            </div>
+          </div>
+        </div>
 
-          <div class="overflow-x-auto max-h-[440px] overflow-y-auto">
+        <!-- Confirmed & Dispatched Table -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed & Dispatched Orders — Payment & Cash Collection</h3>
+                <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Active Orders</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">Toggle Payment Status (Received/Pending) or enter manual Net Cash received after courier charges.</p>
+            </div>
+
+            <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">
+              📥 Extract Confirmed Customers (CSV)
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs sm:text-sm">
-              <thead class="sticky top-0 bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
-                <tr>
-                  <th class="py-2.5 px-3">Date</th>
-                  <th class="py-2.5 px-3">Type</th>
-                  <th class="py-2.5 px-3">Notes & Reference</th>
-                  <th class="py-2.5 px-3">Paid By / To</th>
-                  <th class="py-2.5 px-3 text-right">Amount (Rs.)</th>
-                  <th class="py-2.5 px-3 text-center no-print">Action</th>
+              <thead>
+                <tr class="bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
+                  <th class="py-3 px-3">Order Ref</th>
+                  <th class="py-3 px-3">Customer Details</th>
+                  <th class="py-3 px-3">Total Bill</th>
+                  <th class="py-3 px-3">Delivery Route</th>
+                  <th class="py-3 px-3">Payment Status</th>
+                  <th class="py-3 px-3">Net Cash Received (Rs.)</th>
+                  <th class="py-3 px-3 text-center no-print">Action</th>
                 </tr>
               </thead>
-              <tbody id="expensesTableBody" class="divide-y divide-slate-100 font-medium">
+              <tbody id="confirmedCustomersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
                 <tr>
-                  <td colspan="6" class="text-center py-8 text-slate-400">Loading ledger...</td>
+                  <td colspan="7" class="text-center py-8 text-slate-400">Loading orders...</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-      </div>
 
-    </section>
+      </section>
 
-  </main>
+      <!-- TAB 6: ACCOUNTS & EXPENSES -->
+      <section id="view-accounts" class="hidden space-y-6">
+        
+        <!-- Financial Overview Banner -->
+        <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-indigo-300">KS Traders Business Accounts</span>
+            <h2 class="text-xl font-black mt-0.5">Accounts & Operational Expenses Ledger</h2>
+            <p class="text-xs text-slate-300 mt-1">Tracks customer cash drawer, external courier fees, freight & partner reimbursements.</p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-emerald-400/50 text-center">
+              <span class="text-[11px] text-emerald-300 font-semibold block">Customer Cash on Hand</span>
+              <span id="statAccCashReceived" class="text-2xl font-black text-emerald-400">Rs. 0</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-rose-400/50 text-center">
+              <span class="text-[11px] text-rose-300 font-semibold block">Partner Capital Outflow</span>
+              <span id="statAccTotalExpenses" class="text-2xl font-black text-rose-400">Rs. 0</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-indigo-300/40 text-center">
+              <span class="text-[11px] text-indigo-300 font-semibold block">Customer In-Hand Cash</span>
+              <span id="statAccNetBalance" class="text-2xl font-black text-cyan-300">Rs. 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense Categories Breakdown -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-500 uppercase">Courier Delivery Charges</p>
+            <h3 id="statTotalDeliveryExpense" class="text-2xl font-black text-rose-600 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Out-of-Hyderabad parcels paid</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-500 uppercase">Supply Freight & Transport</p>
+            <h3 id="statTotalFreightExpense" class="text-2xl font-black text-amber-600 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Stock received cargo charges</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-500 uppercase">Paid by Asif Ali</p>
+            <h3 id="statPaidByAsif" class="text-2xl font-black text-blue-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Couriers & on-ground expenses</p>
+          </div>
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-xs font-bold text-slate-500 uppercase">Paid by Khalid Saleem</p>
+            <h3 id="statPaidByKhalid" class="text-2xl font-black text-purple-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Supplies & direct payments</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Form -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+            <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
+              <span>💳</span> Record Expense / Settlement
+            </h3>
+            <form onsubmit="handleRecordExpense(event)" class="space-y-3.5">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Expense Type *</label>
+                <select id="expenseType" onchange="handleExpenseTypeChange()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
+                  <option value="Delivery Charges Paid">🚚 Courier / Delivery Charges Paid</option>
+                  <option value="Supply Freight & Cargo">📦 Supply / Stock Freight Received</option>
+                  <option value="Internal Partner Transfer">🤝 Internal Reimbursement (Khalid ➔ Asif or vice versa)</option>
+                  <option value="Miscellaneous Payment">🏷️ Miscellaneous (Packaging, Tape, Stationery)</option>
+                  <option value="Other Payment">📝 Other Expense (Specify)</option>
+                </select>
+              </div>
+
+              <div id="partnerTransferDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
+                <label class="block text-xs font-bold text-indigo-900">Transfer Direction (Reimbursement):</label>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span class="block text-[10px] text-slate-500 font-semibold">Sent By:</span>
+                    <select id="partnerTransferFrom" class="w-full border rounded-lg p-1.5 font-bold bg-white">
+                      <option value="Khalid Saleem">Khalid Saleem</option>
+                      <option value="Asif Ali">Asif Ali</option>
+                    </select>
+                  </div>
+                  <div>
+                    <span class="block text-[10px] text-slate-500 font-semibold">Received By:</span>
+                    <select id="partnerTransferTo" class="w-full border rounded-lg p-1.5 font-bold bg-white">
+                      <option value="Asif Ali">Asif Ali</option>
+                      <option value="Khalid Saleem">Khalid Saleem</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div id="specifyDetailDiv" class="hidden">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Specify Description *</label>
+                <input type="text" id="expenseSpecifyDesc" placeholder="e.g. Hyderabad delivery fuel, poster printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Amount (Rs.) *</label>
+                  <input type="number" id="expenseAmount" min="1" required placeholder="e.g. 800" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-black text-rose-600 focus:outline-emerald-600" />
+                </div>
+                <div id="regularPaidByDiv">
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Paid By</label>
+                  <select id="expensePaidBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                    <option value="Asif Ali">Asif Ali</option>
+                    <option value="Khalid Saleem">Khalid Saleem</option>
+                    <option value="Business Cash Box">Business Cash Box</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Customer Name / Orders)</label>
+                <input type="text" id="expenseNotes" placeholder="e.g. Paid for Shafi & Ali Ahmed courier" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+              </div>
+
+              <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
+                Save Entry to Ledger
+              </button>
+            </form>
+          </div>
+
+          <!-- Ledger Table -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:col-span-2 space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Expenses & Settlements Ledger</h3>
+                <p class="text-xs text-slate-400">All business payments, freight, couriers and partner reimbursements</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="exportAccountsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                  📊 Export CSV
+                </button>
+                <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                  📄 Export PDF
+                </button>
+                <button onclick="loadExpenses()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">
+                  🔄
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto max-h-[440px] overflow-y-auto">
+              <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                <thead class="sticky top-0 bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
+                  <tr>
+                    <th class="py-2.5 px-3">Date</th>
+                    <th class="py-2.5 px-3">Type</th>
+                    <th class="py-2.5 px-3">Notes & Reference</th>
+                    <th class="py-2.5 px-3">Paid By / To</th>
+                    <th class="py-2.5 px-3 text-right">Amount (Rs.)</th>
+                    <th class="py-2.5 px-3 text-center no-print">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="expensesTableBody" class="divide-y divide-slate-100 font-medium">
+                  <tr>
+                    <td colspan="6" class="text-center py-8 text-slate-400">Loading ledger...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div> <!-- End Protected Dashboard App -->
 
   <!-- MODAL: EDIT CUSTOMER ORDER -->
   <div id="editOrderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
@@ -591,6 +634,48 @@
   </div>
 
   <script>
+    // --- 1. LOGIN AUTHENTICATION LOGIC ---
+    const VALID_USERS = {
+      'asif': '123123',
+      'khalid': '123123'
+    };
+
+    function checkExistingLogin() {
+      const activeUser = sessionStorage.getItem('ks_traders_logged_in_user');
+      if (activeUser) {
+        unlockDashboard(activeUser);
+      }
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const user = document.getElementById('loginUsername').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPassword').value.trim();
+      const errorMsg = document.getElementById('loginErrorMsg');
+
+      if (VALID_USERS[user] && VALID_USERS[user] === pass) {
+        const displayName = user === 'asif' ? 'Asif Ali' : 'Khalid Saleem';
+        sessionStorage.setItem('ks_traders_logged_in_user', displayName);
+        errorMsg.classList.add('hidden');
+        unlockDashboard(displayName);
+      } else {
+        errorMsg.classList.remove('hidden');
+      }
+    }
+
+    function unlockDashboard(displayName) {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('mainDashboardApp').classList.remove('hidden');
+      document.getElementById('loggedInBadge').innerText = `👤 ${displayName}`;
+      loadAllData();
+    }
+
+    function handleAdminLogout() {
+      sessionStorage.removeItem('ks_traders_logged_in_user');
+      location.reload();
+    }
+
+    // --- 2. SUPABASE & CORE DASHBOARD LOGIC ---
     const SUPABASE_URL = "https://izilpbtlktaltsklegyr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_DYM-TBqQpmcGfL9jr-b26w_0pFX_JQa";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -602,9 +687,7 @@
     let statusChartInstance = null;
     let shadeChartInstance = null;
 
-    // Guaranteed Sequential Load
     async function loadAllData() {
-      // Products loaded first so inventory valuation is always calculated properly
       await loadProducts();
       await loadOrders();
       await loadExpenses();
@@ -1055,7 +1138,7 @@
       }
     }
 
-    // ANALYTICS & CHARTS CALCULATION (PERFECTED ACCURACY)
+    // ANALYTICS & CHARTS CALCULATION
     function updateAnalytics() {
       let totalSalesBooked = 0;
       let netProfit = 0;
@@ -1069,13 +1152,11 @@
       let confirmedOrdersCount = 0;
       let dispatchedOrdersCount = 0;
 
-      // 1. Calculate Orders KPIs
       allOrders.forEach(order => {
         const orderTotal = parseFloat(order.total_amount) || (order.quantity * (order.sold_price_per_unit || 2500));
         const shade = (order.shade_name || '').toLowerCase();
         const payStatus = order.payment_status || 'Pending';
 
-        // Count toward total sales (excluding cancelled)
         if (order.order_status !== 'Cancelled') {
           totalSalesBooked += orderTotal;
 
@@ -1087,41 +1168,35 @@
           if (shade.includes('brown')) shadeBrownCount += (order.quantity || 1);
         }
 
-        // Count order status bars
         if (order.order_status === 'Dispatched') dispatchedOrdersCount++;
         else if (order.order_status === 'Confirmed') confirmedOrdersCount++;
         else if (order.order_status === 'Advance Booking' || order.order_status === 'Pending') pendingOrdersCount++;
 
-        // CASH CALCULATION: Look at payment_status & received_cash_amount directly!
         let cashCollectedForThisOrder = 0;
         if (payStatus === 'Received') {
           if (order.received_cash_amount !== null && order.received_cash_amount !== undefined && order.received_cash_amount !== '') {
             cashCollectedForThisOrder = parseFloat(order.received_cash_amount) || 0;
           } else {
-            cashCollectedForThisOrder = orderTotal; // default to order bill if marked Received
+            cashCollectedForThisOrder = orderTotal;
           }
           totalCashReceived += cashCollectedForThisOrder;
         } else {
-          // If payment is pending, add to pending collection!
           pendingCashCollection += orderTotal;
         }
       });
 
-      // 2. Calculate Stock Valuation from live products
       allProducts.forEach(prod => {
         const currentQty = parseInt(prod.current_stock) || 0;
         const currentPrice = parseFloat(prod.default_sale_price) || 2500;
         stockValueRetail += currentQty * currentPrice;
       });
 
-      // 3. Update DOM Cards
       document.getElementById('statStockValuePKR').innerText = 'Rs. ' + stockValueRetail.toLocaleString();
       document.getElementById('statTotalSales').innerText = 'Rs. ' + totalSalesBooked.toLocaleString();
       document.getElementById('statTotalProfit').innerText = 'Rs. ' + netProfit.toLocaleString();
       document.getElementById('statTotalCashReceived').innerText = 'Rs. ' + totalCashReceived.toLocaleString();
       document.getElementById('statPendingValue').innerText = 'Rs. ' + pendingCashCollection.toLocaleString();
 
-      // 4. Render Charts
       const canvas1 = document.getElementById('orderStatusChart');
       if (canvas1) {
         const ctx1 = canvas1.getContext('2d');
@@ -1250,7 +1325,6 @@
       if (order) order.delivery_channel = channel;
     }
 
-    // RELIABLE PAYMENT SAVE FUNCTION
     async function saveOrderPaymentRow(orderId, defaultTotal) {
       const btn = document.getElementById(`saveBtn-${orderId}`);
       btn.innerText = "⏳ Saving...";
@@ -1281,7 +1355,6 @@
         btn.innerText = "✓ Saved!";
         setTimeout(() => { btn.innerText = "💾 Save"; }, 1500);
 
-        // Update local object immediately
         const order = allOrders.find(o => o.id === orderId);
         if (order) {
           order.payment_status = newStatus;
@@ -1395,7 +1468,6 @@
         }
       });
 
-      // Total Cash Received from Orders
       let totalCustomerCash = 0;
       allOrders.forEach(o => {
         if (o.payment_status === 'Received') {
@@ -1407,11 +1479,9 @@
         }
       });
 
-      const netOperatingBalance = totalCustomerCash - totalBusinessExpenses;
-
       document.getElementById('statAccCashReceived').innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
       document.getElementById('statAccTotalExpenses').innerText = 'Rs. ' + totalBusinessExpenses.toLocaleString();
-      document.getElementById('statAccNetBalance').innerText = 'Rs. ' + netOperatingBalance.toLocaleString();
+      document.getElementById('statAccNetBalance').innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
 
       document.getElementById('statTotalDeliveryExpense').innerText = 'Rs. ' + totalDelivery.toLocaleString();
       document.getElementById('statTotalFreightExpense').innerText = 'Rs. ' + totalFreight.toLocaleString();
@@ -1582,8 +1652,8 @@
       reader.readAsText(file);
     }
 
-    // Start App
-    loadAllData();
+    // Initialize Auth Check
+    checkExistingLogin();
   </script>
 </body>
 </html>
