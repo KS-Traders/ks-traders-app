@@ -1,489 +1,491 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apple Hair Colour — Official KS Traders Store</title>
+  <title>Original Apple Hair Colour — Official Store KS Traders Hyderabad</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    .urdu-font {
-      font-family: 'Noto Nastaliq Urdu', serif;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .urdu-font { font-family: 'Noto Nastaliq Urdu', serif; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen pb-28">
+<body class="bg-[#f0fdf4] text-slate-800 min-h-screen flex flex-col justify-between">
 
-  <!-- Header -->
-  <header class="bg-emerald-700 text-white p-3.5 sm:p-4 shadow sticky top-0 z-30">
-    <div class="max-w-4xl mx-auto flex justify-between items-center gap-2">
-      <div>
-        <h1 class="text-base sm:text-xl font-bold tracking-tight">🍏 Apple Hair Colour</h1>
-        <p class="text-[11px] sm:text-xs text-emerald-100">Official Store — KS Traders Hyderabad</p>
+  <!-- TOP HEADER (Exact Original Green Bar) -->
+  <header class="bg-[#047857] text-white shadow-md sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+      
+      <!-- Brand Logo & Title -->
+      <div class="flex items-center gap-2.5">
+        <span class="text-3xl">🍏</span>
+        <div>
+          <h1 class="text-lg sm:text-xl font-extrabold tracking-tight leading-none text-white">Apple Hair Colour</h1>
+          <p class="text-[11px] text-emerald-100 font-medium mt-0.5">Official Store — KS Traders Hyderabad</p>
+        </div>
       </div>
 
-      <!-- Social & Cart Action Buttons -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <a href="https://www.facebook.com/profile.php?id=61589905995222" target="_blank" title="Visit Facebook Page" class="bg-emerald-800 hover:bg-emerald-900 text-white p-2 rounded-xl text-xs font-semibold flex items-center border border-emerald-600 transition">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.597 1.323-1.326V1.326C24 .597 23.403 0 22.675 0z"/></svg>
+      <!-- Social Media Icons & Cart Button -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/profile.php?id=61589905995222" target="_blank" class="w-8 h-8 rounded-lg bg-emerald-800 hover:bg-emerald-900 flex items-center justify-center text-sm transition" title="Facebook">
+          📘
+        </a>
+        <!-- Instagram -->
+        <a href="https://instagram.com/kstraders_official" target="_blank" class="w-8 h-8 rounded-lg bg-pink-600 hover:bg-pink-700 flex items-center justify-center text-sm transition" title="Instagram">
+          📸
+        </a>
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@kstraders7?_r=1&_t=ZS-9ALfLSb4mSG" target="_blank" class="w-8 h-8 rounded-lg bg-slate-900 hover:bg-black flex items-center justify-center text-sm transition" title="TikTok">
+          🎵
+        </a>
+        <!-- X / Twitter -->
+        <a href="https://x.com/KSTradersve" target="_blank" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-900 flex items-center justify-center text-sm transition" title="X / Twitter">
+          𝕏
+        </a>
+        <!-- WhatsApp Header -->
+        <a href="https://wa.me/923361544111?text=Assalam-o-Alaikum%20KS%20Traders,%20I%20want%20to%20order%20Original%20Apple%20Hair%20Colour" target="_blank" class="hidden sm:flex items-center gap-1 bg-emerald-800 hover:bg-emerald-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-600 transition">
+          <span>💬 WhatsApp</span>
         </a>
 
-        <a href="https://instagram.com/kstraders_official" target="_blank" title="Follow on Instagram" class="bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 hover:opacity-90 text-white p-2 rounded-xl text-xs font-semibold flex items-center transition shadow-sm">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-
-        <a href="https://m.me/61589905995222" target="_blank" title="Chat on Messenger" class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-xl text-xs font-semibold flex items-center border border-blue-500 transition">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 4.974 0 11.111c0 3.498 1.745 6.616 4.472 8.652v4.237l4.086-2.242c1.09.302 2.247.464 3.442.464 6.627 0 12-4.975 12-11.111C24 4.974 18.627 0 12 0zm1.196 14.932l-3.055-3.26-5.962 3.26 6.559-6.96 3.13 3.26 5.887-3.26-6.559 6.96z"/></svg>
-        </a>
-
-        <!-- Header WhatsApp (Triggers Pop-up) -->
-        <button onclick="openWhatsAppModal()" title="WhatsApp Us" class="bg-emerald-800 hover:bg-emerald-900 text-white px-2.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1 border border-emerald-600 transition">
-          <span>💬</span> <span class="hidden sm:inline">WhatsApp</span>
-        </button>
-
-        <!-- Cart Button -->
-        <button onclick="toggleCartModal()" class="relative bg-emerald-900 hover:bg-emerald-950 px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 border border-emerald-600 transition">
-          🛒 Cart / کارٹ
-          <span id="cartCountBadge" class="bg-amber-400 text-slate-900 font-bold px-2 py-0.5 rounded-full text-xs">0</span>
+        <!-- Original Cart Button -->
+        <button onclick="toggleCartDrawer(true)" class="bg-[#064e3b] hover:bg-[#022c22] text-white px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black border border-emerald-500 shadow-md flex items-center gap-1.5 transition">
+          <span>🛒</span> <span>Cart / کارٹ</span>
+          <span id="headerCartCount" class="bg-amber-400 text-slate-950 font-black px-2 py-0.2 rounded-full text-xs">0</span>
         </button>
       </div>
+
     </div>
   </header>
 
-  <!-- Banner -->
-  <section class="max-w-4xl mx-auto px-4 pt-5">
-    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-2xl p-5 sm:p-6 shadow-sm">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-        <div>
-          <h2 class="text-lg sm:text-xl font-extrabold">Book Your Order Online / آن لائن آرڈر کریں</h2>
-          <p class="text-xs sm:text-sm text-emerald-100 mt-1">
-            Original Apple Hair Colour by KS Traders. Free Delivery in Hyderabad • Rs. 300 Nationwide COD!
-          </p>
-          <p class="text-xs text-emerald-200 mt-0.5">
-            حیدرآباد میں فری ڈلیوری • ملک بھر میں کیش آن ڈلیوری ۳۰۰ روپے
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- MAIN BODY CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 py-6 w-full flex-grow space-y-6">
 
-  <!-- Products Grid -->
-  <main class="max-w-4xl mx-auto p-4">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-base sm:text-lg font-bold text-slate-800">
+    <!-- Green Welcome Announcement Banner -->
+    <div class="bg-gradient-to-r from-[#065f46] via-[#047857] to-[#0f766e] text-white rounded-2xl p-6 sm:p-8 shadow-md text-left space-y-2">
+      <h2 class="text-xl sm:text-2xl font-black">
+        Book Your Order Online / آن لائن آرڈر کریں
+      </h2>
+      <p class="text-xs sm:text-sm text-emerald-100 font-semibold">
+        Original Apple Hair Colour by KS Traders. Free Delivery in Hyderabad • Rs. 300 Nationwide COD!
+      </p>
+      <p class="text-xs text-emerald-200 urdu-font pt-1">
+        حیدرآباد میں فری ڈیلیوری • ملک بھر میں کیش آن ڈیلیوری ۳۰۰ روپے
+      </p>
+    </div>
+
+    <!-- Section Heading -->
+    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+      <h3 class="text-base sm:text-lg font-black text-slate-900">
         Select Your Shades / اپنے شیڈز منتخب کریں
       </h3>
+      <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-lg">
+        100% Original Guarantee
+      </span>
     </div>
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div class="p-8 text-center text-slate-400 col-span-2">Loading catalog / پراڈکٹس لوڈ ہو رہی ہیں...</div>
-    </div>
-  </main>
 
-  <!-- Floating WhatsApp Quick Connect Button -->
-  <div class="fixed bottom-20 right-4 z-20">
-    <button onclick="openWhatsAppModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold text-xs sm:text-sm transition transform hover:scale-105 border-2 border-white">
-      <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-      <span>WhatsApp Us / رابطہ کریں</span>
-    </button>
-  </div>
+    <!-- PRODUCT CARDS GRID (Live Synced with Cart) -->
+    <div id="productGridList" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      
+      <!-- Card 1: Natural Black -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <h4 class="text-base font-bold text-slate-900">Original Apple Hair Colour - Natural Black</h4>
+            <p class="text-xs text-slate-500 urdu-font mt-0.5">نیچرل بلیک (قدرتی سیاہ رنگ)</p>
+            <div class="text-xl font-black text-[#047857] mt-2">Rs. 2500</div>
+          </div>
+          <span class="bg-[#d1fae5] text-[#065f46] font-bold text-xs px-2.5 py-1 rounded-lg border border-emerald-200 text-center whitespace-nowrap">
+            In Stock / دستیاب ہے
+          </span>
+        </div>
 
-  <!-- Sticky Checkout Bar -->
-  <div id="bottomBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-3 sm:p-4 shadow-lg hidden z-20">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <div>
-        <p class="text-xs text-slate-500 font-medium">Cart Total / کل رقم</p>
-        <p id="bottomBarTotal" class="text-lg sm:text-xl font-bold text-slate-900">Rs. 0</p>
+        <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="text-xs font-semibold text-slate-600">In Your Cart / کارٹ:</span>
+          <div class="flex items-center gap-2">
+            <button onclick="updateCartItem('Apple Hair Colour – Natural Black', 2500, -1)" class="w-8 h-8 rounded-lg bg-white border border-slate-300 font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-center transition">−</button>
+            <span id="qty-black" class="w-8 text-center font-black text-sm text-slate-900">0</span>
+            <button onclick="updateCartItem('Apple Hair Colour – Natural Black', 2500, 1)" class="w-8 h-8 rounded-lg bg-[#047857] text-white font-bold hover:bg-[#065f46] flex items-center justify-center transition">+</button>
+          </div>
+        </div>
       </div>
-      <button onclick="toggleCartModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 sm:px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow transition">
-        Checkout / آرڈر مکمل کریں
+
+      <!-- Card 2: Dark Brown -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <h4 class="text-base font-bold text-slate-900">Original Apple Hair Colour - Dark Brown</h4>
+            <p class="text-xs text-slate-500 urdu-font mt-0.5">ڈارک براؤن (قدرتی براؤن رنگ)</p>
+            <div class="text-xl font-black text-[#047857] mt-2">Rs. 2500</div>
+          </div>
+          <span class="bg-[#d1fae5] text-[#065f46] font-bold text-xs px-2.5 py-1 rounded-lg border border-emerald-200 text-center whitespace-nowrap">
+            In Stock / دستیاب ہے
+          </span>
+        </div>
+
+        <div class="flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span class="text-xs font-semibold text-slate-600">In Your Cart / کارٹ:</span>
+          <div class="flex items-center gap-2">
+            <button onclick="updateCartItem('Apple Hair Colour – Dark Brown', 2500, -1)" class="w-8 h-8 rounded-lg bg-white border border-slate-300 font-bold text-slate-700 hover:bg-slate-100 flex items-center justify-center transition">−</button>
+            <span id="qty-brown" class="w-8 text-center font-black text-sm text-slate-900">0</span>
+            <button onclick="updateCartItem('Apple Hair Colour – Dark Brown', 2500, 1)" class="w-8 h-8 rounded-lg bg-[#047857] text-white font-bold hover:bg-[#065f46] flex items-center justify-center transition">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Medium Brown (Out of Stock Demo) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm opacity-60 flex flex-col justify-between space-y-4">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <h4 class="text-base font-bold text-slate-900">Original Apple Hair Colour - Medium Brown</h4>
+            <p class="text-xs text-slate-500 urdu-font mt-0.5">میڈیم براؤن</p>
+            <div class="text-xl font-bold text-slate-400 mt-2">Rs. 0</div>
+          </div>
+          <span class="bg-rose-100 text-rose-700 font-bold text-xs px-2.5 py-1 rounded-lg border border-rose-200 text-center whitespace-nowrap">
+            Out of Stock / ختم
+          </span>
+        </div>
+        <div class="text-xs font-semibold text-rose-500 bg-rose-50 p-2.5 rounded-xl border border-rose-100 text-center">
+          فی الوقت اسٹاک ختم ہے (Currently Unavailable)
+        </div>
+      </div>
+
+      <!-- Card 4: Burgundy / Wine (Out of Stock Demo) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm opacity-60 flex flex-col justify-between space-y-4">
+        <div class="flex justify-between items-start gap-2">
+          <div>
+            <h4 class="text-base font-bold text-slate-900">Original Apple Hair Colour - Burgundy / Wine</h4>
+            <p class="text-xs text-slate-500 urdu-font mt-0.5">برگنڈی وائن شیڈ</p>
+            <div class="text-xl font-bold text-slate-400 mt-2">Rs. 0</div>
+          </div>
+          <span class="bg-rose-100 text-rose-700 font-bold text-xs px-2.5 py-1 rounded-lg border border-rose-200 text-center whitespace-nowrap">
+            Out of Stock / ختم
+          </span>
+        </div>
+        <div class="text-xs font-semibold text-rose-500 bg-rose-50 p-2.5 rounded-xl border border-rose-100 text-center">
+          فی الوقت اسٹاک ختم ہے (Currently Unavailable)
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar Trigger to Open Cart Drawer When items added -->
+    <div id="stickyCartBar" class="hidden bg-[#047857] text-white p-4 rounded-2xl shadow-xl flex justify-between items-center sticky bottom-4 z-20">
+      <div>
+        <p class="font-extrabold text-sm"><span id="stickyItemsCount">0</span> Boxes in Cart</p>
+        <p class="text-xs text-emerald-100">Total: <span id="stickyTotalPrice" class="font-black text-white text-base">Rs. 0</span></p>
+      </div>
+      <button onclick="toggleCartDrawer(true)" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition flex items-center gap-1.5">
+        <span>Proceed to Checkout / آرڈر مکمل کریں</span> ➔
       </button>
     </div>
+
+  </main>
+
+  <!-- FLOATING WHATSAPP BUTTON (Exact Original Position) -->
+  <a href="https://wa.me/923361544111?text=Assalam-o-Alaikum%20KS%20Traders,%20I%20want%20to%20order%20Original%20Apple%20Hair%20Colour" target="_blank" class="fixed bottom-5 right-5 z-40 bg-[#25D366] hover:bg-[#20ba59] text-white font-black px-4 py-3 rounded-full shadow-2xl flex items-center gap-2 text-xs sm:text-sm border-2 border-white transition transform hover:scale-105">
+    <span class="text-xl">💬</span>
+    <span>WhatsApp Us / رابطہ کریں</span>
+  </a>
+
+  <!-- SLIDE-OUT / MODAL CHECKOUT CART (Fully Restored With Optional Email) -->
+  <div id="cartModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex justify-end">
+    <div class="bg-white w-full max-w-lg h-full overflow-y-auto p-6 space-y-5 flex flex-col justify-between shadow-2xl">
+      
+      <div>
+        <!-- Cart Drawer Header -->
+        <div class="flex justify-between items-center border-b pb-4">
+          <div>
+            <h3 class="text-lg font-black text-slate-900">Your Cart / آپ کا کارٹ</h3>
+            <p class="text-xs text-slate-500">Review selected shades and enter delivery address</p>
+          </div>
+          <button onclick="toggleCartDrawer(false)" class="text-slate-400 hover:text-slate-800 text-3xl font-black leading-none">&times;</button>
+        </div>
+
+        <!-- Selected Items in Cart -->
+        <div class="py-4 space-y-3" id="cartItemsList">
+          <p class="text-sm text-slate-400 text-center py-6">Your cart is empty. Add a shade to continue.</p>
+        </div>
+
+        <!-- Order Form (Bilingual + Optional Email) -->
+        <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-3.5 pt-2 border-t">
+          <p class="text-xs font-black text-slate-800 uppercase tracking-wider">Delivery Details / ڈیلیوری کی معلومات</p>
+          
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Your Full Name / پورا نام *</label>
+            <input type="text" id="custFullName" required placeholder="e.g. Asif Ali" class="w-full border rounded-xl p-2.5 text-xs sm:text-sm focus:outline-[#047857]" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Mobile / WhatsApp *</label>
+              <input type="tel" id="custPhoneNumber" required placeholder="0333-1234567" class="w-full border rounded-xl p-2.5 text-xs sm:text-sm focus:outline-[#047857]" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                Email Address <span class="text-slate-400 font-normal">(Optional / اختیاری)</span>
+              </label>
+              <input type="email" id="custOptionalEmail" placeholder="customer@example.com" class="w-full border rounded-xl p-2.5 text-xs sm:text-sm focus:outline-[#047857]" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Full Delivery Address & City / مکمل پتہ اور شہر *</label>
+            <textarea id="custFullAddress" required rows="2" placeholder="House / Shop No, Street, Area, City (e.g. Hyderabad / Karachi)" class="w-full border rounded-xl p-2.5 text-xs sm:text-sm focus:outline-[#047857]"></textarea>
+          </div>
+
+          <!-- Total Calculation Banner -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-1.5 text-xs">
+            <div class="flex justify-between text-slate-600">
+              <span>Items Total:</span>
+              <span id="modalSubtotal" class="font-bold text-slate-800">Rs. 0</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>Delivery Charges:</span>
+              <span id="modalShipping" class="font-bold text-emerald-700">FREE in Hyderabad (Rs. 300 Nationwide)</span>
+            </div>
+            <div class="border-t pt-1.5 flex justify-between text-sm font-black text-slate-900">
+              <span>Total Payable on Delivery:</span>
+              <span id="modalGrandTotal" class="text-[#047857] text-base">Rs. 0</span>
+            </div>
+          </div>
+
+          <button type="submit" id="submitOrderBtn" class="w-full bg-[#047857] hover:bg-[#065f46] text-white font-extrabold py-3.5 rounded-xl text-sm shadow-lg transition flex items-center justify-center gap-2">
+            <span>✓</span> CONFIRM CASH ON DELIVERY ORDER
+          </button>
+        </form>
+      </div>
+
+      <div class="text-[11px] text-slate-400 text-center pt-3 border-t">
+        🔒 Pay cash upon receiving parcel • تصدیق کے بعد پارسل روانہ کیا جائے گا
+      </div>
+
+    </div>
   </div>
 
-  <!-- CHECKOUT MODAL (Cart + Bilingual Checkout Form) -->
-  <div id="cartModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[92vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
-      <div class="flex justify-between items-center border-b pb-3">
-        <div>
-          <h3 class="text-base sm:text-lg font-bold text-slate-900">Your Shopping Cart / آپ کا کارٹ</h3>
-          <p class="text-[11px] text-slate-500">Apple Hair Colour by KS Traders</p>
-        </div>
-        <button onclick="toggleCartModal()" class="text-slate-400 hover:text-slate-700 text-2xl leading-none">&times;</button>
+  <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+  <div id="orderSuccessModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl border border-slate-100">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+        ✓
+      </div>
+      <div>
+        <h3 class="text-xl font-black text-slate-900">Order Placed Successfully!</h3>
+        <p class="text-xs text-slate-500 mt-0.5 urdu-font">آپ کا آرڈر موصول ہو چکا ہے</p>
+        <p class="text-xs text-slate-400 font-mono mt-1" id="successRefDisplay">Ref: #</p>
       </div>
 
-      <!-- Cart Items -->
-      <div id="cartItemsList" class="divide-y divide-slate-100 max-h-40 overflow-y-auto">
-        <p class="text-sm text-slate-400 py-4 text-center">Your cart is empty / کارٹ خالی ہے</p>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left text-xs space-y-1.5">
+        <p><span class="text-slate-500">Customer:</span> <b id="successName" class="text-slate-800"></b></p>
+        <p><span class="text-slate-500">Items:</span> <b id="successItems" class="text-slate-800"></b></p>
+        <p><span class="text-slate-500">Total Bill:</span> <b id="successTotal" class="text-emerald-700 font-black"></b></p>
       </div>
 
-      <!-- Pricing Summary Breakdown -->
-      <div class="border-t pt-3 space-y-1.5 text-xs sm:text-sm">
-        <div class="flex justify-between text-slate-600">
-          <span>Items Subtotal / مصنوعات کی قیمت:</span>
-          <span id="cartItemsSubtotal" class="font-bold text-slate-800">Rs. 0</span>
-        </div>
-        <div class="flex justify-between text-slate-600">
-          <span>Delivery Charges / ڈلیوری فیس:</span>
-          <span id="cartDeliveryChargeText" class="font-bold text-emerald-600">Free (Hyderabad)</span>
-        </div>
-        <div class="flex justify-between items-center font-bold border-t pt-2 text-slate-900">
-          <span>Grand Total (COD) / کل رقم:</span>
-          <span id="cartModalGrandTotal" class="text-emerald-700 text-lg sm:text-xl font-black">Rs. 0</span>
-        </div>
-      </div>
-
-      <!-- Checkout Form -->
-      <form id="orderForm" onsubmit="submitCustomerOrder(event)" class="space-y-3 pt-1">
-        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">
-          Delivery Details / ڈلیوری کی معلومات
-        </h4>
-        
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">
-            Full Name / پورا نام *
-          </label>
-          <input type="text" id="custName" required placeholder="Recipient Name / نام درج کریں" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm outline-emerald-600" />
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">
-              WhatsApp / Mobile / موبائل نمبر *
-            </label>
-            <input type="tel" id="custPhone" required placeholder="0336-1234567" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm outline-emerald-600" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">
-              Email Address / ای میل <span class="text-slate-400 font-normal">(Optional)</span>
-            </label>
-            <input type="email" id="custEmail" placeholder="your@email.com" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm outline-emerald-600" />
-          </div>
-        </div>
-
-        <!-- Delivery City / Area Selector -->
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">
-            Delivery City / Zone / ڈلیوری زون *
-          </label>
-          <select id="custCityZone" onchange="updateDeliveryCharge()" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold text-slate-700 outline-emerald-600 bg-white">
-            <option value="Hyderabad" selected>Hyderabad City — FREE Delivery / حیدرآباد (مفت ڈلیوری)</option>
-            <option value="Other">Out of Hyderabad (All Pakistan) — Rs. 300 / دیگر شہر (۳۰۰ روپے)</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">
-            Complete Street Address / مکمل گھر یا دکان کا پتہ *
-          </label>
-          <textarea id="custAddress" required rows="2" placeholder="House/Shop #, Street, Mohalla, City / مکان نمبر، گلی، علاقہ، شہر" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm outline-emerald-600"></textarea>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">
-            Nearest Landmark / قریبی مشہور جگہ یا نشان *
-          </label>
-          <input type="text" id="custLandmark" required placeholder="e.g. Near Noor Mosque, Opposite Shell Pump / قریب مشہور نشان" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm outline-emerald-600" />
-        </div>
-
-        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 space-y-1">
-          <p>Payment: <strong>Cash on Delivery (COD) / کیش آن ڈلیوری</strong></p>
-          <p id="codNote" class="text-[11px] text-amber-900 font-medium">
-            حیدرآباد میں ڈلیوری مفت ہے۔ دیگر تمام شہروں کے لیے ۳۰۰ روپے کوریئر چارجز لاگو ہوں گے۔
-          </p>
-        </div>
-
-        <button type="submit" id="submitOrderBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition shadow text-xs sm:text-sm">
-          Book Order Now / آرڈر کنفرم کریں
+      <div class="space-y-2 pt-2">
+        <a id="successWhatsAppBtn" href="#" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20ba59] text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-md">
+          💬 Confirm Instantly on WhatsApp
+        </a>
+        <button onclick="location.reload()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition">
+          Done / Close
         </button>
-      </form>
+      </div>
     </div>
   </div>
 
-  <!-- WHATSAPP DIRECT MESSAGE POPUP MODAL -->
-  <div id="waDirectModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-3.5 shadow-2xl">
-      <div class="flex justify-between items-center border-b pb-2">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">💬</span>
-          <h3 class="text-sm font-bold text-slate-800">Direct WhatsApp Inquiry / سوال پوچھیں</h3>
+  <!-- FOOTER (All 5 Links Included) -->
+  <footer class="bg-[#0f172a] text-white mt-12 border-t border-slate-800 py-8">
+    <div class="max-w-6xl mx-auto px-4 space-y-6">
+      
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-800 pb-6 text-center md:text-left">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🍏</span>
+          <div>
+            <h4 class="font-extrabold text-base">Original Apple Hair Colour</h4>
+            <p class="text-xs text-slate-400">KS Traders • Hyderabad, Sindh, Pakistan</p>
+          </div>
         </div>
-        <button onclick="closeWhatsAppModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+
+        <!-- Verified Social Links -->
+        <div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+          <a href="https://www.facebook.com/profile.php?id=61589905995222" target="_blank" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-bold transition">Facebook</a>
+          <a href="https://instagram.com/kstraders_official" target="_blank" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-bold transition">Instagram</a>
+          <a href="https://www.tiktok.com/@kstraders7?_r=1&_t=ZS-9ALfLSb4mSG" target="_blank" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-bold transition">TikTok</a>
+          <a href="https://x.com/KSTradersve" target="_blank" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-bold transition">Twitter (X)</a>
+          <a href="https://wa.me/923361544111" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black px-3 py-1.5 rounded-lg transition">0336-1544111</a>
+        </div>
       </div>
 
-      <p class="text-xs text-slate-600 leading-relaxed">
-        Send an instant message directly to KS Traders WhatsApp. Our team will assist you immediately.
-        <br><span class="text-[11px] text-slate-500">اپنا سوال یا نام درج کریں اور واٹس ایپ پر براہ راست بات کریں۔</span>
-      </p>
+      <div class="text-center text-xs text-slate-500">
+        © 2026 KS Traders (Asif Ali & Khalid Saleem). All rights reserved. Free delivery in Hyderabad • Cash on Delivery across Pakistan.
+      </div>
 
-      <form onsubmit="handleDirectWhatsAppSubmit(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Your Name / آپ کا نام</label>
-          <input type="text" id="waInquiryName" class="w-full border rounded-lg p-2 text-xs sm:text-sm outline-emerald-600" placeholder="e.g. Asif Ali" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Your Question / Inquiry / میسج</label>
-          <textarea id="waInquiryMessage" rows="3" required class="w-full border rounded-lg p-2 text-xs sm:text-sm outline-emerald-600" placeholder="e.g. I want to inquire about Apple Hair Colour Dark Brown..."></textarea>
-        </div>
-
-        <div class="flex gap-2 pt-1">
-          <button type="button" onclick="closeWhatsAppModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 rounded-lg text-xs transition">
-            Cancel / منسوخ
-          </button>
-          <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg text-xs transition flex items-center justify-center gap-1.5 shadow">
-            <span>Send to WhatsApp</span>
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
+  </footer>
 
   <script>
     const SUPABASE_URL = "https://izilpbtlktaltsklegyr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_DYM-TBqQpmcGfL9jr-b26w_0pFX_JQa";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const BUSINESS_WHATSAPP = "923361544111";
+    // Cart state object
+    const cart = {
+      'Apple Hair Colour – Natural Black': 0,
+      'Apple Hair Colour – Dark Brown': 0
+    };
 
-    let products = [];
-    let cart = {};
-    let deliveryFee = 0; // 0 for Hyderabad, 300 for out of Hyderabad
-
-    async function loadStoreProducts() {
-      const { data, error } = await client.from('products').select('*').order('id');
-      if (error) {
-        document.getElementById('productGrid').innerHTML = `<p class="text-rose-500 col-span-2 text-center">Unable to load catalog right now.</p>`;
-        return;
-      }
-      products = data;
-      renderStore();
-    }
-
-    function renderStore() {
-      const grid = document.getElementById('productGrid');
-      grid.innerHTML = products.map(p => {
-        const currentInCart = cart[p.id] || 0;
-        const inStock = p.current_stock > 0;
-
-        return `
-          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between">
-            <div>
-              <div class="flex justify-between items-start mb-1">
-                <h4 class="font-bold text-slate-800 text-base">${p.shade_name}</h4>
-                <span class="text-xs px-2 py-0.5 rounded font-bold ${inStock ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
-                  ${inStock ? 'In Stock / دستیاب ہے: ' + p.current_stock : 'Out of Stock / ختم'}
-                </span>
-              </div>
-              <p class="text-emerald-700 font-extrabold text-xl my-2">Rs. ${p.default_sale_price || 0}</p>
-            </div>
-            
-            <div class="pt-3 border-t border-slate-100 mt-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs text-slate-500 font-medium">In Your Cart / کارٹ:</span>
-                <div class="flex items-center gap-2">
-                  <button onclick="changeCartQty(${p.id}, -1)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700">-</button>
-                  <span class="w-8 text-center font-bold text-base text-slate-800">${currentInCart}</span>
-                  <button onclick="changeCartQty(${p.id}, 1)" class="w-8 h-8 rounded-lg ${inStock ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : 'bg-slate-300 text-slate-500 cursor-not-allowed'} font-bold">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-      updateCartSummary();
-    }
-
-    function changeCartQty(productId, delta) {
-      const prod = products.find(p => p.id === productId);
-      const current = cart[productId] || 0;
-      const next = current + delta;
-
-      if (delta > 0 && prod && next > prod.current_stock && prod.current_stock > 0) {
-        alert(`Only ${prod.current_stock} units available in stock right now.`);
-        return;
+    function updateCartItem(shade, price, change) {
+      cart[shade] = Math.max(0, (cart[shade] || 0) + change);
+      
+      // Update badge displays on cards
+      if (shade.includes('Black')) {
+        document.getElementById('qty-black').innerText = cart[shade];
+      } else if (shade.includes('Brown')) {
+        document.getElementById('qty-brown').innerText = cart[shade];
       }
 
-      if (next <= 0) delete cart[productId];
-      else cart[productId] = next;
-      renderStore();
+      renderCartTotals();
     }
 
-    function updateDeliveryCharge() {
-      const zone = document.getElementById('custCityZone').value;
-      if (zone === 'Hyderabad') {
-        deliveryFee = 0;
-        document.getElementById('cartDeliveryChargeText').innerText = 'Free / مفت (Hyderabad)';
-        document.getElementById('cartDeliveryChargeText').className = 'font-bold text-emerald-600';
-      } else {
-        deliveryFee = 300;
-        document.getElementById('cartDeliveryChargeText').innerText = 'Rs. 300 / تین سو روپے (Nationwide)';
-        document.getElementById('cartDeliveryChargeText').className = 'font-bold text-slate-800';
-      }
-      updateCartSummary();
-    }
-
-    function updateCartSummary() {
+    function renderCartTotals() {
       let totalQty = 0;
-      let itemsSubtotal = 0;
+      let totalAmount = 0;
 
-      for (const [idStr, qty] of Object.entries(cart)) {
-        const prod = products.find(p => p.id === parseInt(idStr));
-        if (prod) {
-          totalQty += qty;
-          itemsSubtotal += qty * (prod.default_sale_price || 0);
+      for (let shade in cart) {
+        totalQty += cart[shade];
+        totalAmount += (cart[shade] * 2500);
+      }
+
+      // Update top header badge
+      document.getElementById('headerCartCount').innerText = totalQty;
+
+      // Update bottom sticky bar
+      const stickyBar = document.getElementById('stickyCartBar');
+      if (totalQty > 0) {
+        stickyBar.classList.remove('hidden');
+        document.getElementById('stickyItemsCount').innerText = totalQty;
+        document.getElementById('stickyTotalPrice').innerText = `Rs. ${totalAmount.toLocaleString()}`;
+      } else {
+        stickyBar.classList.add('hidden');
+      }
+
+      // Update modal list
+      renderModalList(totalQty, totalAmount);
+    }
+
+    function renderModalList(totalQty, totalAmount) {
+      const container = document.getElementById('cartItemsList');
+      if (totalQty === 0) {
+        container.innerHTML = `<p class="text-sm text-slate-400 text-center py-6">Your cart is empty. Add a shade to continue.</p>`;
+        document.getElementById('modalSubtotal').innerText = 'Rs. 0';
+        document.getElementById('modalGrandTotal').innerText = 'Rs. 0';
+        return;
+      }
+
+      let itemsHtml = '';
+      for (let shade in cart) {
+        if (cart[shade] > 0) {
+          itemsHtml += `
+            <div class="flex justify-between items-center bg-slate-50 border border-slate-200 p-3 rounded-xl">
+              <div>
+                <p class="font-extrabold text-xs text-slate-900">${shade}</p>
+                <p class="text-[11px] text-slate-500">Qty: ${cart[shade]} × Rs. 2,500</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="updateCartItem('${shade}', 2500, -1)" class="w-6 h-6 bg-white border border-slate-300 rounded font-bold text-xs flex items-center justify-center">−</button>
+                <span class="font-black text-xs text-slate-900">${cart[shade]}</span>
+                <button type="button" onclick="updateCartItem('${shade}', 2500, 1)" class="w-6 h-6 bg-[#047857] text-white rounded font-bold text-xs flex items-center justify-center">+</button>
+              </div>
+            </div>
+          `;
         }
       }
 
-      const grandTotal = totalQty > 0 ? (itemsSubtotal + deliveryFee) : 0;
+      container.innerHTML = itemsHtml;
+      document.getElementById('modalSubtotal').innerText = `Rs. ${totalAmount.toLocaleString()}`;
+      document.getElementById('modalGrandTotal').innerText = `Rs. ${totalAmount.toLocaleString()}`;
+    }
 
-      document.getElementById('cartCountBadge').innerText = totalQty;
-      document.getElementById('bottomBarTotal').innerText = 'Rs. ' + grandTotal.toLocaleString();
-      document.getElementById('cartItemsSubtotal').innerText = 'Rs. ' + itemsSubtotal.toLocaleString();
-      document.getElementById('cartModalGrandTotal').innerText = 'Rs. ' + grandTotal.toLocaleString();
+    function toggleCartDrawer(show) {
+      const modal = document.getElementById('cartModal');
+      if (show) modal.classList.remove('hidden');
+      else modal.classList.add('hidden');
+    }
 
-      const bottomBar = document.getElementById('bottomBar');
-      if (totalQty > 0) bottomBar.classList.remove('hidden');
-      else bottomBar.classList.add('hidden');
+    async function handleCheckoutSubmit(e) {
+      e.preventDefault();
+      
+      let totalQty = 0;
+      let totalAmount = 0;
+      let itemsList = [];
 
-      const modalList = document.getElementById('cartItemsList');
-      if (totalQty === 0) {
-        modalList.innerHTML = `<p class="text-sm text-slate-400 py-4 text-center">Your cart is empty / آپ کا کارٹ خالی ہے</p>`;
-      } else {
-        modalList.innerHTML = Object.entries(cart).map(([idStr, qty]) => {
-          const prod = products.find(p => p.id === parseInt(idStr));
-          return `
-            <div class="py-2.5 flex justify-between items-center text-xs sm:text-sm">
-              <div>
-                <p class="font-semibold text-slate-800">${prod.shade_name}</p>
-                <p class="text-xs text-slate-500">${qty} × Rs. ${prod.default_sale_price || 0}</p>
-              </div>
-              <span class="font-bold text-slate-800">Rs. ${(qty * (prod.default_sale_price || 0)).toLocaleString()}</span>
-            </div>
-          `;
-        }).join('');
+      for (let shade in cart) {
+        if (cart[shade] > 0) {
+          totalQty += cart[shade];
+          totalAmount += (cart[shade] * 2500);
+          itemsList.push(`${cart[shade]}x ${shade}`);
+        }
       }
-    }
 
-    function toggleCartModal() {
-      document.getElementById('cartModal').classList.toggle('hidden');
-    }
-
-    // Direct WhatsApp Pop-up Functions
-    function openWhatsAppModal() {
-      document.getElementById('waDirectModal').classList.remove('hidden');
-    }
-
-    function closeWhatsAppModal() {
-      document.getElementById('waDirectModal').classList.add('hidden');
-    }
-
-    function handleDirectWhatsAppSubmit(e) {
-      e.preventDefault();
-      const senderName = document.getElementById('waInquiryName').value.trim() || 'Valued Customer';
-      const question = document.getElementById('waInquiryMessage').value.trim();
-
-      const text = `Assalam-o-Alaikum KS Traders,\nMy name is *${senderName}*.\n\n*Question / Inquiry:*\n${question}`;
-      const url = `https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(text)}`;
-
-      window.open(url, '_blank');
-      closeWhatsAppModal();
-    }
-
-    async function submitCustomerOrder(e) {
-      e.preventDefault();
-      const productIds = Object.keys(cart);
-      if (productIds.length === 0) return alert("Your cart is empty / آپ کا کارٹ خالی ہے");
+      if (totalQty === 0) {
+        return alert("Please select at least 1 box of Apple Hair Colour to proceed!");
+      }
 
       const btn = document.getElementById('submitOrderBtn');
       btn.disabled = true;
-      btn.innerText = "Booking Order...";
+      btn.innerText = "Processing Order...";
 
-      const name = document.getElementById('custName').value.trim();
-      const phone = document.getElementById('custPhone').value.trim();
-      const email = document.getElementById('custEmail').value.trim();
-      const streetAddress = document.getElementById('custAddress').value.trim();
-      const landmark = document.getElementById('custLandmark').value.trim();
-      const zone = document.getElementById('custCityZone').value;
-      const zoneLabel = zone === 'Hyderabad' ? 'Hyderabad (Free Delivery)' : 'Out of Hyderabad (+Rs. 300 Delivery)';
-      
-      const fullShippingAddress = `${streetAddress}, Landmark: ${landmark} [Zone: ${zoneLabel}]${email ? ' | Email: ' + email : ''}`;
-      const batchId = 'ORD-' + Date.now();
+      const name = document.getElementById('custFullName').value.trim();
+      const phone = document.getElementById('custPhoneNumber').value.trim();
+      const email = document.getElementById('custOptionalEmail').value.trim();
+      const address = document.getElementById('custFullAddress').value.trim();
 
-      let orderSummaryText = `*New Order - Apple Hair Colour (Ref: ${batchId})*\n\n`;
-      orderSummaryText += `👤 *Customer / گاہک:* ${name}\n`;
-      orderSummaryText += `📞 *Phone / موبائل:* ${phone}\n`;
-      if (email) orderSummaryText += `📧 *Email:* ${email}\n`;
-      orderSummaryText += `📍 *Address / پتہ:* ${streetAddress}\n`;
-      orderSummaryText += `🏛️ *Nearest Landmark / مشہور نشان:* ${landmark}\n`;
-      orderSummaryText += `🚚 *Zone / علاقہ:* ${zoneLabel}\n\n`;
-      orderSummaryText += `*Items Ordered / آرڈر کی گئی مصنوعات:*\n`;
+      const fullShipping = email ? `${address} [Email: ${email}]` : address;
+      const isHyd = address.toLowerCase().includes('hyderabad') || address.includes('حیدرآباد');
+      const channel = isHyd ? 'Hyderabad In-Person' : 'Courier Service';
 
-      let itemsSubtotal = 0;
+      const payload = {
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: fullShipping,
+        shade_name: itemsList.join(' + '),
+        quantity: totalQty,
+        sold_price_per_unit: 2500,
+        total_amount: totalAmount,
+        order_status: 'Advance Booking',
+        payment_status: 'Pending',
+        sold_by: 'Online Storefront',
+        delivery_channel: channel,
+        received_cash_amount: null
+      };
 
-      try {
-        const { data: custData } = await client.from('customers').insert([{ 
-          name, 
-          phone, 
-          address: fullShippingAddress 
-        }]).select().single();
+      const { data, error } = await client.from('sales_orders').insert([payload]).select();
 
-        for (const idStr of productIds) {
-          const prodId = parseInt(idStr);
-          const qty = cart[idStr];
-          const prod = products.find(p => p.id === prodId);
-          const price = prod.default_sale_price || 0;
-          const itemTotal = qty * price;
-          itemsSubtotal += itemTotal;
+      btn.disabled = false;
+      btn.innerText = "✓ CONFIRM CASH ON DELIVERY ORDER";
 
-          orderSummaryText += `• ${prod.shade_name}: ${qty} pack(s) = Rs. ${itemTotal}\n`;
+      if (error) {
+        alert("Error booking order: " + error.message);
+      } else {
+        const orderId = data && data[0] ? data[0].id : '';
+        toggleCartDrawer(false);
 
-          await client.from('sales_orders').insert([{
-            customer_id: custData ? custData.id : null,
-            customer_name: name,
-            customer_phone: phone,
-            customer_address: fullShippingAddress,
-            product_id: prodId,
-            shade_name: prod.shade_name,
-            quantity: qty,
-            sold_price_per_unit: price,
-            total_amount: itemTotal,
-            sold_by: 'Online Storefront',
-            order_status: 'Advance Booking',
-            order_batch_id: batchId
-          }]);
-        }
+        // Fill and show success popup
+        document.getElementById('successRefDisplay').innerText = `Ref: #${orderId}`;
+        document.getElementById('successName').innerText = name;
+        document.getElementById('successItems').innerText = itemsList.join(' + ');
+        document.getElementById('successTotal').innerText = `Rs. ${totalAmount.toLocaleString()}`;
 
-        const grandFinalTotal = itemsSubtotal + deliveryFee;
+        // WhatsApp direct link
+        const waMsg = encodeURIComponent(`Assalam-o-Alaikum KS Traders! I placed an order for Original Apple Hair Colour.\n\nRef: #${orderId}\nName: ${name}\nPhone: ${phone}\nItems: ${itemsList.join(' + ')}\nTotal: Rs. ${totalAmount}\nAddress: ${fullShipping}`);
+        document.getElementById('successWhatsAppBtn').href = `https://wa.me/923361544111?text=${waMsg}`;
 
-        orderSummaryText += `\n📦 *Subtotal / مصنوعات کی رقم:* Rs. ${itemsSubtotal.toLocaleString()}`;
-        orderSummaryText += `\n🚚 *Delivery / ڈلیوری:* ${deliveryFee === 0 ? 'FREE (Hyderabad)' : 'Rs. 300 (Outside Hyderabad)'}`;
-        orderSummaryText += `\n💰 *Total Bill / کل رقم:* Rs. ${grandFinalTotal.toLocaleString()}`;
-        orderSummaryText += `\n💳 *Payment / طریقہ ادائیگی:* Cash on Delivery (COD)\n\n_Please confirm my order for dispatch!_`;
-
-        const whatsappUrl = `https://wa.me/${BUSINESS_WHATSAPP}?text=${encodeURIComponent(orderSummaryText)}`;
-
-        alert(`Thank you / شکریہ ${name}! Your order has been placed.\nTap OK to open WhatsApp and send your order confirmation directly to KS Traders.`);
-        
-        window.open(whatsappUrl, '_blank');
-
-        cart = {};
-        document.getElementById('orderForm').reset();
-        document.getElementById('custCityZone').value = 'Hyderabad';
-        updateDeliveryCharge();
-        toggleCartModal();
-        renderStore();
-      } catch (err) {
-        alert("Unable to submit order. Please WhatsApp us directly.");
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Book Order Now / آرڈر کنفرم کریں";
+        document.getElementById('orderSuccessModal').classList.remove('hidden');
       }
     }
-
-    loadStoreProducts();
   </script>
 </body>
 </html>
