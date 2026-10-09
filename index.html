@@ -142,13 +142,13 @@
         </div>
       </section>
 
-      <!-- TAB 2: CART & ONLINE ORDERS -->
+      <!-- TAB 2: CART & ONLINE ORDERS (WITH INSTALLMENT CONVERSION BUTTON) -->
       <section id="view-orders" class="space-y-4">
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
               <h2 class="text-base sm:text-lg font-bold text-slate-900">Online Cart Orders & Advance Bookings</h2>
-              <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call and click Dispatch to deduct stock.</p>
+              <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call, dispatch, or convert to an Installment Plan.</p>
             </div>
             <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">
               🔄 Refresh
@@ -260,7 +260,7 @@
         </div>
       </section>
 
-      <!-- TAB 5: ANALYTICS & HISTORY -->
+      <!-- TAB 5: ANALYTICS & HISTORY (FULL AGGREGATION) -->
       <section id="view-analytics" class="hidden space-y-6 print-area">
         
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
@@ -285,6 +285,7 @@
           </div>
         </div>
 
+        <!-- KPI Cards: Includes Installment Cash & Balances -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div class="bg-white p-5 rounded-2xl border-2 border-emerald-300 shadow-sm">
             <p class="text-xs font-bold text-emerald-800 uppercase">Stock Valuation (Retail)</p>
@@ -294,7 +295,7 @@
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-xs font-bold text-slate-500 uppercase">Total Sales Booked</p>
             <h3 id="statTotalSales" class="text-2xl font-black text-slate-900 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-emerald-600 font-semibold mt-1">All active customer orders</p>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Orders + Installment Plans</p>
           </div>
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-xs font-bold text-slate-500 uppercase">Net Gross Profit</p>
@@ -304,12 +305,12 @@
           <div class="bg-white p-5 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
             <p class="text-xs font-bold text-indigo-900 uppercase">Total Cash Received</p>
             <h3 id="statTotalCashReceived" class="text-2xl font-black text-indigo-700 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-indigo-600 font-semibold mt-1">Verified cash collected</p>
+            <p class="text-[11px] text-indigo-600 font-semibold mt-1">Orders + Installment Advance</p>
           </div>
           <div class="bg-white p-5 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
             <p class="text-xs font-bold text-amber-900 uppercase">Pending Cash Collection</p>
             <h3 id="statPendingValue" class="text-2xl font-black text-amber-700 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-amber-600 font-semibold mt-1">Awaiting customer/courier cash</p>
+            <p class="text-[11px] text-amber-600 font-semibold mt-1">Courier Pending + Khata Due</p>
           </div>
         </div>
 
@@ -367,7 +368,7 @@
 
       </section>
 
-      <!-- TAB 6: ACCOUNTS & EXPENSES (WITH PARTNER COMMISSION OPTIONS) -->
+      <!-- TAB 6: ACCOUNTS & EXPENSES (UNIFIED TOTAL CASH IN HAND) -->
       <section id="view-accounts" class="hidden space-y-6">
         
         <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
@@ -378,8 +379,9 @@
           </div>
           <div class="flex flex-wrap gap-3">
             <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-emerald-400/50 text-center">
-              <span class="text-[11px] text-emerald-300 font-semibold block">Customer Cash on Hand</span>
+              <span class="text-[11px] text-emerald-300 font-semibold block">Total Customer Cash on Hand</span>
               <span id="statAccCashReceived" class="text-2xl font-black text-emerald-400">Rs. 0</span>
+              <span class="text-[9px] text-emerald-300/80 block mt-0.5">(Orders COD + Khata Cash)</span>
             </div>
             <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-rose-400/50 text-center">
               <span class="text-[11px] text-rose-300 font-semibold block">Operational Expenses</span>
@@ -392,7 +394,6 @@
           </div>
         </div>
 
-        <!-- 6 Metrics Cards Including Commission for Asif & Khalid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-[11px] font-bold text-slate-500 uppercase">Courier Delivery Paid</p>
@@ -438,7 +439,6 @@
                 </select>
               </div>
 
-              <!-- Partner Commission Beneficiary Selection -->
               <div id="partnerCommissionDiv" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-xl space-y-2">
                 <label class="block text-xs font-bold text-purple-900">Commission Distributed To: *</label>
                 <select id="commissionPartnerSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
@@ -541,10 +541,9 @@
 
       </section>
 
-      <!-- TAB 7: INSTALLMENTS & KHATA (NEW FULL PAGE) -->
+      <!-- TAB 7: INSTALLMENTS & KHATA -->
       <section id="view-installments" class="hidden space-y-6">
         
-        <!-- Summary Cards for Installment Khata -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-xs font-bold text-slate-500 uppercase">Total Khata Booked</p>
@@ -554,7 +553,7 @@
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-xs font-bold text-emerald-800 uppercase">Advance Cash Collected</p>
             <h3 id="statInstAdvanceCollected" class="text-2xl font-black text-emerald-700 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Cash already received</p>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Directly added to Drawer Cash</p>
           </div>
           <div class="bg-white p-5 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
             <p class="text-xs font-bold text-amber-900 uppercase">Remaining Balance Due</p>
@@ -569,7 +568,6 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Record New Installment Account Form -->
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
             <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
               <span>📅</span> Book New Installment Customer
@@ -619,7 +617,6 @@
             </form>
           </div>
 
-          <!-- Installment Ledger Table with Quick Collection Button -->
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:col-span-2 space-y-4">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
               <div>
@@ -666,6 +663,55 @@
 
     </main>
 
+  </div>
+
+  <!-- MODAL: CONVERT CART ORDER TO INSTALLMENT PLAN -->
+  <div id="convertInstallmentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="text-base font-bold text-purple-900">📅 Convert Order to Installment Plan</h3>
+        <button onclick="closeConvertModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+      </div>
+      <form onsubmit="handleConvertOrderToInstallment(event)" class="space-y-3">
+        <input type="hidden" id="convOrderId" />
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Customer Name</label>
+          <input type="text" id="convCustName" required class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-bold" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Phone</label>
+            <input type="text" id="convCustPhone" required class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-bold" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Total Bill (Rs.)</label>
+            <input type="number" id="convTotalBill" required oninput="calcConvertRemaining()" class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-black text-slate-800" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Address</label>
+          <input type="text" id="convCustAddress" class="w-full border rounded-lg p-2 text-xs" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-emerald-800 mb-1">Advance Received (Rs.) *</label>
+            <input type="number" id="convAdvance" min="0" required oninput="calcConvertRemaining()" placeholder="e.g. 1000" class="w-full border border-emerald-300 rounded-lg p-2 text-xs font-black text-emerald-700 focus:outline-emerald-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-amber-800 mb-1">Remaining Due (Rs.)</label>
+            <input type="text" id="convRemaining" disabled class="w-full bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs font-black text-amber-800" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Final Due Date *</label>
+          <input type="date" id="convDueDate" required class="w-full border rounded-lg p-2 text-xs font-semibold" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t">
+          <button type="button" onclick="closeConvertModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Cancel</button>
+          <button type="submit" class="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-bold shadow">Confirm & Save Installment</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- MODAL: EDIT CUSTOMER ORDER -->
@@ -768,17 +814,12 @@
   </div>
 
   <script>
-    // --- 1. LOGIN AUTHENTICATION LOGIC ---
-    const VALID_USERS = {
-      'asif': '123123',
-      'khalid': '123123'
-    };
+    // --- 1. LOGIN LOGIC ---
+    const VALID_USERS = { 'asif': '123123', 'khalid': '123123' };
 
     function checkExistingLogin() {
       const activeUser = sessionStorage.getItem('ks_traders_logged_in_user');
-      if (activeUser) {
-        unlockDashboard(activeUser);
-      }
+      if (activeUser) unlockDashboard(activeUser);
     }
 
     function handleAdminLogin(event) {
@@ -809,7 +850,7 @@
       location.reload();
     }
 
-    // --- 2. SUPABASE CONNECTION ---
+    // --- 2. SUPABASE API ---
     const SUPABASE_URL = "https://izilpbtlktaltsklegyr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_DYM-TBqQpmcGfL9jr-b26w_0pFX_JQa";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -918,6 +959,7 @@
       document.getElementById('ordersBadgeCount').innerText = allOrders.length;
     }
 
+    // CART & ONLINE ORDERS (WITH 'CONVERT TO INSTALLMENT' BUTTON)
     function renderOrders() {
       const container = document.getElementById('ordersCardsList');
       let filtered = allOrders;
@@ -992,35 +1034,107 @@
             </div>
 
             <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
-              <button onclick="openEditOrderModal(${order.id})" class="bg-[#d97706] hover:bg-[#b45309] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
-                ✏️ Edit Order
+              
+              <!-- Convert to Installment Button -->
+              <button onclick="openConvertModal(${order.id})" class="bg-purple-700 hover:bg-purple-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
+                📅 Convert to Installment
+              </button>
+
+              <button onclick="openEditOrderModal(${order.id})" class="bg-[#d97706] hover:bg-[#b45309] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
+                ✏️ Edit
               </button>
 
               ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  ✓ Confirm Booking
+                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                  ✓ Confirm
                 </button>
               ` : ''}
 
               ${order.order_status !== 'Dispatched' ? `
-                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  🚚 Dispatch (Deduct Stock)
+                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                  🚚 Dispatch
                 </button>
               ` : ''}
 
               ${order.order_status !== 'Cancelled' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Cancelled')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3.5 py-2 rounded-xl text-xs font-bold border border-rose-200 transition">
-                  Cancel Order
+                <button onclick="updateOrderStatus(${order.id}, 'Cancelled')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-2 rounded-xl text-xs font-bold border border-rose-200 transition">
+                  Cancel
                 </button>
               ` : ''}
 
-              <button onclick="deleteOrder(${order.id})" class="bg-slate-100 text-slate-500 hover:bg-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1">
-                🗑 Delete
+              <button onclick="deleteOrder(${order.id})" class="bg-slate-100 text-slate-500 hover:bg-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">
+                🗑
               </button>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    // MODAL: CONVERT ORDER TO INSTALLMENT
+    function openConvertModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
+      document.getElementById('convOrderId').value = order.id;
+      document.getElementById('convCustName').value = order.customer_name || '';
+      document.getElementById('convCustPhone').value = order.customer_phone || '';
+      document.getElementById('convCustAddress').value = order.customer_address || '';
+      document.getElementById('convTotalBill').value = total;
+      document.getElementById('convAdvance').value = 0;
+      
+      // Default due date: 15 days ahead
+      const nextDue = new Date();
+      nextDue.setDate(nextDue.getDate() + 15);
+      document.getElementById('convDueDate').value = nextDue.toISOString().split('T')[0];
+
+      calcConvertRemaining();
+      document.getElementById('convertInstallmentModal').classList.remove('hidden');
+    }
+
+    function closeConvertModal() {
+      document.getElementById('convertInstallmentModal').classList.add('hidden');
+    }
+
+    function calcConvertRemaining() {
+      const tot = parseFloat(document.getElementById('convTotalBill').value) || 0;
+      const adv = parseFloat(document.getElementById('convAdvance').value) || 0;
+      document.getElementById('convRemaining').value = `Rs. ${(Math.max(0, tot - adv)).toLocaleString()}`;
+    }
+
+    async function handleConvertOrderToInstallment(e) {
+      e.preventDefault();
+      const orderId = parseInt(document.getElementById('convOrderId').value);
+      const total = parseFloat(document.getElementById('convTotalBill').value) || 0;
+      const advance = parseFloat(document.getElementById('convAdvance').value) || 0;
+      const remaining = Math.max(0, total - advance);
+
+      const payload = {
+        customer_name: document.getElementById('convCustName').value.trim(),
+        customer_phone: document.getElementById('convCustPhone').value.trim(),
+        customer_address: document.getElementById('convCustAddress').value.trim(),
+        total_amount: total,
+        advance_amount: advance,
+        remaining_amount: remaining,
+        due_date: document.getElementById('convDueDate').value,
+        installment_status: remaining === 0 ? 'Completed' : 'Active',
+        notes: `Converted from Cart Order #${orderId}`
+      };
+
+      const { error: instErr } = await client.from('installment_orders').insert([payload]);
+      if (instErr) return alert("Error converting: " + instErr.message);
+
+      // Mark original order as Confirmed Installment
+      await client.from('sales_orders').update({
+        order_status: 'Confirmed',
+        notes: 'Converted to Installment Plan'
+      }).eq('id', orderId);
+
+      closeConvertModal();
+      alert("Order converted to Installment Plan successfully! Switched to Installments tab.");
+      await loadAllData();
+      switchTab('installments');
     }
 
     function renderInventory() {
@@ -1284,7 +1398,7 @@
       }
     }
 
-    // ANALYTICS & CHARTS CALCULATION
+    // --- ANALYTICS: UNIFIED CALCULATION (ORDERS + INSTALLMENTS) ---
     function updateAnalytics() {
       let totalSalesBooked = 0;
       let netProfit = 0;
@@ -1298,6 +1412,7 @@
       let confirmedOrdersCount = 0;
       let dispatchedOrdersCount = 0;
 
+      // 1. Calculate from Orders Table
       allOrders.forEach(order => {
         const orderTotal = parseFloat(order.total_amount) || (order.quantity * (order.sold_price_per_unit || 2500));
         const shade = (order.shade_name || '').toLowerCase();
@@ -1318,19 +1433,29 @@
         else if (order.order_status === 'Confirmed') confirmedOrdersCount++;
         else if (order.order_status === 'Advance Booking' || order.order_status === 'Pending') pendingOrdersCount++;
 
-        let cashCollectedForThisOrder = 0;
         if (payStatus === 'Received') {
           if (order.received_cash_amount !== null && order.received_cash_amount !== undefined && order.received_cash_amount !== '') {
-            cashCollectedForThisOrder = parseFloat(order.received_cash_amount) || 0;
+            totalCashReceived += parseFloat(order.received_cash_amount) || 0;
           } else {
-            cashCollectedForThisOrder = orderTotal;
+            totalCashReceived += orderTotal;
           }
-          totalCashReceived += cashCollectedForThisOrder;
         } else {
           pendingCashCollection += orderTotal;
         }
       });
 
+      // 2. UNIFIED: Add Installment Cash and Balances
+      allInstallments.forEach(inst => {
+        const adv = parseFloat(inst.advance_amount) || 0;
+        const rem = parseFloat(inst.remaining_amount) || 0;
+        const tot = parseFloat(inst.total_amount) || 0;
+
+        totalCashReceived += adv; // Advance collected is CASH ON HAND!
+        pendingCashCollection += rem; // Remaining due is PENDING!
+        totalSalesBooked += tot;
+      });
+
+      // 3. Stock valuation
       allProducts.forEach(prod => {
         const currentQty = parseInt(prod.current_stock) || 0;
         const currentPrice = parseFloat(prod.default_sale_price) || 2500;
@@ -1508,7 +1633,7 @@
       }
     }
 
-    // --- ACCOUNTS & EXPENSES LOGIC (WITH COMMISSIONS) ---
+    // --- ACCOUNTS & EXPENSES LOGIC ---
     function handleExpenseTypeChange() {
       const type = document.getElementById('expenseType').value;
       const specifyDiv = document.getElementById('specifyDetailDiv');
@@ -1629,6 +1754,7 @@
         }
       });
 
+      // 1. Regular Orders Cash Received
       let totalCustomerCash = 0;
       allOrders.forEach(o => {
         if (o.payment_status === 'Received') {
@@ -1638,6 +1764,11 @@
             totalCustomerCash += parseFloat(o.total_amount) || 0;
           }
         }
+      });
+
+      // 2. UNIFIED: Add Installment Advance/Collected Cash to Drawer!
+      allInstallments.forEach(i => {
+        totalCustomerCash += (parseFloat(i.advance_amount) || 0);
       });
 
       document.getElementById('statAccCashReceived').innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
@@ -1691,7 +1822,7 @@
       else await loadExpenses();
     }
 
-    // --- 3. INSTALLMENTS & KHATA SYSTEM ---
+    // --- INSTALLMENTS & KHATA SYSTEM ---
     function calcRemainingInstallment() {
       const total = parseFloat(document.getElementById('instTotalBill').value) || 0;
       const adv = parseFloat(document.getElementById('instAdvanceAmount').value) || 0;
@@ -1727,7 +1858,7 @@
 
       if (error) alert("Error creating installment: " + error.message);
       else {
-        alert("Installment account created successfully!");
+        alert("Installment account created! Advance payment added to cash on hand.");
         document.getElementById('instCustName').value = '';
         document.getElementById('instCustPhone').value = '';
         document.getElementById('instCustAddress').value = '';
@@ -1735,7 +1866,7 @@
         document.getElementById('instAdvanceAmount').value = '';
         document.getElementById('instNotes').value = '';
         calcRemainingInstallment();
-        await loadInstallments();
+        await loadAllData();
       }
     }
 
@@ -1833,8 +1964,8 @@
 
       if (error) alert("Error updating payment: " + error.message);
       else {
-        alert(`Recorded payment of Rs. ${paidAmount.toLocaleString()}! Remaining balance: Rs. ${newRemaining.toLocaleString()}`);
-        await loadInstallments();
+        alert(`Collected Rs. ${paidAmount.toLocaleString()}! Remaining balance: Rs. ${newRemaining.toLocaleString()}. Added directly to cash drawer.`);
+        await loadAllData();
       }
     }
 
@@ -1842,10 +1973,10 @@
       if (!confirm("Are you sure you want to delete this installment account record?")) return;
       const { error } = await client.from('installment_orders').delete().eq('id', id);
       if (error) alert("Error: " + error.message);
-      else await loadInstallments();
+      else await loadAllData();
     }
 
-    // EXPORTS
+    // --- EXPORTS ---
     function exportInstallmentsCSV() {
       if (allInstallments.length === 0) return alert("No installment records to export.");
 
