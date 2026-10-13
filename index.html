@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <!-- PROTECTED APPLICATION -->
+  <!-- MAIN APP CONTAINER -->
   <div id="mainDashboardApp" class="hidden">
 
     <!-- Top Navigation Bar -->
@@ -120,12 +120,12 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
 
       <!-- TAB 1: STOCK & INVENTORY -->
-      <section id="view-inventory" class="hidden space-y-4">
+      <section id="view-inventory" class="hidden space-y-6">
         <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
             <div>
               <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Current Stock & Product Pricing</h2>
-              <p class="text-xs text-slate-500 mt-0.5">Inventory counts, cost prices and retail selling prices.</p>
+              <p class="text-xs text-slate-500 mt-0.5">Edit available stock, manage retail selling rates, and delete products.</p>
             </div>
             <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400/80 px-5 py-3 rounded-2xl shadow-sm text-right flex items-center gap-4">
               <span class="text-3xl">💎</span>
@@ -138,17 +138,52 @@
               </div>
             </div>
           </div>
+
+          <!-- Product Cards Grid with Fast Inline & Modal Controls -->
           <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
+        </div>
+
+        <!-- SUMMARY TABLE: UNITS AVAILABLE & UNITS SOLD -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">📊 Inventory Stock Breakdown & Units Sold Summary</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Total units available in stock vs units dispatched across all shades.</p>
+            </div>
+            <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border transition">
+              🔄 Refresh
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
+                  <th class="py-3 px-3">Product Shade</th>
+                  <th class="py-3 px-3 text-center">Available Units In Stock</th>
+                  <th class="py-3 px-3 text-center">Total Units Sold (Dispatched)</th>
+                  <th class="py-3 px-3 text-right">Selling Price</th>
+                  <th class="py-3 px-3 text-right">Available Retail Value</th>
+                </tr>
+              </thead>
+              <tbody id="inventorySummaryTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
+                <tr>
+                  <td colspan="5" class="text-center py-6 text-slate-400">Loading inventory data...</td>
+                </tr>
+              </tbody>
+              <tfoot id="inventorySummaryTableFoot" class="bg-slate-50/80 font-black text-slate-900 border-t-2 border-slate-200"></tfoot>
+            </table>
+          </div>
         </div>
       </section>
 
-      <!-- TAB 2: CART & ONLINE ORDERS (WITH INSTALLMENT CONVERSION BUTTON) -->
+      <!-- TAB 2: CART & ONLINE ORDERS -->
       <section id="view-orders" class="space-y-4">
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
               <h2 class="text-base sm:text-lg font-bold text-slate-900">Online Cart Orders & Advance Bookings</h2>
-              <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call, dispatch, or convert to an Installment Plan.</p>
+              <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call and dispatch or convert to installments.</p>
             </div>
             <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">
               🔄 Refresh
@@ -250,7 +285,7 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Cost Price Per Unit (Rs.)</label>
-                <input type="number" id="inwardCostPrice" min="0" required placeholder="Cost price" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
+                <input type="number" id="inwardCostPrice" min="0" value="0" placeholder="Cost price" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
               </div>
             </div>
             <button type="submit" id="saveInwardBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
@@ -260,9 +295,8 @@
         </div>
       </section>
 
-      <!-- TAB 5: ANALYTICS & HISTORY (FULL AGGREGATION) -->
+      <!-- TAB 5: ANALYTICS & HISTORY -->
       <section id="view-analytics" class="hidden space-y-6 print-area">
-        
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
           <div>
             <h3 class="text-sm font-bold text-slate-800">Data Management & Reports</h3>
@@ -270,22 +304,18 @@
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)" />
-            
             <button onclick="document.getElementById('csvFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
               📥 Import CSV
             </button>
-
             <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
               📄 Export PDF
             </button>
-
             <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
               📊 Export All Orders CSV
             </button>
           </div>
         </div>
 
-        <!-- KPI Cards: Includes Installment Cash & Balances -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div class="bg-white p-5 rounded-2xl border-2 border-emerald-300 shadow-sm">
             <p class="text-xs font-bold text-emerald-800 uppercase">Stock Valuation (Retail)</p>
@@ -336,7 +366,7 @@
                 <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed & Dispatched Orders — Payment & Cash Collection</h3>
                 <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Active Orders</span>
               </div>
-              <p class="text-xs text-slate-500 mt-0.5">Toggle Payment Status (Received/Pending) or enter manual Net Cash received after courier charges.</p>
+              <p class="text-xs text-slate-500 mt-0.5">Toggle Payment Status (Received/Pending) or enter manual Net Cash received.</p>
             </div>
 
             <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">
@@ -365,17 +395,15 @@
             </table>
           </div>
         </div>
-
       </section>
 
-      <!-- TAB 6: ACCOUNTS & EXPENSES (UNIFIED TOTAL CASH IN HAND) -->
+      <!-- TAB 6: ACCOUNTS & EXPENSES -->
       <section id="view-accounts" class="hidden space-y-6">
-        
         <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <span class="text-xs font-bold uppercase tracking-widest text-indigo-300">KS Traders Business Accounts</span>
-            <h2 class="text-xl font-black mt-0.5">Accounts, Expenses & Partner Commission</h2>
-            <p class="text-xs text-slate-300 mt-1">Tracks customer cash drawer, external courier fees, freight, partner profit share & reimbursements.</p>
+            <h2 class="text-xl font-black mt-0.5">Accounts, Expenses, Marketing & Partner Profit Ledger</h2>
+            <p class="text-xs text-slate-300 mt-1">Tracks customer cash drawer, marketing campaigns, couriers, and partner profit distributions.</p>
           </div>
           <div class="flex flex-wrap gap-3">
             <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-emerald-400/50 text-center">
@@ -384,47 +412,52 @@
               <span class="text-[9px] text-emerald-300/80 block mt-0.5">(Orders COD + Khata Cash)</span>
             </div>
             <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-rose-400/50 text-center">
-              <span class="text-[11px] text-rose-300 font-semibold block">Operational Expenses</span>
+              <span class="text-[11px] text-rose-300 font-semibold block">Operational & Marketing Costs</span>
               <span id="statAccTotalExpenses" class="text-2xl font-black text-rose-400">Rs. 0</span>
             </div>
             <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-purple-400/50 text-center">
-              <span class="text-[11px] text-purple-300 font-semibold block">Total Commissions Distributed</span>
-              <span id="statAccTotalCommission" class="text-2xl font-black text-purple-300">Rs. 0</span>
+              <span class="text-[11px] text-purple-300 font-semibold block">Total Profit Distributed</span>
+              <span id="statAccTotalProfitShare" class="text-2xl font-black text-purple-300">Rs. 0</span>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+        <!-- Metric KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[11px] font-bold text-slate-500 uppercase">Courier Delivery Paid</p>
-            <h3 id="statTotalDeliveryExpense" class="text-xl font-black text-rose-600 mt-1">Rs. 0</h3>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[11px] font-bold text-slate-500 uppercase">Supply Freight Paid</p>
-            <h3 id="statTotalFreightExpense" class="text-xl font-black text-amber-600 mt-1">Rs. 0</h3>
+            <p class="text-[11px] font-bold text-slate-500 uppercase">Courier Delivery</p>
+            <h3 id="statTotalDeliveryExpense" class="text-lg font-black text-rose-600 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[11px] font-bold text-slate-500 uppercase">Expenses by Asif</p>
-            <h3 id="statPaidByAsif" class="text-xl font-black text-blue-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] font-bold text-slate-500 uppercase">Supply Freight</p>
+            <h3 id="statTotalFreightExpense" class="text-lg font-black text-amber-600 mt-1">Rs. 0</h3>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm">
+            <p class="text-[11px] font-bold text-indigo-800 uppercase">Marketing & Ads</p>
+            <h3 id="statTotalMarketingExpense" class="text-lg font-black text-indigo-700 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[11px] font-bold text-slate-500 uppercase">Expenses by Khalid</p>
-            <h3 id="statPaidByKhalid" class="text-xl font-black text-indigo-700 mt-1">Rs. 0</h3>
+            <p class="text-[11px] font-bold text-slate-500 uppercase">Paid by Asif</p>
+            <h3 id="statPaidByAsif" class="text-lg font-black text-blue-700 mt-1">Rs. 0</h3>
           </div>
-          <div class="bg-white p-4 rounded-2xl border-2 border-emerald-200 bg-emerald-50/20 shadow-sm">
-            <p class="text-[11px] font-bold text-emerald-800 uppercase">Commission: Asif Ali</p>
-            <h3 id="statCommAsif" class="text-xl font-black text-emerald-700 mt-1">Rs. 0</h3>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-[11px] font-bold text-slate-500 uppercase">Paid by Khalid</p>
+            <h3 id="statPaidByKhalid" class="text-lg font-black text-purple-700 mt-1">Rs. 0</h3>
           </div>
-          <div class="bg-white p-4 rounded-2xl border-2 border-purple-200 bg-purple-50/20 shadow-sm">
-            <p class="text-[11px] font-bold text-purple-800 uppercase">Commission: Khalid</p>
-            <h3 id="statCommKhalid" class="text-xl font-black text-purple-700 mt-1">Rs. 0</h3>
+          <div class="bg-white p-4 rounded-2xl border-2 border-emerald-300 bg-emerald-50/30 shadow-sm">
+            <p class="text-[11px] font-bold text-emerald-800 uppercase">Profit: Asif Ali</p>
+            <h3 id="statProfitAsif" class="text-lg font-black text-emerald-700 mt-1">Rs. 0</h3>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border-2 border-purple-300 bg-purple-50/30 shadow-sm">
+            <p class="text-[11px] font-bold text-purple-800 uppercase">Profit: Khalid</p>
+            <h3 id="statProfitKhalid" class="text-lg font-black text-purple-700 mt-1">Rs. 0</h3>
           </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
             <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
-              <span>💳</span> Record Expense / Commission
+              <span>💳</span> Record Expense, Ads or Partner Profit
             </h3>
             <form onsubmit="handleRecordExpense(event)" class="space-y-3.5">
               <div>
@@ -432,16 +465,31 @@
                 <select id="expenseType" onchange="handleExpenseTypeChange()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
                   <option value="Delivery Charges Paid">🚚 Courier / Delivery Charges Paid</option>
                   <option value="Supply Freight & Cargo">📦 Supply / Stock Freight Received</option>
-                  <option value="Partner Commission">💼 Partner Commission / Profit Share</option>
+                  <option value="Marketing & Promotions">📢 Marketing & Promotions (Meta, TikTok, YT, WA)</option>
+                  <option value="Partner Profit Share">💰 Partner Profit Share / Withdrawal</option>
                   <option value="Internal Partner Transfer">🤝 Internal Reimbursement (Khalid ➔ Asif or vice versa)</option>
                   <option value="Miscellaneous Payment">🏷️ Miscellaneous (Packaging, Tape, Stationery)</option>
                   <option value="Other Payment">📝 Other Expense (Specify)</option>
                 </select>
               </div>
 
-              <div id="partnerCommissionDiv" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-xl space-y-2">
-                <label class="block text-xs font-bold text-purple-900">Commission Distributed To: *</label>
-                <select id="commissionPartnerSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
+              <!-- Marketing Channels Selector -->
+              <div id="marketingPlatformDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
+                <label class="block text-xs font-bold text-indigo-900">Promotion Platform: *</label>
+                <select id="marketingPlatformSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
+                  <option value="Facebook & Instagram Ads">📘 Facebook & Instagram Ads</option>
+                  <option value="TikTok Promotion / Ads">🎵 TikTok Promotion / Ads</option>
+                  <option value="YouTube Marketing / Video Edit">▶️ YouTube Video & Marketing</option>
+                  <option value="WhatsApp Business & SMS Broadcast">💬 WhatsApp Marketing & Broadcast</option>
+                  <option value="Influencer Collaboration">⭐ Influencer Collaboration</option>
+                  <option value="Printing / Flyers / Posters">📄 Printing Posters / Promotional Material</option>
+                </select>
+              </div>
+
+              <!-- Partner Profit Selector -->
+              <div id="partnerProfitDiv" class="hidden bg-emerald-50 border border-emerald-200 p-3 rounded-xl space-y-2">
+                <label class="block text-xs font-bold text-emerald-900">Partner Withdrawing Profit: *</label>
+                <select id="profitPartnerSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
                   <option value="Asif Ali">Asif Ali</option>
                   <option value="Khalid Saleem">Khalid Saleem</option>
                 </select>
@@ -488,8 +536,8 @@
               </div>
 
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Order / Details)</label>
-                <input type="text" id="expenseNotes" placeholder="e.g. Commission on 4 delivered boxes" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Campaign / Details)</label>
+                <input type="text" id="expenseNotes" placeholder="e.g. Facebook campaign targeting Sindh, or profit distribution" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
 
               <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
@@ -501,8 +549,8 @@
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm lg:col-span-2 space-y-4">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
               <div>
-                <h3 class="text-base font-bold text-slate-900">Expenses, Settlements & Commissions</h3>
-                <p class="text-xs text-slate-400">All business payments, partner commissions and transfers</p>
+                <h3 class="text-base font-bold text-slate-900">Expenses, Marketing & Partner Profit Ledger</h3>
+                <p class="text-xs text-slate-400">All business payments, marketing promotions, partner profit distributions and transfers</p>
               </div>
               <div class="flex items-center gap-2">
                 <button onclick="exportAccountsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
@@ -523,7 +571,7 @@
                   <tr>
                     <th class="py-2.5 px-3">Date</th>
                     <th class="py-2.5 px-3">Type</th>
-                    <th class="py-2.5 px-3">Notes & Reference</th>
+                    <th class="py-2.5 px-3">Notes & Campaign Details</th>
                     <th class="py-2.5 px-3">Paid By / Beneficiary</th>
                     <th class="py-2.5 px-3 text-right">Amount (Rs.)</th>
                     <th class="py-2.5 px-3 text-center no-print">Action</th>
@@ -538,12 +586,10 @@
             </div>
           </div>
         </div>
-
       </section>
 
       <!-- TAB 7: INSTALLMENTS & KHATA -->
       <section id="view-installments" class="hidden space-y-6">
-        
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-xs font-bold text-slate-500 uppercase">Total Khata Booked</p>
@@ -658,160 +704,151 @@
             </div>
           </div>
         </div>
-
       </section>
 
     </main>
 
-  </div>
-
-  <!-- MODAL: CONVERT CART ORDER TO INSTALLMENT PLAN -->
-  <div id="convertInstallmentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-base font-bold text-purple-900">📅 Convert Order to Installment Plan</h3>
-        <button onclick="closeConvertModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+    <!-- MODAL: DETAILED PRODUCT EDIT -->
+    <div id="editProductModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="text-base font-bold text-slate-800">Edit Product Price & Stock</h3>
+          <button onclick="closeProductModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        </div>
+        <form onsubmit="saveProductChanges(event)" class="space-y-3">
+          <input type="hidden" id="editProdId" />
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Shade Name</label>
+            <input type="text" id="editProdName" disabled class="w-full bg-slate-100 border rounded-lg p-2.5 text-sm font-bold text-slate-700" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Retail Selling Price (Rs.)</label>
+            <input type="number" id="editProdSalePrice" required min="0" class="w-full border rounded-lg p-2.5 text-sm font-semibold text-emerald-700 focus:outline-emerald-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Cost Price Per Unit (Rs.)</label>
+            <input type="number" id="editProdCostPrice" min="0" value="0" class="w-full border rounded-lg p-2.5 text-sm font-semibold text-slate-700 focus:outline-emerald-600" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Current Stock Quantity (Available)</label>
+            <input type="number" id="editProdStock" required min="0" class="w-full border rounded-lg p-2.5 text-sm font-semibold text-slate-700 focus:outline-emerald-600" />
+          </div>
+          <div class="flex justify-end gap-2 pt-3">
+            <button type="button" onclick="closeProductModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Cancel</button>
+            <button type="submit" id="saveProdBtn" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow">Save Changes</button>
+          </div>
+        </form>
       </div>
-      <form onsubmit="handleConvertOrderToInstallment(event)" class="space-y-3">
-        <input type="hidden" id="convOrderId" />
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Customer Name</label>
-          <input type="text" id="convCustName" required class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-bold" />
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Phone</label>
-            <input type="text" id="convCustPhone" required class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-bold" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Total Bill (Rs.)</label>
-            <input type="number" id="convTotalBill" required oninput="calcConvertRemaining()" class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-black text-slate-800" />
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Address</label>
-          <input type="text" id="convCustAddress" class="w-full border rounded-lg p-2 text-xs" />
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-xs font-semibold text-emerald-800 mb-1">Advance Received (Rs.) *</label>
-            <input type="number" id="convAdvance" min="0" required oninput="calcConvertRemaining()" placeholder="e.g. 1000" class="w-full border border-emerald-300 rounded-lg p-2 text-xs font-black text-emerald-700 focus:outline-emerald-600" />
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-amber-800 mb-1">Remaining Due (Rs.)</label>
-            <input type="text" id="convRemaining" disabled class="w-full bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs font-black text-amber-800" />
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Final Due Date *</label>
-          <input type="date" id="convDueDate" required class="w-full border rounded-lg p-2 text-xs font-semibold" />
-        </div>
-        <div class="flex justify-end gap-2 pt-2 border-t">
-          <button type="button" onclick="closeConvertModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-bold shadow">Confirm & Save Installment</button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <!-- MODAL: EDIT CUSTOMER ORDER -->
-  <div id="editOrderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b pb-3">
-        <div>
+    <!-- MODAL: CONVERT CART ORDER TO INSTALLMENT PLAN -->
+    <div id="convertInstallmentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="text-base font-bold text-purple-900">📅 Convert Order to Installment Plan</h3>
+          <button onclick="closeConvertModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        </div>
+        <form onsubmit="handleConvertOrderToInstallment(event)" class="space-y-3">
+          <input type="hidden" id="convOrderId" />
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Customer Name</label>
+            <input type="text" id="convCustName" required class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-bold" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Phone</label>
+              <input type="text" id="convCustPhone" required class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-bold" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Total Bill (Rs.)</label>
+              <input type="number" id="convTotalBill" required oninput="calcConvertRemaining()" class="w-full bg-slate-50 border rounded-lg p-2 text-xs font-black text-slate-800" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Address</label>
+            <input type="text" id="convCustAddress" class="w-full border rounded-lg p-2 text-xs" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-emerald-800 mb-1">Advance Received (Rs.) *</label>
+              <input type="number" id="convAdvance" min="0" required oninput="calcConvertRemaining()" placeholder="e.g. 1000" class="w-full border border-emerald-300 rounded-lg p-2 text-xs font-black text-emerald-700 focus:outline-emerald-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-amber-800 mb-1">Remaining Due (Rs.)</label>
+              <input type="text" id="convRemaining" disabled class="w-full bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs font-black text-amber-800" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Final Due Date *</label>
+            <input type="date" id="convDueDate" required class="w-full border rounded-lg p-2 text-xs font-semibold" />
+          </div>
+          <div class="flex justify-end gap-2 pt-2 border-t">
+            <button type="button" onclick="closeConvertModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Cancel</button>
+            <button type="submit" class="px-5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-bold shadow">Confirm & Save Installment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: EDIT CUSTOMER ORDER -->
+    <div id="editOrderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b pb-3">
           <h3 class="text-base font-bold text-slate-800">Edit Order Details</h3>
           <p class="text-xs text-slate-400" id="editOrderRefDisplay">Ref: #</p>
         </div>
-        <button onclick="closeOrderModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold leading-none">&times;</button>
-      </div>
 
-      <form onsubmit="saveOrderChanges(event)" class="space-y-3.5">
-        <input type="hidden" id="editOrderId" />
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <form onsubmit="saveOrderChanges(event)" class="space-y-3.5">
+          <input type="hidden" id="editOrderId" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Customer Name *</label>
+              <input type="text" id="editCustName" required class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold focus:outline-emerald-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Phone / WhatsApp *</label>
+              <input type="tel" id="editCustPhone" required class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold focus:outline-emerald-600" />
+            </div>
+          </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Customer Name *</label>
-            <input type="text" id="editCustName" required class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold focus:outline-emerald-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Address & Delivery Details *</label>
+            <textarea id="editCustAddress" required rows="3" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-normal focus:outline-emerald-600"></textarea>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-3">
+            <p class="text-xs font-bold text-slate-700 uppercase">Items & Pricing</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Quantity</label>
+                <input type="number" id="editOrderQty" min="1" required oninput="recalcOrderTotal()" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold text-slate-800 focus:outline-emerald-600" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Price / Unit (Rs.)</label>
+                <input type="number" id="editOrderPrice" min="0" required oninput="recalcOrderTotal()" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold text-slate-800 focus:outline-emerald-600" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Total Bill (Rs.)</label>
+                <input type="number" id="editOrderTotal" min="0" required class="w-full bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs sm:text-sm font-black text-emerald-800 focus:outline-emerald-600" />
+              </div>
+            </div>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-600 mb-1">Phone / WhatsApp *</label>
-            <input type="tel" id="editCustPhone" required class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold focus:outline-emerald-600" />
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Order Status</label>
+            <select id="editOrderStatus" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
+              <option value="Advance Booking">Advance Booking</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Dispatched">Dispatched</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
           </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Address & Delivery Details *</label>
-          <textarea id="editCustAddress" required rows="3" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-normal focus:outline-emerald-600"></textarea>
-        </div>
-
-        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-3">
-          <p class="text-xs font-bold text-slate-700 uppercase">Items & Pricing</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Quantity</label>
-              <input type="number" id="editOrderQty" min="1" required oninput="recalcOrderTotal()" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold text-slate-800 focus:outline-emerald-600" />
-            </div>
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Price / Unit (Rs.)</label>
-              <input type="number" id="editOrderPrice" min="0" required oninput="recalcOrderTotal()" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold text-slate-800 focus:outline-emerald-600" />
-            </div>
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-500 mb-1">Total Bill (Rs.)</label>
-              <input type="number" id="editOrderTotal" min="0" required class="w-full bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-xs sm:text-sm font-black text-emerald-800 focus:outline-emerald-600" />
-            </div>
+          <div class="flex justify-end gap-2 pt-3 border-t">
+            <button type="button" onclick="closeOrderModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition">Cancel</button>
+            <button type="submit" id="saveOrderBtn" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow transition">Save Order Changes</button>
           </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Order Status</label>
-          <select id="editOrderStatus" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
-            <option value="Advance Booking">Advance Booking</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Dispatched">Dispatched</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-        </div>
-
-        <div class="flex justify-end gap-2 pt-3 border-t">
-          <button type="button" onclick="closeOrderModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition">Cancel</button>
-          <button type="submit" id="saveOrderBtn" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow transition">Save Order Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: EDIT PRODUCT -->
-  <div id="editProductModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="text-base font-bold text-slate-800">Edit Product Price & Stock</h3>
-        <button onclick="closeProductModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+        </form>
       </div>
-      <form onsubmit="saveProductChanges(event)" class="space-y-3">
-        <input type="hidden" id="editProdId" />
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Shade Name</label>
-          <input type="text" id="editProdName" disabled class="w-full bg-slate-100 border rounded-lg p-2.5 text-sm font-bold text-slate-700" />
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Retail Selling Price (Rs.)</label>
-          <input type="number" id="editProdSalePrice" required class="w-full border rounded-lg p-2.5 text-sm font-semibold text-emerald-700 focus:outline-emerald-600" />
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Cost Price Per Unit (Rs.)</label>
-          <input type="number" id="editProdCostPrice" required class="w-full border rounded-lg p-2.5 text-sm font-semibold text-slate-700 focus:outline-emerald-600" />
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Current Stock Quantity</label>
-          <input type="number" id="editProdStock" required class="w-full border rounded-lg p-2.5 text-sm font-semibold text-slate-700 focus:outline-emerald-600" />
-        </div>
-        <div class="flex justify-end gap-2 pt-3">
-          <button type="button" onclick="closeProductModal()" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold">Cancel</button>
-          <button type="submit" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow">Save Changes</button>
-        </div>
-      </form>
     </div>
-  </div>
+
+  </div> <!-- End App -->
 
   <script>
     // --- 1. LOGIN LOGIC ---
@@ -850,7 +887,7 @@
       location.reload();
     }
 
-    // --- 2. SUPABASE API ---
+    // --- 2. SUPABASE API (WITH ERROR BOUNDARIES) ---
     const SUPABASE_URL = "https://izilpbtlktaltsklegyr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_DYM-TBqQpmcGfL9jr-b26w_0pFX_JQa";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -864,11 +901,18 @@
     let shadeChartInstance = null;
 
     async function loadAllData() {
-      await loadProducts();
-      await loadOrders();
-      await loadExpenses();
-      await loadInstallments();
-      updateAnalytics();
+      try {
+        await Promise.allSettled([
+          loadProducts(),
+          loadOrders(),
+          loadExpenses(),
+          loadInstallments()
+        ]);
+        updateAnalytics();
+        renderInventorySummaryTable();
+      } catch (err) {
+        console.error("Data load error:", err);
+      }
     }
 
     async function loadProducts() {
@@ -920,6 +964,10 @@
         }
       });
 
+      if (tabId === 'inventory') {
+        renderInventory();
+        renderInventorySummaryTable();
+      }
       if (tabId === 'analytics') {
         setTimeout(() => {
           updateAnalytics();
@@ -959,184 +1007,7 @@
       document.getElementById('ordersBadgeCount').innerText = allOrders.length;
     }
 
-    // CART & ONLINE ORDERS (WITH 'CONVERT TO INSTALLMENT' BUTTON)
-    function renderOrders() {
-      const container = document.getElementById('ordersCardsList');
-      let filtered = allOrders;
-
-      if (currentFilter === 'Pending / Advance') {
-        filtered = allOrders.filter(o => o.order_status === 'Advance Booking' || o.order_status === 'Pending');
-      } else if (currentFilter === 'Confirmed') {
-        filtered = allOrders.filter(o => o.order_status === 'Confirmed');
-      } else if (currentFilter === 'Dispatched') {
-        filtered = allOrders.filter(o => o.order_status === 'Dispatched');
-      }
-
-      if (filtered.length === 0) {
-        container.innerHTML = `<div class="p-12 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200">No orders found in this status.</div>`;
-        return;
-      }
-
-      container.innerHTML = filtered.map(order => {
-        const cleanPhone = (order.customer_phone || '').replace(/[^0-9]/g, '');
-        const formattedPhone = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
-        const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
-
-        let badgeBg = 'bg-amber-100 text-amber-800';
-        if (order.order_status === 'Confirmed') badgeBg = 'bg-blue-100 text-blue-800';
-        if (order.order_status === 'Dispatched') badgeBg = 'bg-emerald-100 text-emerald-800';
-        if (order.order_status === 'Cancelled') badgeBg = 'bg-rose-100 text-rose-800';
-
-        return `
-          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
-              <div>
-                <div class="flex items-center gap-2">
-                  <h3 class="text-base font-bold text-slate-900">${order.customer_name || 'Customer'}</h3>
-                  <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgeBg}">${order.order_status || 'Advance Booking'}</span>
-                </div>
-                <p class="text-xs text-slate-400 mt-0.5">Placed: ${order.created_at ? new Date(order.created_at).toLocaleString() : 'Recent'} • Ref: #${order.id}</p>
-              </div>
-              <div class="text-right">
-                <span class="text-xs text-slate-400 font-semibold block">Total Bill:</span>
-                <span class="text-xl font-black text-emerald-700">Rs. ${Number(total).toLocaleString()}</span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                <p><span class="font-semibold text-slate-500">Phone:</span> <span class="font-bold text-slate-800">${order.customer_phone || 'N/A'}</span></p>
-                <p><span class="font-semibold text-slate-500">Address:</span> <span class="font-normal text-slate-700">${order.customer_address || 'N/A'}</span></p>
-                <p><span class="font-semibold text-slate-500">Source:</span> <span class="font-semibold text-slate-600">${order.sold_by || 'Online Storefront'}</span></p>
-                
-                <div class="flex items-center gap-2 pt-2">
-                  <a href="https://wa.me/${formattedPhone}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1 shadow-sm">
-                    💬 WhatsApp
-                  </a>
-                  <a href="tel:${order.customer_phone}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1">
-                    📞 Call
-                  </a>
-                </div>
-              </div>
-
-              <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100 flex flex-col justify-between">
-                <div>
-                  <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">ORDER ITEMS:</span>
-                  <div class="flex justify-between items-center text-xs sm:text-sm">
-                    <div>
-                      <p class="font-bold text-slate-800">${order.shade_name || 'Apple Hair Colour'}</p>
-                      <p class="text-slate-500">Qty: ${order.quantity} × Rs. ${order.sold_price_per_unit || 2500}</p>
-                    </div>
-                    <span class="font-black text-slate-800">Rs. ${Number(total).toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
-              
-              <!-- Convert to Installment Button -->
-              <button onclick="openConvertModal(${order.id})" class="bg-purple-700 hover:bg-purple-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
-                📅 Convert to Installment
-              </button>
-
-              <button onclick="openEditOrderModal(${order.id})" class="bg-[#d97706] hover:bg-[#b45309] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
-                ✏️ Edit
-              </button>
-
-              ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  ✓ Confirm
-                </button>
-              ` : ''}
-
-              ${order.order_status !== 'Dispatched' ? `
-                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  🚚 Dispatch
-                </button>
-              ` : ''}
-
-              ${order.order_status !== 'Cancelled' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Cancelled')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-2 rounded-xl text-xs font-bold border border-rose-200 transition">
-                  Cancel
-                </button>
-              ` : ''}
-
-              <button onclick="deleteOrder(${order.id})" class="bg-slate-100 text-slate-500 hover:bg-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">
-                🗑
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // MODAL: CONVERT ORDER TO INSTALLMENT
-    function openConvertModal(orderId) {
-      const order = allOrders.find(o => o.id === orderId);
-      if (!order) return;
-
-      const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
-      document.getElementById('convOrderId').value = order.id;
-      document.getElementById('convCustName').value = order.customer_name || '';
-      document.getElementById('convCustPhone').value = order.customer_phone || '';
-      document.getElementById('convCustAddress').value = order.customer_address || '';
-      document.getElementById('convTotalBill').value = total;
-      document.getElementById('convAdvance').value = 0;
-      
-      // Default due date: 15 days ahead
-      const nextDue = new Date();
-      nextDue.setDate(nextDue.getDate() + 15);
-      document.getElementById('convDueDate').value = nextDue.toISOString().split('T')[0];
-
-      calcConvertRemaining();
-      document.getElementById('convertInstallmentModal').classList.remove('hidden');
-    }
-
-    function closeConvertModal() {
-      document.getElementById('convertInstallmentModal').classList.add('hidden');
-    }
-
-    function calcConvertRemaining() {
-      const tot = parseFloat(document.getElementById('convTotalBill').value) || 0;
-      const adv = parseFloat(document.getElementById('convAdvance').value) || 0;
-      document.getElementById('convRemaining').value = `Rs. ${(Math.max(0, tot - adv)).toLocaleString()}`;
-    }
-
-    async function handleConvertOrderToInstallment(e) {
-      e.preventDefault();
-      const orderId = parseInt(document.getElementById('convOrderId').value);
-      const total = parseFloat(document.getElementById('convTotalBill').value) || 0;
-      const advance = parseFloat(document.getElementById('convAdvance').value) || 0;
-      const remaining = Math.max(0, total - advance);
-
-      const payload = {
-        customer_name: document.getElementById('convCustName').value.trim(),
-        customer_phone: document.getElementById('convCustPhone').value.trim(),
-        customer_address: document.getElementById('convCustAddress').value.trim(),
-        total_amount: total,
-        advance_amount: advance,
-        remaining_amount: remaining,
-        due_date: document.getElementById('convDueDate').value,
-        installment_status: remaining === 0 ? 'Completed' : 'Active',
-        notes: `Converted from Cart Order #${orderId}`
-      };
-
-      const { error: instErr } = await client.from('installment_orders').insert([payload]);
-      if (instErr) return alert("Error converting: " + instErr.message);
-
-      // Mark original order as Confirmed Installment
-      await client.from('sales_orders').update({
-        order_status: 'Confirmed',
-        notes: 'Converted to Installment Plan'
-      }).eq('id', orderId);
-
-      closeConvertModal();
-      alert("Order converted to Installment Plan successfully! Switched to Installments tab.");
-      await loadAllData();
-      switchTab('installments');
-    }
-
+    // --- INVENTORY RENDERING (QUICK INLINE + DETAILS MODAL + DELETE) ---
     function renderInventory() {
       const container = document.getElementById('inventoryCardsList');
       let totalStockValueRetail = 0;
@@ -1144,14 +1015,15 @@
       let unitsBreakdown = [];
 
       container.innerHTML = allProducts.map(p => {
-        const units = p.current_stock || 0;
-        const retailPrice = p.default_sale_price || 2500;
+        const units = parseInt(p.current_stock) || 0;
+        const retailPrice = parseFloat(p.default_sale_price) || 2500;
+        const costPrice = parseFloat(p.cost_price_per_unit) || 0;
         const itemValuationRetail = units * retailPrice;
         
         if (units > 0) {
           totalStockValueRetail += itemValuationRetail;
           totalUnitsInStock += units;
-          unitsBreakdown.push(`${units} ${p.shade_name.replace('Apple Hair Colour – ', '')}`);
+          unitsBreakdown.push(`${units} ${p.shade_name.replace('Apple Hair Colour – ', '').replace('Apple Hair Colour - ', '')}`);
         }
 
         return `
@@ -1159,34 +1031,201 @@
             <div>
               <div class="flex justify-between items-start">
                 <h3 class="text-base font-bold text-slate-900">${p.shade_name}</h3>
-                <span class="text-xs px-2.5 py-1 rounded-full font-bold ${p.current_stock > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                  ${p.current_stock > 0 ? p.current_stock + ' in stock' : 'Out of stock'}
+                <span class="text-xs px-2.5 py-1 rounded-full font-bold ${units > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                  ${units > 0 ? units + ' in stock' : 'Out of stock'}
                 </span>
               </div>
+
+              <!-- Stat Blocks -->
               <div class="grid grid-cols-3 gap-2 mt-4 text-center">
                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                   <span class="text-[11px] text-slate-500 block">Retail Price</span>
-                  <span class="text-sm font-bold text-emerald-700">Rs. ${p.default_sale_price || 0}</span>
+                  <span class="text-sm font-bold text-emerald-700">Rs. ${retailPrice.toLocaleString()}</span>
                 </div>
                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                   <span class="text-[11px] text-slate-500 block">Cost Price</span>
-                  <span class="text-sm font-bold text-slate-700">Rs. ${p.cost_price_per_unit || 0}</span>
+                  <span class="text-sm font-bold text-slate-700">Rs. ${costPrice.toLocaleString()}</span>
                 </div>
                 <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                   <span class="text-[11px] text-slate-500 block">Current Stock</span>
-                  <span class="text-sm font-bold text-slate-800">${p.current_stock || 0} units</span>
+                  <span class="text-sm font-bold text-slate-800">${units} units</span>
                 </div>
               </div>
             </div>
-            <button onclick="openProductModal(${p.id})" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 rounded-xl text-xs transition">
-              ✏ Edit Price & Stock
-            </button>
+            
+            <!-- Working Action Buttons -->
+            <div class="flex items-center gap-2 pt-2 border-t">
+              <button type="button" onclick="quickEditStockPrompt(${p.id}, ${units}, ${retailPrice})" class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
+                ✏️ Quick Edit
+              </button>
+              <button type="button" onclick="openProductModal(${p.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs transition">
+                ⚙️ Details
+              </button>
+              <button type="button" onclick="deleteProduct(${p.id}, '${p.shade_name.replace(/'/g, "\\'")}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1">
+                🗑 Delete
+              </button>
+            </div>
           </div>
         `;
       }).join('');
 
       document.getElementById('totalStockValueHeader').innerText = 'Rs. ' + totalStockValueRetail.toLocaleString();
       document.getElementById('totalUnitsFormula').innerText = `${totalUnitsInStock} total units (${unitsBreakdown.join(' + ')}) × Rs. 2,500`;
+    }
+
+    // 1-CLICK INSTANT QUICK EDIT
+    async function quickEditStockPrompt(prodId, currentUnits, currentPrice) {
+      const newStock = prompt(`Update Current Stock Quantity for this shade:`, currentUnits);
+      if (newStock === null) return;
+      
+      const newPrice = prompt(`Update Retail Selling Price (Rs.):`, currentPrice);
+      if (newPrice === null) return;
+
+      const parsedStock = parseInt(newStock);
+      const parsedPrice = parseFloat(newPrice);
+
+      if (isNaN(parsedStock) || isNaN(parsedPrice)) {
+        return alert("Please enter valid numeric values for stock and price.");
+      }
+
+      const { error } = await client.from('products').update({
+        current_stock: parsedStock,
+        default_sale_price: parsedPrice
+      }).eq('id', prodId);
+
+      if (error) {
+        alert("Error updating product: " + error.message);
+      } else {
+        alert("Stock quantity and price updated successfully!");
+        await loadAllData();
+      }
+    }
+
+    // MODAL DIALOG EDIT
+    function openProductModal(prodId) {
+      const prod = allProducts.find(p => p.id === prodId);
+      if (!prod) return alert("Product not found.");
+
+      document.getElementById('editProdId').value = prod.id;
+      document.getElementById('editProdName').value = prod.shade_name;
+      document.getElementById('editProdSalePrice').value = prod.default_sale_price || 2500;
+      document.getElementById('editProdCostPrice').value = prod.cost_price_per_unit || 0;
+      document.getElementById('editProdStock').value = prod.current_stock || 0;
+
+      document.getElementById('editProductModal').classList.remove('hidden');
+    }
+
+    function closeProductModal() {
+      document.getElementById('editProductModal').classList.add('hidden');
+    }
+
+    async function saveProductChanges(e) {
+      e.preventDefault();
+      const prodId = parseInt(document.getElementById('editProdId').value);
+      const btn = document.getElementById('saveProdBtn');
+      btn.disabled = true;
+      btn.innerText = "Saving...";
+
+      const updated = {
+        default_sale_price: parseFloat(document.getElementById('editProdSalePrice').value) || 2500,
+        current_stock: parseInt(document.getElementById('editProdStock').value) || 0
+      };
+
+      // Only include cost price if the input has a valid number
+      const costInput = document.getElementById('editProdCostPrice').value;
+      if (costInput !== '') {
+        updated.cost_price_per_unit = parseFloat(costInput) || 0;
+      }
+
+      const { error } = await client.from('products').update(updated).eq('id', prodId);
+      btn.disabled = false;
+      btn.innerText = "Save Changes";
+
+      if (error) {
+        alert("Error saving: " + error.message);
+      } else {
+        closeProductModal();
+        alert("Product updated successfully!");
+        await loadAllData();
+      }
+    }
+
+    // FUNCTIONAL DELETE WITH AUTOMATIC UNLINK
+    async function deleteProduct(prodId, shadeName) {
+      if (!confirm(`Are you sure you want to delete "${shadeName}" from inventory?`)) return;
+
+      // Unlink any existing sales order pointing to this product to prevent foreign key errors
+      await client.from('sales_orders').update({ product_id: null }).eq('product_id', prodId);
+
+      const { error } = await client.from('products').delete().eq('id', prodId);
+      
+      if (error) {
+        alert("Error deleting: " + error.message);
+      } else {
+        alert(`Product "${shadeName}" deleted successfully!`);
+        await loadAllData();
+      }
+    }
+
+    // --- INVENTORY UNITS SUMMARY TABLE ---
+    function renderInventorySummaryTable() {
+      const tbody = document.getElementById('inventorySummaryTableBody');
+      const tfoot = document.getElementById('inventorySummaryTableFoot');
+      if (!tbody) return;
+
+      if (allProducts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">No products recorded.</td></tr>`;
+        return;
+      }
+
+      let grandAvailableUnits = 0;
+      let grandSoldUnits = 0;
+      let grandValuation = 0;
+
+      tbody.innerHTML = allProducts.map(p => {
+        const available = parseInt(p.current_stock) || 0;
+        const retail = parseFloat(p.default_sale_price) || 2500;
+        const valuation = available * retail;
+
+        let sold = 0;
+        const pNameLower = (p.shade_name || '').toLowerCase();
+        allOrders.forEach(o => {
+          if (o.order_status === 'Dispatched') {
+            const oShade = (o.shade_name || '').toLowerCase();
+            if (o.product_id === p.id || (pNameLower.includes('black') && oShade.includes('black')) || (pNameLower.includes('brown') && oShade.includes('brown'))) {
+              sold += (o.quantity || 1);
+            }
+          }
+        });
+
+        grandAvailableUnits += available;
+        grandSoldUnits += sold;
+        grandValuation += valuation;
+
+        return `
+          <tr class="hover:bg-slate-50 transition border-b">
+            <td class="py-3 px-3 font-bold text-slate-800">${p.shade_name}</td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2.5 py-0.5 rounded-full font-black text-xs ${available > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'}">
+                ${available} units
+              </span>
+            </td>
+            <td class="py-3 px-3 text-center font-black text-blue-700">${sold} units</td>
+            <td class="py-3 px-3 text-right font-bold text-slate-700">Rs. ${retail.toLocaleString()}</td>
+            <td class="py-3 px-3 text-right font-black text-emerald-700">Rs. ${valuation.toLocaleString()}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tfoot.innerHTML = `
+        <tr>
+          <td class="py-3 px-3 uppercase text-xs tracking-wider">Total Summary:</td>
+          <td class="py-3 px-3 text-center text-emerald-800 text-sm">${grandAvailableUnits} Available</td>
+          <td class="py-3 px-3 text-center text-blue-800 text-sm">${grandSoldUnits} Dispatched</td>
+          <td class="py-3 px-3 text-right text-xs text-slate-400">—</td>
+          <td class="py-3 px-3 text-right text-emerald-700 text-base">Rs. ${grandValuation.toLocaleString()}</td>
+        </tr>
+      `;
     }
 
     function populateShadeSelects() {
@@ -1261,12 +1300,15 @@
 
       const prodId = parseInt(document.getElementById('inwardShadeSelect').value);
       const qty = parseInt(document.getElementById('inwardQty').value);
-      const cost = parseFloat(document.getElementById('inwardCostPrice').value);
+      const cost = parseFloat(document.getElementById('inwardCostPrice').value) || 0;
 
       const prod = allProducts.find(p => p.id === prodId);
       if (prod) {
         const newStock = (prod.current_stock || 0) + qty;
-        const { error } = await client.from('products').update({ current_stock: newStock, cost_price_per_unit: cost }).eq('id', prodId);
+        const updatePayload = { current_stock: newStock };
+        if (cost > 0) updatePayload.cost_price_per_unit = cost;
+
+        const { error } = await client.from('products').update(updatePayload).eq('id', prodId);
         btn.disabled = false;
         if (error) alert("Error: " + error.message);
         else {
@@ -1275,6 +1317,178 @@
           await loadAllData();
         }
       }
+    }
+
+    function renderOrders() {
+      const container = document.getElementById('ordersCardsList');
+      let filtered = allOrders;
+
+      if (currentFilter === 'Pending / Advance') {
+        filtered = allOrders.filter(o => o.order_status === 'Advance Booking' || o.order_status === 'Pending');
+      } else if (currentFilter === 'Confirmed') {
+        filtered = allOrders.filter(o => o.order_status === 'Confirmed');
+      } else if (currentFilter === 'Dispatched') {
+        filtered = allOrders.filter(o => o.order_status === 'Dispatched');
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-12 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200">No orders found in this status.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(order => {
+        const cleanPhone = (order.customer_phone || '').replace(/[^0-9]/g, '');
+        const formattedPhone = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
+        const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
+
+        let badgeBg = 'bg-amber-100 text-amber-800';
+        if (order.order_status === 'Confirmed') badgeBg = 'bg-blue-100 text-blue-800';
+        if (order.order_status === 'Dispatched') badgeBg = 'bg-emerald-100 text-emerald-800';
+        if (order.order_status === 'Cancelled') badgeBg = 'bg-rose-100 text-rose-800';
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base font-bold text-slate-900">${order.customer_name || 'Customer'}</h3>
+                  <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgeBg}">${order.order_status || 'Advance Booking'}</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">Placed: ${order.created_at ? new Date(order.created_at).toLocaleString() : 'Recent'} • Ref: #${order.id}</p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-400 font-semibold block">Total Bill:</span>
+                <span class="text-xl font-black text-emerald-700">Rs. ${Number(total).toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+              <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                <p><span class="font-semibold text-slate-500">Phone:</span> <span class="font-bold text-slate-800">${order.customer_phone || 'N/A'}</span></p>
+                <p><span class="font-semibold text-slate-500">Address:</span> <span class="font-normal text-slate-700">${order.customer_address || 'N/A'}</span></p>
+                <p><span class="font-semibold text-slate-500">Source:</span> <span class="font-semibold text-slate-600">${order.sold_by || 'Online Storefront'}</span></p>
+                
+                <div class="flex items-center gap-2 pt-2">
+                  <a href="https://wa.me/${formattedPhone}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1 shadow-sm">
+                    💬 WhatsApp
+                  </a>
+                  <a href="tel:${order.customer_phone}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1">
+                    📞 Call
+                  </a>
+                </div>
+              </div>
+
+              <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100 flex flex-col justify-between">
+                <div>
+                  <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">ORDER ITEMS:</span>
+                  <div class="flex justify-between items-center text-xs sm:text-sm">
+                    <div>
+                      <p class="font-bold text-slate-800">${order.shade_name || 'Apple Hair Colour'}</p>
+                      <p class="text-slate-500">Qty: ${order.quantity} × Rs. ${order.sold_price_per_unit || 2500}</p>
+                    </div>
+                    <span class="font-black text-slate-800">Rs. ${Number(total).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
+              <button onclick="openConvertModal(${order.id})" class="bg-purple-700 hover:bg-purple-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
+                📅 Convert to Installment
+              </button>
+
+              <button onclick="openEditOrderModal(${order.id})" class="bg-[#d97706] hover:bg-[#b45309] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
+                ✏️ Edit
+              </button>
+
+              ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' ? `
+                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                  ✓ Confirm
+                </button>
+              ` : ''}
+
+              ${order.order_status !== 'Dispatched' ? `
+                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                  🚚 Dispatch
+                </button>
+              ` : ''}
+
+              ${order.order_status !== 'Cancelled' ? `
+                <button onclick="updateOrderStatus(${order.id}, 'Cancelled')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-2 rounded-xl text-xs font-bold border border-rose-200 transition">
+                  Cancel
+                </button>
+              ` : ''}
+
+              <button onclick="deleteOrder(${order.id})" class="bg-slate-100 text-slate-500 hover:bg-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">
+                🗑
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openConvertModal(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
+      document.getElementById('convOrderId').value = order.id;
+      document.getElementById('convCustName').value = order.customer_name || '';
+      document.getElementById('convCustPhone').value = order.customer_phone || '';
+      document.getElementById('convCustAddress').value = order.customer_address || '';
+      document.getElementById('convTotalBill').value = total;
+      document.getElementById('convAdvance').value = 0;
+      
+      const nextDue = new Date();
+      nextDue.setDate(nextDue.getDate() + 15);
+      document.getElementById('convDueDate').value = nextDue.toISOString().split('T')[0];
+
+      calcConvertRemaining();
+      document.getElementById('convertInstallmentModal').classList.remove('hidden');
+    }
+
+    function closeConvertModal() {
+      document.getElementById('convertInstallmentModal').classList.add('hidden');
+    }
+
+    function calcConvertRemaining() {
+      const tot = parseFloat(document.getElementById('convTotalBill').value) || 0;
+      const adv = parseFloat(document.getElementById('convAdvance').value) || 0;
+      document.getElementById('convRemaining').value = `Rs. ${(Math.max(0, tot - adv)).toLocaleString()}`;
+    }
+
+    async function handleConvertOrderToInstallment(e) {
+      e.preventDefault();
+      const orderId = parseInt(document.getElementById('convOrderId').value);
+      const total = parseFloat(document.getElementById('convTotalBill').value) || 0;
+      const advance = parseFloat(document.getElementById('convAdvance').value) || 0;
+      const remaining = Math.max(0, total - advance);
+
+      const payload = {
+        customer_name: document.getElementById('convCustName').value.trim(),
+        customer_phone: document.getElementById('convCustPhone').value.trim(),
+        customer_address: document.getElementById('convCustAddress').value.trim(),
+        total_amount: total,
+        advance_amount: advance,
+        remaining_amount: remaining,
+        due_date: document.getElementById('convDueDate').value,
+        installment_status: remaining === 0 ? 'Completed' : 'Active',
+        notes: `Converted from Cart Order #${orderId}`
+      };
+
+      const { error: instErr } = await client.from('installment_orders').insert([payload]);
+      if (instErr) return alert("Error converting: " + instErr.message);
+
+      await client.from('sales_orders').update({
+        order_status: 'Confirmed',
+        notes: 'Converted to Installment Plan'
+      }).eq('id', orderId);
+
+      closeConvertModal();
+      alert("Order converted to Installment Plan successfully!");
+      await loadAllData();
+      switchTab('installments');
     }
 
     function openEditOrderModal(orderId) {
@@ -1366,39 +1580,7 @@
       else await loadAllData();
     }
 
-    function openProductModal(prodId) {
-      const prod = allProducts.find(p => p.id === prodId);
-      if (!prod) return;
-      document.getElementById('editProdId').value = prod.id;
-      document.getElementById('editProdName').value = prod.shade_name;
-      document.getElementById('editProdSalePrice').value = prod.default_sale_price || 0;
-      document.getElementById('editProdCostPrice').value = prod.cost_price_per_unit || 0;
-      document.getElementById('editProdStock').value = prod.current_stock || 0;
-      document.getElementById('editProductModal').classList.remove('hidden');
-    }
-
-    function closeProductModal() {
-      document.getElementById('editProductModal').classList.add('hidden');
-    }
-
-    async function saveProductChanges(e) {
-      e.preventDefault();
-      const prodId = parseInt(document.getElementById('editProdId').value);
-      const updated = {
-        default_sale_price: parseFloat(document.getElementById('editProdSalePrice').value),
-        cost_price_per_unit: parseFloat(document.getElementById('editProdCostPrice').value),
-        current_stock: parseInt(document.getElementById('editProdStock').value)
-      };
-
-      const { error } = await client.from('products').update(updated).eq('id', prodId);
-      if (error) alert("Error updating product: " + error.message);
-      else {
-        closeProductModal();
-        await loadAllData();
-      }
-    }
-
-    // --- ANALYTICS: UNIFIED CALCULATION (ORDERS + INSTALLMENTS) ---
+    // --- ANALYTICS CALCULATIONS ---
     function updateAnalytics() {
       let totalSalesBooked = 0;
       let netProfit = 0;
@@ -1412,7 +1594,6 @@
       let confirmedOrdersCount = 0;
       let dispatchedOrdersCount = 0;
 
-      // 1. Calculate from Orders Table
       allOrders.forEach(order => {
         const orderTotal = parseFloat(order.total_amount) || (order.quantity * (order.sold_price_per_unit || 2500));
         const shade = (order.shade_name || '').toLowerCase();
@@ -1422,7 +1603,7 @@
           totalSalesBooked += orderTotal;
 
           const prod = allProducts.find(p => p.id === order.product_id);
-          const cost = prod ? (prod.cost_price_per_unit || 0) : 0;
+          const cost = prod ? (parseFloat(prod.cost_price_per_unit) || 0) : 0;
           netProfit += orderTotal - ((order.quantity || 1) * cost);
 
           if (shade.includes('black')) shadeBlackCount += (order.quantity || 1);
@@ -1444,18 +1625,16 @@
         }
       });
 
-      // 2. UNIFIED: Add Installment Cash and Balances
       allInstallments.forEach(inst => {
         const adv = parseFloat(inst.advance_amount) || 0;
         const rem = parseFloat(inst.remaining_amount) || 0;
         const tot = parseFloat(inst.total_amount) || 0;
 
-        totalCashReceived += adv; // Advance collected is CASH ON HAND!
-        pendingCashCollection += rem; // Remaining due is PENDING!
+        totalCashReceived += adv;
+        pendingCashCollection += rem;
         totalSalesBooked += tot;
       });
 
-      // 3. Stock valuation
       allProducts.forEach(prod => {
         const currentQty = parseInt(prod.current_stock) || 0;
         const currentPrice = parseFloat(prod.default_sale_price) || 2500;
@@ -1638,7 +1817,8 @@
       const type = document.getElementById('expenseType').value;
       const specifyDiv = document.getElementById('specifyDetailDiv');
       const partnerTransferDiv = document.getElementById('partnerTransferDiv');
-      const partnerCommissionDiv = document.getElementById('partnerCommissionDiv');
+      const partnerProfitDiv = document.getElementById('partnerProfitDiv');
+      const marketingPlatformDiv = document.getElementById('marketingPlatformDiv');
       const regularPaidByDiv = document.getElementById('regularPaidByDiv');
 
       if (type === 'Other Payment') {
@@ -1657,10 +1837,16 @@
         regularPaidByDiv.classList.remove('hidden');
       }
 
-      if (type === 'Partner Commission') {
-        partnerCommissionDiv.classList.remove('hidden');
+      if (type === 'Partner Profit Share') {
+        partnerProfitDiv.classList.remove('hidden');
       } else {
-        partnerCommissionDiv.classList.add('hidden');
+        partnerProfitDiv.classList.add('hidden');
+      }
+
+      if (type === 'Marketing & Promotions') {
+        marketingPlatformDiv.classList.remove('hidden');
+      } else {
+        marketingPlatformDiv.classList.add('hidden');
       }
     }
 
@@ -1682,15 +1868,19 @@
       if (type === 'Internal Partner Transfer') {
         paidBy = document.getElementById('partnerTransferFrom').value;
         paidTo = document.getElementById('partnerTransferTo').value;
-      } else if (type === 'Partner Commission') {
-        commissionPartner = document.getElementById('commissionPartnerSelect').value;
+      } else if (type === 'Partner Profit Share') {
+        commissionPartner = document.getElementById('profitPartnerSelect').value;
+      } else if (type === 'Marketing & Promotions') {
+        commissionPartner = document.getElementById('marketingPlatformSelect').value;
       }
 
       let finalDescription = type;
       if (type === 'Internal Partner Transfer') {
         finalDescription = `Reimbursement: ${paidBy} paid to ${paidTo}` + (notes ? ` (${notes})` : '');
-      } else if (type === 'Partner Commission') {
-        finalDescription = `Commission paid to ${commissionPartner}` + (notes ? ` (${notes})` : '');
+      } else if (type === 'Partner Profit Share') {
+        finalDescription = `Profit Distributed to Partner: ${commissionPartner}` + (notes ? ` (${notes})` : '');
+      } else if (type === 'Marketing & Promotions') {
+        finalDescription = `Marketing Spend on ${commissionPartner}` + (notes ? ` (${notes})` : '');
       } else if (type === 'Other Payment') {
         finalDescription = specifyDesc ? `Other: ${specifyDesc}` : 'Other Payment';
         if (notes) finalDescription += ` [${notes}]`;
@@ -1726,10 +1916,11 @@
       const tbody = document.getElementById('expensesTableBody');
       let totalDelivery = 0;
       let totalFreight = 0;
+      let totalMarketing = 0;
       let totalBusinessExpenses = 0;
-      let totalCommissionsAll = 0;
-      let commAsif = 0;
-      let commKhalid = 0;
+      let totalProfitDistributed = 0;
+      let profitAsif = 0;
+      let profitKhalid = 0;
       let paidByAsif = 0;
       let paidByKhalid = 0;
 
@@ -1745,16 +1936,18 @@
         } else if (exp.expense_type === 'Supply Freight & Cargo') {
           totalFreight += amt;
           totalBusinessExpenses += amt;
+        } else if (exp.expense_type === 'Marketing & Promotions') {
+          totalMarketing += amt;
+          totalBusinessExpenses += amt;
         } else if (exp.expense_type === 'Miscellaneous Payment' || exp.expense_type === 'Other Payment') {
           totalBusinessExpenses += amt;
-        } else if (exp.expense_type === 'Partner Commission') {
-          totalCommissionsAll += amt;
-          if (exp.commission_partner === 'Asif Ali') commAsif += amt;
-          else if (exp.commission_partner === 'Khalid Saleem') commKhalid += amt;
+        } else if (exp.expense_type === 'Partner Profit Share' || exp.expense_type === 'Partner Commission') {
+          totalProfitDistributed += amt;
+          if (exp.commission_partner === 'Asif Ali') profitAsif += amt;
+          else if (exp.commission_partner === 'Khalid Saleem') profitKhalid += amt;
         }
       });
 
-      // 1. Regular Orders Cash Received
       let totalCustomerCash = 0;
       allOrders.forEach(o => {
         if (o.payment_status === 'Received') {
@@ -1766,21 +1959,21 @@
         }
       });
 
-      // 2. UNIFIED: Add Installment Advance/Collected Cash to Drawer!
       allInstallments.forEach(i => {
         totalCustomerCash += (parseFloat(i.advance_amount) || 0);
       });
 
       document.getElementById('statAccCashReceived').innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
       document.getElementById('statAccTotalExpenses').innerText = 'Rs. ' + totalBusinessExpenses.toLocaleString();
-      document.getElementById('statAccTotalCommission').innerText = 'Rs. ' + totalCommissionsAll.toLocaleString();
+      document.getElementById('statAccTotalProfitShare').innerText = 'Rs. ' + totalProfitDistributed.toLocaleString();
 
       document.getElementById('statTotalDeliveryExpense').innerText = 'Rs. ' + totalDelivery.toLocaleString();
       document.getElementById('statTotalFreightExpense').innerText = 'Rs. ' + totalFreight.toLocaleString();
+      document.getElementById('statTotalMarketingExpense').innerText = 'Rs. ' + totalMarketing.toLocaleString();
       document.getElementById('statPaidByAsif').innerText = 'Rs. ' + paidByAsif.toLocaleString();
       document.getElementById('statPaidByKhalid').innerText = 'Rs. ' + paidByKhalid.toLocaleString();
-      document.getElementById('statCommAsif').innerText = 'Rs. ' + commAsif.toLocaleString();
-      document.getElementById('statCommKhalid').innerText = 'Rs. ' + commKhalid.toLocaleString();
+      document.getElementById('statProfitAsif').innerText = 'Rs. ' + profitAsif.toLocaleString();
+      document.getElementById('statProfitKhalid').innerText = 'Rs. ' + profitKhalid.toLocaleString();
 
       if (allExpenses.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No records found.</td></tr>`;
@@ -1791,20 +1984,22 @@
         let badge = `<span class="font-bold text-slate-800">${exp.paid_by || 'Business'}</span>`;
         if (exp.expense_type === 'Internal Partner Transfer' && exp.paid_to) {
           badge = `<span class="bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded-md font-bold text-xs">${exp.paid_by} ➔ ${exp.paid_to}</span>`;
-        } else if (exp.expense_type === 'Partner Commission') {
-          badge = `<span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded-md font-bold text-xs">💼 Commission: ${exp.commission_partner || 'Partner'}</span>`;
+        } else if (exp.expense_type === 'Partner Profit Share' || exp.expense_type === 'Partner Commission') {
+          badge = `<span class="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-md font-bold text-xs">💰 Profit: ${exp.commission_partner || 'Partner'}</span>`;
+        } else if (exp.expense_type === 'Marketing & Promotions') {
+          badge = `<span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded-md font-bold text-xs">📢 ${exp.commission_partner || 'Marketing'}</span>`;
         }
 
         const isTransfer = exp.expense_type === 'Internal Partner Transfer';
-        const isComm = exp.expense_type === 'Partner Commission';
+        const isProfit = exp.expense_type === 'Partner Profit Share' || exp.expense_type === 'Partner Commission';
 
         return `
           <tr class="hover:bg-slate-50 transition border-b">
             <td class="py-2.5 px-3 text-slate-500 font-medium">${exp.created_at ? new Date(exp.created_at).toLocaleDateString() : 'Today'}</td>
-            <td class="py-2.5 px-3 font-bold text-slate-800">${exp.expense_type}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${exp.expense_type === 'Partner Commission' ? 'Partner Profit Share' : exp.expense_type}</td>
             <td class="py-2.5 px-3 text-slate-600">${exp.notes || '—'}</td>
             <td class="py-2.5 px-3">${badge}</td>
-            <td class="py-2.5 px-3 text-right font-black ${isTransfer ? 'text-indigo-600' : isComm ? 'text-purple-600' : 'text-rose-600'}">
+            <td class="py-2.5 px-3 text-right font-black ${isTransfer ? 'text-indigo-600' : isProfit ? 'text-emerald-600' : 'text-rose-600'}">
               Rs. ${Number(exp.amount).toLocaleString()}
             </td>
             <td class="py-2.5 px-3 text-center no-print">
@@ -1973,13 +2168,12 @@
       if (!confirm("Are you sure you want to delete this installment account record?")) return;
       const { error } = await client.from('installment_orders').delete().eq('id', id);
       if (error) alert("Error: " + error.message);
-      else await loadAllData();
+      else await loadInstallments();
     }
 
-    // --- EXPORTS ---
+    // --- CSV & EXPORT REPORTS ---
     function exportInstallmentsCSV() {
       if (allInstallments.length === 0) return alert("No installment records to export.");
-
       const headers = ["ID", "Customer Name", "Phone", "Address", "Total Bill (PKR)", "Advance (PKR)", "Remaining (PKR)", "Due Date", "Status", "Notes"];
       const rows = allInstallments.map(i => [
         i.id,
@@ -1993,7 +2187,6 @@
         i.installment_status,
         `"${(i.notes || '').replace(/"/g, '""')}"`
       ]);
-
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
@@ -2005,8 +2198,7 @@
 
     function exportAccountsCSV() {
       if (allExpenses.length === 0) return alert("No expenses to export.");
-
-      const headers = ["ID", "Date", "Expense Type", "Description / Notes", "Paid By", "Beneficiary/Partner", "Amount (PKR)"];
+      const headers = ["ID", "Date", "Expense Type", "Description / Campaign Notes", "Paid By", "Beneficiary", "Amount (PKR)"];
       const rows = allExpenses.map(e => [
         e.id,
         e.created_at ? new Date(e.created_at).toLocaleDateString() : '',
@@ -2016,7 +2208,6 @@
         `"${(e.commission_partner || e.paid_to || '').replace(/"/g, '""')}"`,
         e.amount
       ]);
-
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
@@ -2029,12 +2220,7 @@
     function exportConfirmedCustomersCSV() {
       const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
       if (confirmedList.length === 0) return alert("No confirmed orders to export.");
-
-      const headers = [
-        "Order ID", "Customer Name", "Phone / WhatsApp", "Address", "Shade", "Quantity", 
-        "Total Bill (PKR)", "Delivery Route", "Payment Status", "Net Cash Received (PKR)", "Booking Date"
-      ];
-
+      const headers = ["Order ID", "Customer Name", "Phone / WhatsApp", "Address", "Shade", "Quantity", "Total Bill (PKR)", "Delivery Route", "Payment Status", "Net Cash Received (PKR)", "Booking Date"];
       const rows = confirmedList.map(o => [
         o.id,
         `"${(o.customer_name || '').replace(/"/g, '""')}"`,
@@ -2048,7 +2234,6 @@
         (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : (o.payment_status === 'Received' ? o.total_amount : '0'),
         o.created_at ? new Date(o.created_at).toLocaleDateString() : ''
       ]);
-
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
@@ -2060,7 +2245,6 @@
 
     function exportToCSV() {
       if (allOrders.length === 0) return alert("No orders available to export.");
-
       const headers = ["Order ID", "Date", "Customer Name", "Phone", "Address", "Shade", "Quantity", "Total Bill", "Sold By", "Status", "Delivery Route", "Payment Status", "Net Received Cash"];
       const rows = allOrders.map(o => [
         o.id,
@@ -2077,7 +2261,6 @@
         o.payment_status || 'Pending',
         (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : (o.payment_status === 'Received' ? o.total_amount : '0')
       ]);
-
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
