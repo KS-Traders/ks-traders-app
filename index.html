@@ -91,8 +91,9 @@
           📦 Stock & Inventory
         </button>
 
+        <!-- PAGE 2: RENAMED TO ORDERS -->
         <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">
-          🛒 Cart & Online Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
+          📋 Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
         </button>
 
         <button onclick="switchTab('record-sale')" id="tab-record-sale" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
@@ -125,7 +126,7 @@
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
             <div>
               <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Current Stock & Product Pricing</h2>
-              <p class="text-xs text-slate-500 mt-0.5">Edit available stock, manage retail selling rates, and delete products.</p>
+              <p class="text-xs text-slate-500 mt-0.5">Live warehouse stock counts, unit costs, and retail prices.</p>
             </div>
             <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-400/80 px-5 py-3 rounded-2xl shadow-sm text-right flex items-center gap-4">
               <span class="text-3xl">💎</span>
@@ -142,7 +143,6 @@
           <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
         </div>
 
-        <!-- SUMMARY TABLE: UNITS AVAILABLE & UNITS SOLD (STRICT EXACT MATCH) -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
             <div>
@@ -176,24 +176,27 @@
         </div>
       </section>
 
-      <!-- TAB 2: CART & ONLINE ORDERS -->
+      <!-- TAB 2: ORDERS (UPDATED TITLE & PLATFORM / DISPATCH DROPDOWNS) -->
       <section id="view-orders" class="space-y-4">
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-slate-900">Online Cart Orders & Advance Bookings</h2>
-              <p class="text-xs text-slate-500">Review orders placed online. Contact customer via WhatsApp/Call and dispatch or convert to installments.</p>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">Orders Management</h2>
+              <p class="text-xs text-slate-500">Track order acquisition source (WhatsApp, Facebook, Instagram, Cart, TikTok, Twitter) and delivery channel.</p>
             </div>
             <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">
               🔄 Refresh
             </button>
           </div>
 
-          <!-- Customer Order Filter Controls -->
+          <!-- Workflow Filters -->
           <div class="bg-slate-50 p-2 rounded-xl border border-slate-200 flex flex-wrap gap-1.5 items-center">
-            <span class="text-xs font-bold text-slate-500 mr-1">Status Filter:</span>
-            <button onclick="filterOrders('Pending / Advance')" id="subFilter-Pending" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-              Pending / Advance (<span id="count-pending">0</span>)
+            <span class="text-xs font-bold text-slate-500 mr-1">Filter View:</span>
+            <button onclick="filterOrders('Active / Open')" id="subFilter-Active" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition">
+              🟢 Active Orders (<span id="count-active">0</span>)
+            </button>
+            <button onclick="filterOrders('Pending')" id="subFilter-Pending" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
+              Advance Bookings (<span id="count-pending">0</span>)
             </button>
             <button onclick="filterOrders('Confirmed')" id="subFilter-Confirmed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
               Confirmed (<span id="count-confirmed">0</span>)
@@ -201,7 +204,10 @@
             <button onclick="filterOrders('Dispatched')" id="subFilter-Dispatched" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
               Dispatched (<span id="count-dispatched">0</span>)
             </button>
-            <button onclick="filterOrders('All')" id="subFilter-All" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition">
+            <button onclick="filterOrders('Closed')" id="subFilter-Closed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
+              📁 Closed / Delivered (<span id="count-closed">0</span>)
+            </button>
+            <button onclick="filterOrders('All')" id="subFilter-All" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
               All (<span id="count-all">0</span>)
             </button>
           </div>
@@ -212,7 +218,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: RECORD SALE / ADVANCE -->
+      <!-- TAB 3: RECORD SALE / ADVANCE (WITH PLATFORM & DISPATCH DROPDOWNS) -->
       <section id="view-record-sale" class="hidden space-y-4">
         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-2xl mx-auto space-y-4">
           <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">➕ Record Manual Direct Sale / Advance Booking</h2>
@@ -221,49 +227,78 @@
               <label class="block text-xs font-semibold text-slate-700 mb-1">Customer Name *</label>
               <input type="text" id="manualCustName" required placeholder="Customer Full Name" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Phone / WhatsApp *</label>
                 <input type="tel" id="manualCustPhone" required placeholder="0336-1234567" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
+              
+              <!-- Order Received By Dropdown -->
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Sold By / Partner</label>
-                <select id="manualSoldBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
-                  <option value="Khalid Saleem">Khalid Saleem</option>
-                  <option value="Asif Ali">Asif Ali</option>
-                  <option value="Online Storefront">Online Storefront</option>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Order Received By *</label>
+                <select id="manualOrderReceivedBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                  <option value="WhatsApp">💬 WhatsApp</option>
+                  <option value="Facebook">📘 Facebook</option>
+                  <option value="Instagram">📸 Instagram</option>
+                  <option value="Cart">🛒 Cart (Online Store)</option>
+                  <option value="TikTok">🎵 TikTok</option>
+                  <option value="Twitter">𝕏 Twitter (X)</option>
+                </select>
+              </div>
+
+              <!-- Order Dispatched Through Dropdown -->
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Dispatched Through *</label>
+                <select id="manualDispatchThrough" onchange="autoAdjustDeliveryPrice()" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                  <option value="InPerson">🛵 In-Person (Hyderabad)</option>
+                  <option value="Courier">📦 Courier Service</option>
                 </select>
               </div>
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Email Address <span class="text-slate-400 font-normal">(Optional)</span></label>
-              <input type="email" id="manualCustEmail" placeholder="customer@example.com" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Booked By Partner</label>
+                <select id="manualSoldBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                  <option value="Khalid Saleem">Khalid Saleem</option>
+                  <option value="Asif Ali">Asif Ali</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Email <span class="text-slate-400 font-normal">(Optional)</span></label>
+                <input type="email" id="manualCustEmail" placeholder="customer@example.com" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+              </div>
             </div>
+
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Complete Address / City</label>
               <input type="text" id="manualAddress" required placeholder="Address or City" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
             </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Select Shade *</label>
-                <select id="manualShadeSelect" onchange="autoFillPrice()" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600"></select>
+                <select id="manualShadeSelect" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600"></select>
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Quantity</label>
                 <input type="number" id="manualQty" value="1" min="1" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Price Per Unit (Rs.)</label>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Bill Per Unit (Rs.)</label>
                 <input type="number" id="manualPrice" value="2500" min="0" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold text-emerald-700 focus:outline-emerald-600" />
               </div>
             </div>
+
             <div class="flex justify-between items-center bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-              <span class="text-xs font-bold text-slate-700">Total Calculation:</span>
+              <span class="text-xs font-bold text-slate-700">Total Customer Bill:</span>
               <span id="manualTotalText" class="text-base font-black text-emerald-700">Rs. 2,500</span>
             </div>
+
             <div class="pt-2">
               <button type="submit" id="saveManualSaleBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-                Save & Record Sale (Advance Booking)
+                Save & Record Order
               </button>
             </div>
           </form>
@@ -286,7 +321,7 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Cost Price Per Unit (Rs.)</label>
-                <input type="number" id="inwardCostPrice" min="0" value="0" placeholder="Cost price" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
+                <input type="number" id="inwardCostPrice" min="0" value="1750" placeholder="1750" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
               </div>
             </div>
             <button type="submit" id="saveInwardBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
@@ -296,7 +331,7 @@
         </div>
       </section>
 
-      <!-- TAB 5: ANALYTICS & HISTORY -->
+      <!-- TAB 5: ANALYTICS & HISTORY (CORRECT 4% = 112 ON 2800, 100 ON 2500) -->
       <section id="view-analytics" class="hidden space-y-6 print-area">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
           <div>
@@ -317,34 +352,46 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="bg-white p-5 rounded-2xl border-2 border-emerald-300 shadow-sm">
-            <p class="text-xs font-bold text-emerald-800 uppercase">Stock Valuation (Retail)</p>
-            <h3 id="statStockValuePKR" class="text-2xl font-black text-emerald-700 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Live in-stock inventory</p>
+        <!-- 6 KPI CARDS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-[11px] font-bold text-slate-500 uppercase">Stock Valuation (Retail)</p>
+            <h3 id="statStockValuePKR" class="text-xl font-black text-slate-900 mt-1">Rs. 0</h3>
+            <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Live warehouse stock</p>
           </div>
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-xs font-bold text-slate-500 uppercase">Total Sales Booked</p>
-            <h3 id="statTotalSales" class="text-2xl font-black text-slate-900 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-emerald-600 font-semibold mt-1">Orders + Installment Plans</p>
+
+          <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-[11px] font-bold text-slate-500 uppercase">Total Sales Booked</p>
+            <h3 id="statTotalSales" class="text-xl font-black text-slate-900 mt-1">Rs. 0</h3>
+            <p class="text-[10px] text-slate-400 mt-0.5">Orders + Installments</p>
           </div>
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-xs font-bold text-slate-500 uppercase">Net Gross Profit</p>
-            <h3 id="statTotalProfit" class="text-2xl font-black text-emerald-600 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-slate-400 mt-1">Revenue - Unit Cost</p>
+
+          <div class="bg-white p-4 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
+            <p class="text-[11px] font-bold text-indigo-900 uppercase">Total Net Cash Received</p>
+            <h3 id="statTotalCashReceived" class="text-xl font-black text-indigo-700 mt-1">Rs. 0</h3>
+            <p class="text-[10px] text-indigo-600 font-semibold mt-0.5">In-Person + Courier Net</p>
           </div>
-          <div class="bg-white p-5 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
-            <p class="text-xs font-bold text-indigo-900 uppercase">Total Cash Received</p>
-            <h3 id="statTotalCashReceived" class="text-2xl font-black text-indigo-700 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-indigo-600 font-semibold mt-1">Orders + Installment Advance</p>
+
+          <div class="bg-white p-4 rounded-2xl border-2 border-emerald-300 shadow-sm bg-emerald-50/20">
+            <p class="text-[10px] font-bold text-emerald-800 uppercase">🛵 In-Person Cash (Hyd)</p>
+            <h3 id="statCashInPerson" class="text-lg font-black text-emerald-700 mt-1">Rs. 0</h3>
+            <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Direct full cash</p>
           </div>
-          <div class="bg-white p-5 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
-            <p class="text-xs font-bold text-amber-900 uppercase">Pending Cash Collection</p>
-            <h3 id="statPendingValue" class="text-2xl font-black text-amber-700 mt-1">Rs. 0</h3>
-            <p class="text-[11px] text-amber-600 font-semibold mt-1">Courier Pending + Khata Due</p>
+
+          <div class="bg-white p-4 rounded-2xl border-2 border-blue-300 shadow-sm bg-blue-50/20">
+            <p class="text-[10px] font-bold text-blue-900 uppercase">📦 Courier Net In-Hand</p>
+            <h3 id="statCashCourier" class="text-lg font-black text-blue-700 mt-1">Rs. 0</h3>
+            <p class="text-[10px] text-blue-600 font-semibold mt-0.5">After 4% courier deduction</p>
+          </div>
+
+          <div class="bg-white p-4 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
+            <p class="text-[11px] font-bold text-amber-900 uppercase">Pending Cash Collection</p>
+            <h3 id="statPendingValue" class="text-xl font-black text-amber-700 mt-1">Rs. 0</h3>
+            <p class="text-[10px] text-amber-600 font-semibold mt-0.5">Awaiting delivery/settlement</p>
           </div>
         </div>
 
+        <!-- CHARTS SECTION -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <h4 class="text-sm font-bold text-slate-800 mb-4">Orders Status Breakdown</h4>
@@ -360,15 +407,15 @@
           </div>
         </div>
 
-        <!-- CONFIRMED & DISPATCHED ORDERS TABLE (WITH ROUTE FILTER & COURIER TAX 2388 DEDUCTION) -->
+        <!-- CONFIRMED ORDERS TABLE -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed & Dispatched Orders — Payment, Route Filter & Tax Settlement</h3>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">👥 Confirmed & Dispatched Orders — Settlement & Net Cash Tracking</h3>
                 <span id="confirmedCustomersBadge" class="bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full text-xs">0 Active Orders</span>
               </div>
-              <p class="text-xs text-slate-500 mt-0.5">Filter by delivery route. Out-of-Hyd Courier orders feature 4% tax deduction (Rs. 2,388 net per box).</p>
+              <p class="text-xs text-slate-500 mt-0.5">Courier 4% deduction: Exactly Rs. 112 per Rs. 2,800 total bill (Net Rs. 2,688 per unit).</p>
             </div>
 
             <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">
@@ -376,17 +423,16 @@
             </button>
           </div>
 
-          <!-- NEW: CUSTOMER ROUTE & PAYMENT FILTERS -->
           <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-wrap gap-2 items-center text-xs no-print">
-            <span class="font-bold text-slate-600">Filter By Customer Route:</span>
+            <span class="font-bold text-slate-600">Filter By Route:</span>
             <button onclick="setCustomerRouteFilter('All')" id="routeFilter-All" class="px-3 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-900 transition">
               All Orders
             </button>
-            <button onclick="setCustomerRouteFilter('Hyderabad In-Person')" id="routeFilter-Hyd" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
-              🛵 Hyderabad (In-Person)
+            <button onclick="setCustomerRouteFilter('InPerson')" id="routeFilter-Hyd" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
+              🛵 In-Person (Hyderabad)
             </button>
-            <button onclick="setCustomerRouteFilter('Courier Service')" id="routeFilter-Courier" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
-              📦 Courier (Out-of-Hyd)
+            <button onclick="setCustomerRouteFilter('Courier')" id="routeFilter-Courier" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
+              📦 Courier Service
             </button>
             <button onclick="setCustomerRouteFilter('Pending')" id="routeFilter-Pending" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
               ⏳ Pending / Partial Balance
@@ -402,10 +448,11 @@
                 <tr class="bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
                   <th class="py-3 px-3">Order Ref</th>
                   <th class="py-3 px-3">Customer Details</th>
+                  <th class="py-3 px-3">Received Via</th>
                   <th class="py-3 px-3">Total Bill</th>
-                  <th class="py-3 px-3">Delivery Route</th>
-                  <th class="py-3 px-3">Payment Status</th>
-                  <th class="py-3 px-3">Cash Collected (Rs.)</th>
+                  <th class="py-3 px-3">Dispatch Route</th>
+                  <th class="py-3 px-3">Payment</th>
+                  <th class="py-3 px-3">Collected (Rs.)</th>
                   <th class="py-3 px-3">Courier Tax (4%)</th>
                   <th class="py-3 px-3">Net In-Hand (Rs.)</th>
                   <th class="py-3 px-3">Remaining Balance</th>
@@ -414,7 +461,7 @@
               </thead>
               <tbody id="confirmedCustomersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
                 <tr>
-                  <td colspan="10" class="text-center py-8 text-slate-400">Loading orders...</td>
+                  <td colspan="11" class="text-center py-8 text-slate-400">Loading orders...</td>
                 </tr>
               </tbody>
             </table>
@@ -422,64 +469,72 @@
         </div>
       </section>
 
-      <!-- TAB 6: ACCOUNTS & EXPENSES (WITH DEDICATED OTHER EXPENSES KPI BOX) -->
+      <!-- TAB 6: ACCOUNTS & EXPENSES (WITH 1750 UNIT COST & REINVESTMENT PROFIT) -->
       <section id="view-accounts" class="hidden space-y-6">
+        
         <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <span class="text-xs font-bold uppercase tracking-widest text-indigo-300">KS Traders Business Accounts</span>
-            <h2 class="text-xl font-black mt-0.5">Accounts, Expenses, Marketing & Partner Profit Ledger</h2>
-            <p class="text-xs text-slate-300 mt-1">Tracks customer cash drawer, marketing campaigns, other operational expenses, and partner profit distributions.</p>
+            <h2 class="text-xl font-black mt-0.5">Accounts, Product Cost & Profit Distribution Ledger</h2>
+            <p class="text-xs text-slate-300 mt-1">Deducting Rs. 1,750 unit cost, 4% tax, operational expenses, and Rs. 200 partner profit share per unit for Asif & Khalid.</p>
           </div>
-          <div class="flex flex-wrap gap-3">
-            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-emerald-400/50 text-center">
-              <span class="text-[11px] text-emerald-300 font-semibold block">Total Customer Cash on Hand</span>
-              <span id="statAccCashReceived" class="text-2xl font-black text-emerald-400">Rs. 0</span>
-              <span class="text-[9px] text-emerald-300/80 block mt-0.5">(Orders COD + Khata Cash)</span>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full md:w-auto">
+            <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-emerald-400/50 text-center">
+              <span class="text-[10px] text-emerald-300 font-semibold block uppercase">Total Cash in Hand</span>
+              <span id="statAccCashReceived" class="text-xl font-black text-emerald-400">Rs. 0</span>
+              <span class="text-[9px] text-emerald-300/80 block mt-0.5">Net In-Hand Collected</span>
             </div>
-            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-rose-400/50 text-center">
-              <span class="text-[11px] text-rose-300 font-semibold block">Total Expenses & Marketing</span>
-              <span id="statAccTotalExpenses" class="text-2xl font-black text-rose-400">Rs. 0</span>
+            <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-rose-400/50 text-center">
+              <span class="text-[10px] text-rose-300 font-semibold block uppercase">Total Expenses</span>
+              <span id="statAccTotalExpenses" class="text-xl font-black text-rose-400">Rs. 0</span>
+              <span class="text-[9px] text-rose-300/80 block mt-0.5">Cargo, TCS, Ads, Others</span>
             </div>
-            <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-purple-400/50 text-center">
-              <span class="text-[11px] text-purple-300 font-semibold block">Total Profit Distributed</span>
-              <span id="statAccTotalProfitShare" class="text-2xl font-black text-purple-300">Rs. 0</span>
+            <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-purple-400/50 text-center">
+              <span class="text-[10px] text-purple-300 font-semibold block uppercase">Partners Share (Rs. 200/unit)</span>
+              <span id="statAccTotalProfitShare" class="text-xl font-black text-purple-300">Rs. 0</span>
+              <span class="text-[9px] text-purple-300/80 block mt-0.5">Asif (Rs. 200) + Khalid (Rs. 200)</span>
+            </div>
+            <div class="bg-emerald-600/30 backdrop-blur-md px-4 py-3 rounded-2xl border-2 border-emerald-400 text-center">
+              <span class="text-[10px] text-emerald-200 font-bold block uppercase">Remaining for Reinvestment</span>
+              <span id="statAccNetRetainedProfit" class="text-xl font-black text-emerald-300">Rs. 0</span>
+              <span class="text-[9px] text-emerald-200/80 block mt-0.5">Net business retained profit</span>
             </div>
           </div>
         </div>
 
-        <!-- 8 Metric KPI Cards: OTHER EXPENSES Box Right Beside Marketing & Ads -->
+        <!-- 8 Metric KPI Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-2.5">
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase">Courier</p>
+            <p class="text-[10px] font-bold text-slate-500 uppercase">TCS / Courier</p>
             <h3 id="statTotalDeliveryExpense" class="text-base font-black text-rose-600 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase">Freight</p>
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Supply Freight</p>
             <h3 id="statTotalFreightExpense" class="text-base font-black text-amber-600 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border-2 border-indigo-200 bg-indigo-50/20 shadow-sm">
             <p class="text-[10px] font-bold text-indigo-800 uppercase">Marketing & Ads</p>
             <h3 id="statTotalMarketingExpense" class="text-base font-black text-indigo-700 mt-1">Rs. 0</h3>
           </div>
-          <!-- Dedicated Other Expenses KPI Box -->
           <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-300 bg-slate-50 shadow-sm">
             <p class="text-[10px] font-bold text-slate-700 uppercase">Other Expenses</p>
             <h3 id="statTotalOtherExpense" class="text-base font-black text-slate-800 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase">Paid by Asif</p>
-            <h3 id="statPaidByAsif" class="text-base font-black text-blue-700 mt-1">Rs. 0</h3>
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Product Cost (1750/u)</p>
+            <h3 id="statTotalPurchasingCost" class="text-base font-black text-slate-800 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase">Paid by Khalid</p>
-            <h3 id="statPaidByKhalid" class="text-base font-black text-purple-700 mt-1">Rs. 0</h3>
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Courier Tax (4%)</p>
+            <h3 id="statTotalCourierTax" class="text-base font-black text-rose-600 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border-2 border-emerald-300 bg-emerald-50/30 shadow-sm">
-            <p class="text-[10px] font-bold text-emerald-800 uppercase">Profit: Asif</p>
+            <p class="text-[10px] font-bold text-emerald-800 uppercase">Profit: Asif (200/u)</p>
             <h3 id="statProfitAsif" class="text-base font-black text-emerald-700 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border-2 border-purple-300 bg-purple-50/30 shadow-sm">
-            <p class="text-[10px] font-bold text-purple-800 uppercase">Profit: Khalid</p>
+            <p class="text-[10px] font-bold text-purple-800 uppercase">Profit: Khalid (200/u)</p>
             <h3 id="statProfitKhalid" class="text-base font-black text-purple-700 mt-1">Rs. 0</h3>
           </div>
         </div>
@@ -487,23 +542,21 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
             <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
-              <span>💳</span> Record Expense, Ads or Partner Profit
+              <span>💳</span> Record Expense, Ads or Partner Transfer
             </h3>
             <form onsubmit="handleRecordExpense(event)" class="space-y-3.5">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Entry Category *</label>
                 <select id="expenseType" onchange="handleExpenseTypeChange()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
-                  <option value="Delivery Charges Paid">🚚 Courier / Delivery Charges Paid</option>
-                  <option value="Supply Freight & Cargo">📦 Supply / Stock Freight Received</option>
+                  <option value="Delivery Charges Paid">🚚 Courier / TCS Delivery Charges Paid</option>
+                  <option value="Supply Freight & Cargo">📦 Supply / Stock Freight Cargo</option>
                   <option value="Marketing & Promotions">📢 Marketing & Promotions (Meta, TikTok, YT, WA)</option>
-                  <option value="Other Payment">📝 Other Expense (Fuel, Packaging, Stationery, etc.)</option>
-                  <option value="Partner Profit Share">💰 Partner Profit Share / Withdrawal</option>
+                  <option value="Other Payment">📝 Other Expense (Fuel, Packaging, Stationery, Food)</option>
                   <option value="Internal Partner Transfer">🤝 Internal Reimbursement (Khalid ➔ Asif or vice versa)</option>
                   <option value="Miscellaneous Payment">🏷️ Miscellaneous Payment</option>
                 </select>
               </div>
 
-              <!-- Marketing Channels Selector -->
               <div id="marketingPlatformDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
                 <label class="block text-xs font-bold text-indigo-900">Promotion Platform: *</label>
                 <select id="marketingPlatformSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
@@ -513,15 +566,6 @@
                   <option value="WhatsApp Business & SMS Broadcast">💬 WhatsApp Marketing & Broadcast</option>
                   <option value="Influencer Collaboration">⭐ Influencer Collaboration</option>
                   <option value="Printing / Flyers / Posters">📄 Printing Posters / Promotional Material</option>
-                </select>
-              </div>
-
-              <!-- Partner Profit Selector -->
-              <div id="partnerProfitDiv" class="hidden bg-emerald-50 border border-emerald-200 p-3 rounded-xl space-y-2">
-                <label class="block text-xs font-bold text-emerald-900">Partner Withdrawing Profit: *</label>
-                <select id="profitPartnerSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
-                  <option value="Asif Ali">Asif Ali</option>
-                  <option value="Khalid Saleem">Khalid Saleem</option>
                 </select>
               </div>
 
@@ -547,7 +591,7 @@
 
               <div id="specifyDetailDiv" class="hidden">
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Specify Description *</label>
-                <input type="text" id="expenseSpecifyDesc" placeholder="e.g. Hyderabad delivery fuel, poster printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+                <input type="text" id="expenseSpecifyDesc" placeholder="e.g. Hyderabad delivery fuel, flyer printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
 
               <div class="grid grid-cols-2 gap-3">
@@ -567,7 +611,7 @@
 
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Details)</label>
-                <input type="text" id="expenseNotes" placeholder="e.g. Fuel for parcel deliveries, food, printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+                <input type="text" id="expenseNotes" placeholder="e.g. Fuel for deliveries, packaging tape" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
 
               <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
@@ -684,7 +728,7 @@
 
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Item / Terms Notes</label>
-                <input type="text" id="instNotes" placeholder="e.g. 2 Packs Natural Black. Rs 1500 every 15 days." class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
+                <input type="text" id="instNotes" placeholder="e.g. 2 Packs Natural Black" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
 
               <button type="submit" id="saveInstallmentBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
@@ -757,7 +801,7 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Cost Price Per Unit (Rs.)</label>
-            <input type="number" id="editProdCostPrice" min="0" value="0" class="w-full border rounded-lg p-2.5 text-sm font-semibold text-slate-700 focus:outline-emerald-600" />
+            <input type="number" id="editProdCostPrice" min="0" value="1750" class="w-full border rounded-lg p-2.5 text-sm font-semibold text-slate-700 focus:outline-emerald-600" />
           </div>
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Current Stock Quantity (Available)</label>
@@ -771,7 +815,7 @@
       </div>
     </div>
 
-    <!-- MODAL: CONVERT CART ORDER TO INSTALLMENT PLAN -->
+    <!-- MODAL: CONVERT TO INSTALLMENT -->
     <div id="convertInstallmentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
       <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
         <div class="flex justify-between items-center border-b pb-3">
@@ -820,7 +864,7 @@
       </div>
     </div>
 
-    <!-- MODAL: EDIT CUSTOMER ORDER -->
+    <!-- MODAL: EDIT CUSTOMER ORDER (WITH PLATFORM & DISPATCH DROPDOWNS) -->
     <div id="editOrderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-3">
@@ -843,10 +887,33 @@
               <input type="tel" id="editCustPhone" required class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold focus:outline-emerald-600" />
             </div>
           </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Order Received By *</label>
+              <select id="editOrderReceivedBy" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                <option value="WhatsApp">💬 WhatsApp</option>
+                <option value="Facebook">📘 Facebook</option>
+                <option value="Instagram">📸 Instagram</option>
+                <option value="Cart">🛒 Cart (Online Store)</option>
+                <option value="TikTok">🎵 TikTok</option>
+                <option value="Twitter">𝕏 Twitter (X)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Dispatched Through *</label>
+              <select id="editDispatchThrough" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
+                <option value="InPerson">🛵 In-Person (Hyderabad)</option>
+                <option value="Courier">📦 Courier Service</option>
+              </select>
+            </div>
+          </div>
+
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Address & Delivery Details *</label>
-            <textarea id="editCustAddress" required rows="3" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-normal focus:outline-emerald-600"></textarea>
+            <textarea id="editCustAddress" required rows="2" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-normal focus:outline-emerald-600"></textarea>
           </div>
+
           <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-3">
             <p class="text-xs font-bold text-slate-700 uppercase">Items & Pricing</p>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -864,15 +931,18 @@
               </div>
             </div>
           </div>
+
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Order Status</label>
             <select id="editOrderStatus" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
               <option value="Advance Booking">Advance Booking</option>
               <option value="Confirmed">Confirmed</option>
               <option value="Dispatched">Dispatched</option>
+              <option value="Delivered / Closed">Delivered / Closed</option>
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
+
           <div class="flex justify-end gap-2 pt-3 border-t">
             <button type="button" onclick="closeOrderModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition">Cancel</button>
             <button type="submit" id="saveOrderBtn" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow transition">Save Order Changes</button>
@@ -881,7 +951,7 @@
       </div>
     </div>
 
-  </div> <!-- End App -->
+  </div>
 
   <script>
     // --- 1. LOGIN LOGIC ---
@@ -920,7 +990,7 @@
       location.reload();
     }
 
-    // --- 2. SUPABASE API (WITH ERROR BOUNDARIES) ---
+    // --- 2. SUPABASE API ---
     const SUPABASE_URL = "https://izilpbtlktaltsklegyr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_DYM-TBqQpmcGfL9jr-b26w_0pFX_JQa";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -929,7 +999,7 @@
     let allProducts = [];
     let allExpenses = [];
     let allInstallments = [];
-    let currentFilter = 'All';
+    let currentFilter = 'Active / Open';
     let customerRouteFilter = 'All';
     let statusChartInstance = null;
     let shadeChartInstance = null;
@@ -950,37 +1020,53 @@
     }
 
     async function loadProducts() {
-      const { data, error } = await client.from('products').select('*').order('id');
-      if (!error && data) {
-        allProducts = data;
-        renderInventory();
-        populateShadeSelects();
+      try {
+        const { data, error } = await client.from('products').select('*').order('id');
+        if (!error && data) {
+          allProducts = data;
+          renderInventory();
+          populateShadeSelects();
+        }
+      } catch (e) {
+        console.error("Error loading products:", e);
       }
     }
 
     async function loadOrders() {
-      const { data, error } = await client.from('sales_orders').select('*').order('id', { ascending: false });
-      if (!error && data) {
-        allOrders = data;
-        renderOrders();
-        updateCounts();
-        renderConfirmedCustomersTable();
+      try {
+        const { data, error } = await client.from('sales_orders').select('*').order('id', { ascending: false });
+        if (!error && data) {
+          allOrders = data;
+          renderOrders();
+          updateCounts();
+          renderConfirmedCustomersTable();
+        }
+      } catch (e) {
+        console.error("Error loading orders:", e);
       }
     }
 
     async function loadExpenses() {
-      const { data, error } = await client.from('expenses_account').select('*').order('id', { ascending: false });
-      if (!error && data) {
-        allExpenses = data;
-        renderExpenses();
+      try {
+        const { data, error } = await client.from('expenses_account').select('*').order('id', { ascending: false });
+        if (!error && data) {
+          allExpenses = data;
+          renderExpenses();
+        }
+      } catch (e) {
+        console.error("Error loading expenses:", e);
       }
     }
 
     async function loadInstallments() {
-      const { data, error } = await client.from('installment_orders').select('*').order('id', { ascending: false });
-      if (!error && data) {
-        allInstallments = data;
-        renderInstallments();
+      try {
+        const { data, error } = await client.from('installment_orders').select('*').order('id', { ascending: false });
+        if (!error && data) {
+          allInstallments = data;
+          renderInstallments();
+        }
+      } catch (e) {
+        console.error("Error loading installments:", e);
       }
     }
 
@@ -1006,7 +1092,7 @@
         setTimeout(() => {
           updateAnalytics();
           renderConfirmedCustomersTable();
-        }, 100);
+        }, 50);
       }
       if (tabId === 'accounts') {
         renderExpenses();
@@ -1018,12 +1104,15 @@
 
     function filterOrders(filter) {
       currentFilter = filter;
-      ['Pending', 'Confirmed', 'Dispatched', 'All'].forEach(f => {
+      const filters = ['Active', 'Pending', 'Confirmed', 'Dispatched', 'Closed', 'All'];
+      filters.forEach(f => {
         const btn = document.getElementById('subFilter-' + f);
-        if (filter.startsWith(f) || (filter === 'All' && f === 'All')) {
-          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition";
-        } else {
-          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition";
+        if (btn) {
+          if (filter.startsWith(f) || (filter === 'All' && f === 'All') || (filter === 'Active / Open' && f === 'Active') || (filter === 'Closed' && f === 'Closed')) {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition";
+          } else {
+            btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition";
+          }
         }
       });
       renderOrders();
@@ -1033,8 +1122,8 @@
       customerRouteFilter = route;
       const buttons = [
         { id: 'routeFilter-All', match: 'All' },
-        { id: 'routeFilter-Hyd', match: 'Hyderabad In-Person' },
-        { id: 'routeFilter-Courier', match: 'Courier Service' },
+        { id: 'routeFilter-Hyd', match: 'InPerson' },
+        { id: 'routeFilter-Courier', match: 'Courier' },
         { id: 'routeFilter-Pending', match: 'Pending' },
         { id: 'routeFilter-Received', match: 'Received' }
       ];
@@ -1054,20 +1143,33 @@
     }
 
     function updateCounts() {
+      const activeOpen = allOrders.filter(o => o.order_status !== 'Delivered / Closed' && o.order_status !== 'Cancelled').length;
       const pending = allOrders.filter(o => o.order_status === 'Advance Booking' || o.order_status === 'Pending').length;
       const confirmed = allOrders.filter(o => o.order_status === 'Confirmed').length;
       const dispatched = allOrders.filter(o => o.order_status === 'Dispatched').length;
+      const closed = allOrders.filter(o => o.order_status === 'Delivered / Closed').length;
 
-      document.getElementById('count-pending').innerText = pending;
-      document.getElementById('count-confirmed').innerText = confirmed;
-      document.getElementById('count-dispatched').innerText = dispatched;
-      document.getElementById('count-all').innerText = allOrders.length;
-      document.getElementById('ordersBadgeCount').innerText = allOrders.length;
+      const actEl = document.getElementById('count-active');
+      const penEl = document.getElementById('count-pending');
+      const conEl = document.getElementById('count-confirmed');
+      const disEl = document.getElementById('count-dispatched');
+      const cloEl = document.getElementById('count-closed');
+      const allEl = document.getElementById('count-all');
+      const badgeEl = document.getElementById('ordersBadgeCount');
+
+      if (actEl) actEl.innerText = activeOpen;
+      if (penEl) penEl.innerText = pending;
+      if (conEl) conEl.innerText = confirmed;
+      if (disEl) disEl.innerText = dispatched;
+      if (cloEl) cloEl.innerText = closed;
+      if (allEl) allEl.innerText = allOrders.length;
+      if (badgeEl) badgeEl.innerText = activeOpen;
     }
 
     // --- INVENTORY RENDERING ---
     function renderInventory() {
       const container = document.getElementById('inventoryCardsList');
+      if (!container) return;
       let totalStockValueRetail = 0;
       let totalUnitsInStock = 0;
       let unitsBreakdown = [];
@@ -1075,7 +1177,7 @@
       container.innerHTML = allProducts.map(p => {
         const units = parseInt(p.current_stock) || 0;
         const retailPrice = parseFloat(p.default_sale_price) || 2500;
-        const costPrice = parseFloat(p.cost_price_per_unit) || 0;
+        const costPrice = parseFloat(p.cost_price_per_unit) || 1750;
         const itemValuationRetail = units * retailPrice;
         
         if (units > 0) {
@@ -1125,8 +1227,10 @@
         `;
       }).join('');
 
-      document.getElementById('totalStockValueHeader').innerText = 'Rs. ' + totalStockValueRetail.toLocaleString();
-      document.getElementById('totalUnitsFormula').innerText = `${totalUnitsInStock} total units (${unitsBreakdown.join(' + ')}) × Rs. 2,500`;
+      const valH = document.getElementById('totalStockValueHeader');
+      const formH = document.getElementById('totalUnitsFormula');
+      if (valH) valH.innerText = 'Rs. ' + totalStockValueRetail.toLocaleString();
+      if (formH) formH.innerText = `${totalUnitsInStock} total units (${unitsBreakdown.join(' + ')}) × Rs. 2,500`;
     }
 
     async function quickEditStockPrompt(prodId, currentUnits, currentPrice) {
@@ -1163,7 +1267,7 @@
       document.getElementById('editProdId').value = prod.id;
       document.getElementById('editProdName').value = prod.shade_name;
       document.getElementById('editProdSalePrice').value = prod.default_sale_price || 2500;
-      document.getElementById('editProdCostPrice').value = prod.cost_price_per_unit || 0;
+      document.getElementById('editProdCostPrice').value = prod.cost_price_per_unit || 1750;
       document.getElementById('editProdStock').value = prod.current_stock || 0;
 
       document.getElementById('editProductModal').classList.remove('hidden');
@@ -1187,7 +1291,7 @@
 
       const costInput = document.getElementById('editProdCostPrice').value;
       if (costInput !== '') {
-        updated.cost_price_per_unit = parseFloat(costInput) || 0;
+        updated.cost_price_per_unit = parseFloat(costInput) || 1750;
       }
 
       const { error } = await client.from('products').update(updated).eq('id', prodId);
@@ -1218,7 +1322,6 @@
       }
     }
 
-    // --- STRICT EXACT SHADE NORMALIZATION (FIXES MEDIUM BROWN 0 SOLD) ---
     function normalizeShade(s) {
       return (s || '')
         .replace(/Apple Hair Colour\s*[-–]\s*/i, '')
@@ -1248,12 +1351,11 @@
 
         let sold = 0;
         allOrders.forEach(o => {
-          if (o.order_status === 'Dispatched') {
+          if (o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed') {
             if (o.product_id === p.id) {
               sold += (o.quantity || 1);
             } else {
               const orderClean = normalizeShade(o.shade_name);
-              // Strict string check ensures Medium Brown !== Dark Brown
               if (orderClean === targetClean) {
                 sold += (o.quantity || 1);
               }
@@ -1280,37 +1382,53 @@
         `;
       }).join('');
 
-      tfoot.innerHTML = `
-        <tr>
-          <td class="py-3 px-3 uppercase text-xs tracking-wider">Total Summary:</td>
-          <td class="py-3 px-3 text-center text-emerald-800 text-sm">${grandAvailableUnits} Available</td>
-          <td class="py-3 px-3 text-center text-blue-800 text-sm">${grandSoldUnits} Dispatched</td>
-          <td class="py-3 px-3 text-right text-xs text-slate-400">—</td>
-          <td class="py-3 px-3 text-right text-emerald-700 text-base">Rs. ${grandValuation.toLocaleString()}</td>
-        </tr>
-      `;
+      if (tfoot) {
+        tfoot.innerHTML = `
+          <tr>
+            <td class="py-3 px-3 uppercase text-xs tracking-wider">Total Summary:</td>
+            <td class="py-3 px-3 text-center text-emerald-800 text-sm">${grandAvailableUnits} Available</td>
+            <td class="py-3 px-3 text-center text-blue-800 text-sm">${grandSoldUnits} Dispatched</td>
+            <td class="py-3 px-3 text-right text-xs text-slate-400">—</td>
+            <td class="py-3 px-3 text-right text-emerald-700 text-base">Rs. ${grandValuation.toLocaleString()}</td>
+          </tr>
+        `;
+      }
     }
 
     function populateShadeSelects() {
       const options = allProducts.map(p => `<option value="${p.id}" data-price="${p.default_sale_price || 2500}">${p.shade_name}</option>`).join('');
-      document.getElementById('manualShadeSelect').innerHTML = options;
-      document.getElementById('inwardShadeSelect').innerHTML = options;
+      const manSelect = document.getElementById('manualShadeSelect');
+      const inwSelect = document.getElementById('inwardShadeSelect');
+      if (manSelect) manSelect.innerHTML = options;
+      if (inwSelect) inwSelect.innerHTML = options;
       autoFillPrice();
     }
 
     function autoFillPrice() {
       const select = document.getElementById('manualShadeSelect');
+      if (!select) return;
       const selected = select.options[select.selectedIndex];
       if (selected) {
-        document.getElementById('manualPrice').value = selected.dataset.price || 2500;
-        calcManualTotal();
+        autoAdjustDeliveryPrice();
       }
+    }
+
+    function autoAdjustDeliveryPrice() {
+      const dispatch = document.getElementById('manualDispatchThrough').value;
+      const priceInput = document.getElementById('manualPrice');
+      if (dispatch === 'Courier') {
+        priceInput.value = 2800; // Base 2500 + 300 Delivery
+      } else {
+        priceInput.value = 2500; // Free in-person Hyderabad
+      }
+      calcManualTotal();
     }
 
     function calcManualTotal() {
       const qty = parseFloat(document.getElementById('manualQty').value) || 0;
       const price = parseFloat(document.getElementById('manualPrice').value) || 0;
-      document.getElementById('manualTotalText').innerText = 'Rs. ' + (qty * price).toLocaleString();
+      const totEl = document.getElementById('manualTotalText');
+      if (totEl) totEl.innerText = 'Rs. ' + (qty * price).toLocaleString();
     }
 
     async function handleManualSale(e) {
@@ -1325,6 +1443,8 @@
       const total = qty * price;
       const email = document.getElementById('manualCustEmail').value.trim();
       const address = document.getElementById('manualAddress').value.trim();
+      const orderSource = document.getElementById('manualOrderReceivedBy').value;
+      const dispatchRoute = document.getElementById('manualDispatchThrough').value;
 
       const fullShippingDetails = email ? `${address} [Email: ${email}]` : address;
 
@@ -1337,19 +1457,19 @@
         quantity: qty,
         sold_price_per_unit: price,
         total_amount: total,
-        sold_by: document.getElementById('manualSoldBy').value,
+        sold_by: `${document.getElementById('manualSoldBy').value} (${orderSource})`,
         order_status: 'Advance Booking',
         payment_status: 'Pending',
         received_cash_amount: null,
-        delivery_channel: address.toLowerCase().includes('hyderabad') ? 'Hyderabad In-Person' : 'Courier Service'
+        delivery_channel: dispatchRoute === 'Courier' ? 'Courier Service' : 'Hyderabad In-Person'
       };
 
       const { error } = await client.from('sales_orders').insert([payload]);
       btn.disabled = false;
 
-      if (error) alert("Error recording sale: " + error.message);
+      if (error) alert("Error recording order: " + error.message);
       else {
-        alert("Sale recorded successfully as Advance Booking!");
+        alert("Order recorded successfully!");
         switchTab('orders');
         document.getElementById('manualCustEmail').value = '';
         await loadAllData();
@@ -1363,13 +1483,12 @@
 
       const prodId = parseInt(document.getElementById('inwardShadeSelect').value);
       const qty = parseInt(document.getElementById('inwardQty').value);
-      const cost = parseFloat(document.getElementById('inwardCostPrice').value) || 0;
+      const cost = parseFloat(document.getElementById('inwardCostPrice').value) || 1750;
 
       const prod = allProducts.find(p => p.id === prodId);
       if (prod) {
         const newStock = (prod.current_stock || 0) + qty;
-        const updatePayload = { current_stock: newStock };
-        if (cost > 0) updatePayload.cost_price_per_unit = cost;
+        const updatePayload = { current_stock: newStock, cost_price_per_unit: cost };
 
         const { error } = await client.from('products').update(updatePayload).eq('id', prodId);
         btn.disabled = false;
@@ -1382,20 +1501,26 @@
       }
     }
 
+    // --- ORDERS LIST (PAGE 2) ---
     function renderOrders() {
       const container = document.getElementById('ordersCardsList');
+      if (!container) return;
       let filtered = allOrders;
 
-      if (currentFilter === 'Pending / Advance') {
+      if (currentFilter === 'Active / Open') {
+        filtered = allOrders.filter(o => o.order_status !== 'Delivered / Closed' && o.order_status !== 'Cancelled');
+      } else if (currentFilter === 'Pending') {
         filtered = allOrders.filter(o => o.order_status === 'Advance Booking' || o.order_status === 'Pending');
       } else if (currentFilter === 'Confirmed') {
         filtered = allOrders.filter(o => o.order_status === 'Confirmed');
       } else if (currentFilter === 'Dispatched') {
         filtered = allOrders.filter(o => o.order_status === 'Dispatched');
+      } else if (currentFilter === 'Closed') {
+        filtered = allOrders.filter(o => o.order_status === 'Delivered / Closed');
       }
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="p-12 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200">No orders found in this status.</div>`;
+        container.innerHTML = `<div class="p-12 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200">No orders found in this view.</div>`;
         return;
       }
 
@@ -1406,16 +1531,23 @@
 
         let badgeBg = 'bg-amber-100 text-amber-800';
         if (order.order_status === 'Confirmed') badgeBg = 'bg-blue-100 text-blue-800';
-        if (order.order_status === 'Dispatched') badgeBg = 'bg-emerald-100 text-emerald-800';
+        if (order.order_status === 'Dispatched') badgeBg = 'bg-purple-100 text-purple-800';
+        if (order.order_status === 'Delivered / Closed') badgeBg = 'bg-emerald-100 text-emerald-800';
         if (order.order_status === 'Cancelled') badgeBg = 'bg-rose-100 text-rose-800';
 
+        const isClosed = order.order_status === 'Delivered / Closed';
+        const isCourier = (order.delivery_channel || '').toLowerCase().includes('courier');
+
         return `
-          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4 ${isClosed ? 'opacity-80' : ''}">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-3">
               <div>
                 <div class="flex items-center gap-2">
                   <h3 class="text-base font-bold text-slate-900">${order.customer_name || 'Customer'}</h3>
                   <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgeBg}">${order.order_status || 'Advance Booking'}</span>
+                  <span class="text-xs px-2 py-0.5 rounded-full font-bold ${isCourier ? 'bg-blue-50 text-blue-800 border border-blue-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}">
+                    ${isCourier ? '📦 Courier' : '🛵 In-Person'}
+                  </span>
                 </div>
                 <p class="text-xs text-slate-400 mt-0.5">Placed: ${order.created_at ? new Date(order.created_at).toLocaleString() : 'Recent'} • Ref: #${order.id}</p>
               </div>
@@ -1429,7 +1561,7 @@
               <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
                 <p><span class="font-semibold text-slate-500">Phone:</span> <span class="font-bold text-slate-800">${order.customer_phone || 'N/A'}</span></p>
                 <p><span class="font-semibold text-slate-500">Address:</span> <span class="font-normal text-slate-700">${order.customer_address || 'N/A'}</span></p>
-                <p><span class="font-semibold text-slate-500">Source:</span> <span class="font-semibold text-slate-600">${order.sold_by || 'Online Storefront'}</span></p>
+                <p><span class="font-semibold text-slate-500">Acquisition Source:</span> <span class="font-bold text-indigo-700">${order.sold_by || 'Online Storefront'}</span></p>
                 
                 <div class="flex items-center gap-2 pt-2">
                   <a href="https://wa.me/${formattedPhone}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1 shadow-sm">
@@ -1443,11 +1575,11 @@
 
               <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100 flex flex-col justify-between">
                 <div>
-                  <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">ORDER ITEMS:</span>
+                  <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">ORDER ITEMS & ROUTE:</span>
                   <div class="flex justify-between items-center text-xs sm:text-sm">
                     <div>
                       <p class="font-bold text-slate-800">${order.shade_name || 'Apple Hair Colour'}</p>
-                      <p class="text-slate-500">Qty: ${order.quantity} × Rs. ${order.sold_price_per_unit || 2500}</p>
+                      <p class="text-slate-500">Qty: ${order.quantity} × Rs. ${order.sold_price_per_unit || (isCourier ? 2800 : 2500)}</p>
                     </div>
                     <span class="font-black text-slate-800">Rs. ${Number(total).toLocaleString()}</span>
                   </div>
@@ -1464,15 +1596,27 @@
                 ✏️ Edit
               </button>
 
-              ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' ? `
+              ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' && order.order_status !== 'Delivered / Closed' ? `
                 <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
                   ✓ Confirm
                 </button>
               ` : ''}
 
-              ${order.order_status !== 'Dispatched' ? `
-                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+              ${order.order_status !== 'Dispatched' && order.order_status !== 'Delivered / Closed' ? `
+                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
                   🚚 Dispatch
+                </button>
+              ` : ''}
+
+              ${order.order_status === 'Dispatched' ? `
+                <button onclick="updateOrderStatus(${order.id}, 'Delivered / Closed')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                  ✓ Close Order (Delivered)
+                </button>
+              ` : ''}
+
+              ${isClosed ? `
+                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition">
+                  Re-open
                 </button>
               ` : ''}
 
@@ -1537,7 +1681,7 @@
         remaining_amount: remaining,
         due_date: document.getElementById('convDueDate').value,
         installment_status: remaining === 0 ? 'Completed' : 'Active',
-        notes: `Converted from Cart Order #${orderId}`
+        notes: `Converted from Order #${orderId}`
       };
 
       const { error: instErr } = await client.from('installment_orders').insert([payload]);
@@ -1568,6 +1712,18 @@
       document.getElementById('editOrderTotal').value = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
       document.getElementById('editOrderStatus').value = order.order_status || 'Advance Booking';
 
+      const isCourier = (order.delivery_channel || '').toLowerCase().includes('courier');
+      document.getElementById('editDispatchThrough').value = isCourier ? 'Courier' : 'InPerson';
+
+      const soldByStr = (order.sold_by || '').toLowerCase();
+      let src = 'WhatsApp';
+      if (soldByStr.includes('facebook')) src = 'Facebook';
+      else if (soldByStr.includes('instagram')) src = 'Instagram';
+      else if (soldByStr.includes('cart')) src = 'Cart';
+      else if (soldByStr.includes('tiktok')) src = 'TikTok';
+      else if (soldByStr.includes('twitter')) src = 'Twitter';
+      document.getElementById('editOrderReceivedBy').value = src;
+
       document.getElementById('editOrderModal').classList.remove('hidden');
     }
 
@@ -1588,6 +1744,9 @@
       btn.innerText = "Saving...";
       btn.disabled = true;
 
+      const orderSource = document.getElementById('editOrderReceivedBy').value;
+      const dispatchRoute = document.getElementById('editDispatchThrough').value;
+
       const updatedPayload = {
         customer_name: document.getElementById('editCustName').value.trim(),
         customer_phone: document.getElementById('editCustPhone').value.trim(),
@@ -1595,7 +1754,9 @@
         quantity: parseInt(document.getElementById('editOrderQty').value),
         sold_price_per_unit: parseFloat(document.getElementById('editOrderPrice').value),
         total_amount: parseFloat(document.getElementById('editOrderTotal').value),
-        order_status: document.getElementById('editOrderStatus').value
+        order_status: document.getElementById('editOrderStatus').value,
+        sold_by: `Partner (${orderSource})`,
+        delivery_channel: dispatchRoute === 'Courier' ? 'Courier Service' : 'Hyderabad In-Person'
       };
 
       const { error } = await client.from('sales_orders').update(updatedPayload).eq('id', orderId);
@@ -1646,8 +1807,9 @@
     // --- ANALYTICS CALCULATIONS ---
     function updateAnalytics() {
       let totalSalesBooked = 0;
-      let netProfit = 0;
-      let totalCashReceived = 0;
+      let netGrossProfit = 0;
+      let inPersonCash = 0;
+      let courierNetCash = 0;
       let pendingCashCollection = 0;
       let stockValueRetail = 0;
 
@@ -1661,29 +1823,37 @@
         const orderTotal = parseFloat(order.total_amount) || (order.quantity * (order.sold_price_per_unit || 2500));
         const shade = (order.shade_name || '').toLowerCase();
         const payStatus = order.payment_status || 'Pending';
+        const route = (order.delivery_channel || '').toLowerCase();
+        const isCourier = route.includes('courier');
 
         if (order.order_status !== 'Cancelled') {
           totalSalesBooked += orderTotal;
 
           const prod = allProducts.find(p => p.id === order.product_id);
-          const cost = prod ? (parseFloat(prod.cost_price_per_unit) || 0) : 0;
-          netProfit += orderTotal - ((order.quantity || 1) * cost);
+          const cost = prod ? (parseFloat(prod.cost_price_per_unit) || 1750) : 1750;
+          netGrossProfit += orderTotal - ((order.quantity || 1) * cost);
 
           if (shade.includes('black')) shadeBlackCount += (order.quantity || 1);
           if (shade.includes('dark brown')) shadeBrownCount += (order.quantity || 1);
         }
 
-        if (order.order_status === 'Dispatched') dispatchedOrdersCount++;
+        if (order.order_status === 'Dispatched' || order.order_status === 'Delivered / Closed') dispatchedOrdersCount++;
         else if (order.order_status === 'Confirmed') confirmedOrdersCount++;
         else if (order.order_status === 'Advance Booking' || order.order_status === 'Pending') pendingOrdersCount++;
 
         if (payStatus === 'Received') {
-          if (order.net_payout_amount !== null && order.net_payout_amount !== undefined && order.net_payout_amount !== '') {
-            totalCashReceived += parseFloat(order.net_payout_amount) || 0;
-          } else if (order.received_cash_amount !== null && order.received_cash_amount !== undefined && order.received_cash_amount !== '') {
-            totalCashReceived += parseFloat(order.received_cash_amount) || 0;
+          if (isCourier) {
+            let collected = order.received_cash_amount !== null && order.received_cash_amount !== undefined 
+              ? parseFloat(order.received_cash_amount) 
+              : orderTotal;
+            // Exact 4% Courier Deduction: Rs. 112 on Rs. 2,800 -> Net Rs. 2,688
+            let netCourierAmt = collected - Math.round(collected * 0.04);
+            courierNetCash += netCourierAmt;
           } else {
-            totalCashReceived += orderTotal;
+            let collectedHyd = order.received_cash_amount !== null && order.received_cash_amount !== undefined 
+              ? parseFloat(order.received_cash_amount) 
+              : orderTotal;
+            inPersonCash += collectedHyd;
           }
         } else {
           pendingCashCollection += orderTotal;
@@ -1695,7 +1865,7 @@
         const rem = parseFloat(inst.remaining_amount) || 0;
         const tot = parseFloat(inst.total_amount) || 0;
 
-        totalCashReceived += adv;
+        inPersonCash += adv;
         pendingCashCollection += rem;
         totalSalesBooked += tot;
       });
@@ -1706,63 +1876,81 @@
         stockValueRetail += currentQty * currentPrice;
       });
 
-      document.getElementById('statStockValuePKR').innerText = 'Rs. ' + stockValueRetail.toLocaleString();
-      document.getElementById('statTotalSales').innerText = 'Rs. ' + totalSalesBooked.toLocaleString();
-      document.getElementById('statTotalProfit').innerText = 'Rs. ' + netProfit.toLocaleString();
-      document.getElementById('statTotalCashReceived').innerText = 'Rs. ' + totalCashReceived.toLocaleString();
-      document.getElementById('statPendingValue').innerText = 'Rs. ' + pendingCashCollection.toLocaleString();
+      const grandNetCashReceived = inPersonCash + courierNetCash;
 
-      const canvas1 = document.getElementById('orderStatusChart');
-      if (canvas1) {
-        const ctx1 = canvas1.getContext('2d');
-        if (statusChartInstance) statusChartInstance.destroy();
-        statusChartInstance = new Chart(ctx1, {
-          type: 'bar',
-          data: {
-            labels: ['Pending / Advance', 'Confirmed', 'Dispatched'],
-            datasets: [{
-              label: 'Orders Count',
-              data: [pendingOrdersCount, confirmedOrdersCount, dispatchedOrdersCount],
-              backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
-              borderRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-          }
-        });
-      }
+      const svEl = document.getElementById('statStockValuePKR');
+      const tsEl = document.getElementById('statTotalSales');
+      const crEl = document.getElementById('statTotalCashReceived');
+      const cipEl = document.getElementById('statCashInPerson');
+      const ccEl = document.getElementById('statCashCourier');
+      const pvEl = document.getElementById('statPendingValue');
 
-      const canvas2 = document.getElementById('shadeBreakdownChart');
-      if (canvas2) {
-        const ctx2 = canvas2.getContext('2d');
-        if (shadeChartInstance) shadeChartInstance.destroy();
+      if (svEl) svEl.innerText = 'Rs. ' + stockValueRetail.toLocaleString();
+      if (tsEl) tsEl.innerText = 'Rs. ' + totalSalesBooked.toLocaleString();
+      if (crEl) crEl.innerText = 'Rs. ' + grandNetCashReceived.toLocaleString();
+      if (cipEl) cipEl.innerText = 'Rs. ' + inPersonCash.toLocaleString();
+      if (ccEl) ccEl.innerText = 'Rs. ' + courierNetCash.toLocaleString();
+      if (pvEl) pvEl.innerText = 'Rs. ' + pendingCashCollection.toLocaleString();
 
-        const totalShades = shadeBlackCount + shadeBrownCount;
-        const dataValues = totalShades > 0 ? [shadeBlackCount, shadeBrownCount] : [1, 1];
+      renderAnalyticsCharts(pendingOrdersCount, confirmedOrdersCount, dispatchedOrdersCount, shadeBlackCount, shadeBrownCount);
+    }
 
-        shadeChartInstance = new Chart(ctx2, {
-          type: 'doughnut',
-          data: {
-            labels: ['Natural Black', 'Dark Brown'],
-            datasets: [{
-              data: dataValues,
-              backgroundColor: ['#0f172a', '#b45309']
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-          }
-        });
+    function renderAnalyticsCharts(pending, confirmed, dispatched, blackCount, brownCount) {
+      try {
+        const canvas1 = document.getElementById('orderStatusChart');
+        if (canvas1 && canvas1.offsetParent !== null) {
+          const ctx1 = canvas1.getContext('2d');
+          if (statusChartInstance) statusChartInstance.destroy();
+          statusChartInstance = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+              labels: ['Pending / Advance', 'Confirmed', 'Dispatched / Closed'],
+              datasets: [{
+                label: 'Orders Count',
+                data: [pending, confirmed, dispatched],
+                backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
+                borderRadius: 8
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+          });
+        }
+
+        const canvas2 = document.getElementById('shadeBreakdownChart');
+        if (canvas2 && canvas2.offsetParent !== null) {
+          const ctx2 = canvas2.getContext('2d');
+          if (shadeChartInstance) shadeChartInstance.destroy();
+
+          const totalShades = blackCount + brownCount;
+          const dataValues = totalShades > 0 ? [blackCount, brownCount] : [1, 1];
+
+          shadeChartInstance = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+              labels: ['Natural Black', 'Dark Brown'],
+              datasets: [{
+                data: dataValues,
+                backgroundColor: ['#0f172a', '#b45309']
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { position: 'bottom' } }
+            }
+          });
+        }
+      } catch (err) {
+        console.warn("Chart render skipped:", err);
       }
     }
 
-    // --- LIVE RECALCULATION: 4% COURIER TAX & REMAINING CASH ---
+    // --- EXACT 4% (RS. 112 ON 2800, RS. 100 ON 2500) RECALCULATIONS ---
     function updateRowCalculations(orderId, totalBill) {
       const channelSelect = document.getElementById(`deliveryChannel-${orderId}`);
       const isCourier = channelSelect ? channelSelect.value.includes('Courier') : false;
@@ -1774,44 +1962,49 @@
       let netVal = collectedVal;
 
       if (isCourier && collectedVal > 0) {
-        taxVal = Math.round(collectedVal * 0.0448); // Exactly Rs. 112 per Rs. 2,500 box -> Net Rs. 2,388
+        // Direct 4% deduction: Rs. 112 on Rs. 2,800, Rs. 100 on Rs. 2,500
+        taxVal = Math.round(collectedVal * 0.04);
         netVal = collectedVal - taxVal;
       }
 
-      document.getElementById(`taxDisplay-${orderId}`).innerText = isCourier ? `Rs. ${taxVal}` : `Rs. 0`;
-      document.getElementById(`netDisplay-${orderId}`).innerText = `Rs. ${netVal.toLocaleString()}`;
+      const taxEl = document.getElementById(`taxDisplay-${orderId}`);
+      const netEl = document.getElementById(`netDisplay-${orderId}`);
+      if (taxEl) taxEl.innerText = isCourier ? `Rs. ${taxVal}` : `Rs. 0`;
+      if (netEl) netEl.innerText = `Rs. ${netVal.toLocaleString()}`;
 
       const remDisplay = document.getElementById(`remainingCashDisplay-${orderId}`);
       const remaining = Math.max(0, totalBill - collectedVal);
 
-      if (remaining === 0) {
-        remDisplay.innerHTML = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>`;
-      } else {
-        remDisplay.innerHTML = `<span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md font-black text-xs">Rs. ${remaining.toLocaleString()}</span>`;
+      if (remDisplay) {
+        if (remaining === 0) {
+          remDisplay.innerHTML = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>`;
+        } else {
+          remDisplay.innerHTML = `<span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md font-black text-xs">Rs. ${remaining.toLocaleString()}</span>`;
+        }
       }
     }
 
     function renderConfirmedCustomersTable() {
       const tbody = document.getElementById('confirmedCustomersTableBody');
       const badge = document.getElementById('confirmedCustomersBadge');
+      if (!tbody) return;
       
-      let confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
+      let confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed');
 
-      // Apply Filter
-      if (customerRouteFilter === 'Hyderabad In-Person') {
-        confirmedList = confirmedList.filter(o => (o.delivery_channel || '').includes('Hyderabad'));
-      } else if (customerRouteFilter === 'Courier Service') {
-        confirmedList = confirmedList.filter(o => (o.delivery_channel || '').includes('Courier'));
+      if (customerRouteFilter === 'InPerson') {
+        confirmedList = confirmedList.filter(o => (o.delivery_channel || '').toLowerCase().includes('in-person') || (o.delivery_channel || '').toLowerCase().includes('hyderabad'));
+      } else if (customerRouteFilter === 'Courier') {
+        confirmedList = confirmedList.filter(o => (o.delivery_channel || '').toLowerCase().includes('courier'));
       } else if (customerRouteFilter === 'Pending') {
         confirmedList = confirmedList.filter(o => (o.payment_status !== 'Received' || (parseFloat(o.remaining_cash_amount) > 0)));
       } else if (customerRouteFilter === 'Received') {
         confirmedList = confirmedList.filter(o => o.payment_status === 'Received');
       }
 
-      badge.innerText = `${confirmedList.length} Active Orders`;
+      if (badge) badge.innerText = `${confirmedList.length} Active Orders`;
 
       if (confirmedList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="text-center py-8 text-slate-400">No orders matching this filter.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="text-center py-8 text-slate-400">No orders matching this filter.</td></tr>`;
         return;
       }
 
@@ -1821,7 +2014,7 @@
         const total = o.total_amount || (o.quantity * (o.sold_price_per_unit || 2500));
         const paymentStatus = o.payment_status || 'Pending';
         const deliveryChannel = o.delivery_channel || ( (o.customer_address || '').toLowerCase().includes('hyderabad') ? 'Hyderabad In-Person' : 'Courier Service' );
-        const isCourier = deliveryChannel.includes('Courier');
+        const isCourier = deliveryChannel.toLowerCase().includes('courier');
 
         let initialReceivedVal = (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : '';
         if (paymentStatus === 'Received' && (initialReceivedVal === '' || initialReceivedVal === null)) {
@@ -1829,12 +2022,21 @@
         }
 
         const collectedNum = parseFloat(initialReceivedVal) || 0;
-        let taxNum = parseFloat(o.courier_tax_deduction) || 0;
-        if (isCourier && collectedNum > 0 && taxNum === 0) {
-          taxNum = Math.round(collectedNum * 0.0448);
+        let taxNum = 0;
+        if (isCourier && collectedNum > 0) {
+          taxNum = Math.round(collectedNum * 0.04);
         }
-        const netNum = (o.net_payout_amount !== null && o.net_payout_amount !== undefined && o.net_payout_amount > 0) ? parseFloat(o.net_payout_amount) : (collectedNum - taxNum);
+        const netNum = collectedNum - taxNum;
         const remaining = Math.max(0, total - collectedNum);
+
+        // Extract received platform from string if available
+        let src = 'WhatsApp';
+        const soldByLower = (o.sold_by || '').toLowerCase();
+        if (soldByLower.includes('facebook')) src = 'Facebook';
+        else if (soldByLower.includes('instagram')) src = 'Instagram';
+        else if (soldByLower.includes('cart')) src = 'Cart';
+        else if (soldByLower.includes('tiktok')) src = 'TikTok';
+        else if (soldByLower.includes('twitter')) src = 'Twitter';
 
         return `
           <tr class="hover:bg-slate-50 transition border-b">
@@ -1848,6 +2050,13 @@
               </div>
               <p class="text-[11px] text-slate-400 truncate max-w-xs mt-0.5" title="${o.customer_address || ''}">${o.customer_address || ''}</p>
             </td>
+
+            <td class="py-3 px-3">
+              <span class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-2 py-0.5 rounded-md text-xs">
+                ${src}
+              </span>
+            </td>
+
             <td class="py-3 px-3">
               <p class="font-black text-emerald-700 text-sm">Rs. ${Number(total).toLocaleString()}</p>
               <span class="text-[10px] text-slate-400 font-semibold block">${o.shade_name || 'Apple Colour'} (${o.quantity} units)</span>
@@ -1855,19 +2064,18 @@
 
             <td class="py-3 px-3">
               <select id="deliveryChannel-${o.id}" onchange="updateDeliveryChannel(${o.id}, this.value, ${total})" class="border rounded-lg px-2 py-1 text-xs font-semibold bg-white">
-                <option value="Hyderabad In-Person" ${!isCourier ? 'selected' : ''}>🛵 Hyderabad (In-Person)</option>
-                <option value="Courier Service" ${isCourier ? 'selected' : ''}>📦 Courier (Out-of-Hyd)</option>
+                <option value="Hyderabad In-Person" ${!isCourier ? 'selected' : ''}>🛵 In-Person (Hyderabad)</option>
+                <option value="Courier Service" ${isCourier ? 'selected' : ''}>📦 Courier Service</option>
               </select>
             </td>
 
             <td class="py-3 px-3">
-              <select id="statusSelect-${o.id}" onchange="handlePaymentStatusToggle(${o.id}, ${total}, this.value)" class="border rounded-lg px-2 py-1 text-xs font-bold ${paymentStatus === 'Received' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-amber-50 text-amber-800 border-amber-300'}">
+              <select id="statusSelect-${o.id}" onchange="handlePaymentStatusToggle(${o.id}, ${total}, this.value)" class="border rounded-lg px-2.5 py-1 text-xs font-bold ${paymentStatus === 'Received' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-amber-50 text-amber-800 border-amber-300'}">
                 <option value="Pending" ${paymentStatus === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
                 <option value="Received" ${paymentStatus === 'Received' ? 'selected' : ''}>✅ Received</option>
               </select>
             </td>
 
-            <!-- Cash Input -->
             <td class="py-3 px-3">
               <div class="flex items-center gap-1">
                 <span class="text-xs font-bold text-slate-400">Rs.</span>
@@ -1875,17 +2083,14 @@
               </div>
             </td>
 
-            <!-- Courier Tax Deduction Display -->
             <td class="py-3 px-3 font-semibold text-rose-600 text-xs" id="taxDisplay-${o.id}">
               Rs. ${taxNum.toLocaleString()}
             </td>
 
-            <!-- Net In-Hand Amount -->
             <td class="py-3 px-3 font-black text-emerald-700 text-xs" id="netDisplay-${o.id}">
               Rs. ${netNum.toLocaleString()}
             </td>
 
-            <!-- Real-time Remaining Balance Due -->
             <td class="py-3 px-3" id="remainingCashDisplay-${o.id}">
               ${remaining === 0 
                 ? '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>' 
@@ -1894,7 +2099,7 @@
             </td>
 
             <td class="py-3 px-3 text-center no-print">
-              <button id="saveBtn-${o.id}" onclick="saveOrderPaymentRow(${o.id}, ${total})" class="bg-slate-900 hover:bg-black text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1 mx-auto">
+              <button id="saveBtn-${o.id}" onclick="saveOrderPaymentRow(${o.id}, ${total})" class="bg-slate-900 hover:bg-black text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1 mx-auto">
                 💾 Save
               </button>
             </td>
@@ -1940,7 +2145,7 @@
       let netPayout = collectedNum;
 
       if (isCourier && collectedNum > 0) {
-        taxAmount = Math.round(collectedNum * 0.0448); // Rs. 112 per Rs. 2,500 box -> Net Rs. 2,388
+        taxAmount = Math.round(collectedNum * 0.04);
         netPayout = collectedNum - taxAmount;
       }
 
@@ -1979,12 +2184,11 @@
       }
     }
 
-    // --- ACCOUNTS & EXPENSES LOGIC ---
+    // --- ACCOUNTS & EXPENSES (WITH 1750 UNIT COST & REINVESTMENT PROFIT) ---
     function handleExpenseTypeChange() {
       const type = document.getElementById('expenseType').value;
       const specifyDiv = document.getElementById('specifyDetailDiv');
       const partnerTransferDiv = document.getElementById('partnerTransferDiv');
-      const partnerProfitDiv = document.getElementById('partnerProfitDiv');
       const marketingPlatformDiv = document.getElementById('marketingPlatformDiv');
       const regularPaidByDiv = document.getElementById('regularPaidByDiv');
 
@@ -2002,12 +2206,6 @@
       } else {
         partnerTransferDiv.classList.add('hidden');
         regularPaidByDiv.classList.remove('hidden');
-      }
-
-      if (type === 'Partner Profit Share') {
-        partnerProfitDiv.classList.remove('hidden');
-      } else {
-        partnerProfitDiv.classList.add('hidden');
       }
 
       if (type === 'Marketing & Promotions') {
@@ -2035,8 +2233,6 @@
       if (type === 'Internal Partner Transfer') {
         paidBy = document.getElementById('partnerTransferFrom').value;
         paidTo = document.getElementById('partnerTransferTo').value;
-      } else if (type === 'Partner Profit Share') {
-        commissionPartner = document.getElementById('profitPartnerSelect').value;
       } else if (type === 'Marketing & Promotions') {
         commissionPartner = document.getElementById('marketingPlatformSelect').value;
       }
@@ -2044,8 +2240,6 @@
       let finalDescription = type;
       if (type === 'Internal Partner Transfer') {
         finalDescription = `Reimbursement: ${paidBy} paid to ${paidTo}` + (notes ? ` (${notes})` : '');
-      } else if (type === 'Partner Profit Share') {
-        finalDescription = `Profit Distributed to Partner: ${commissionPartner}` + (notes ? ` (${notes})` : '');
       } else if (type === 'Marketing & Promotions') {
         finalDescription = `Marketing Spend on ${commissionPartner}` + (notes ? ` (${notes})` : '');
       } else if (type === 'Other Payment') {
@@ -2085,10 +2279,7 @@
       let totalFreight = 0;
       let totalMarketing = 0;
       let totalOtherExpense = 0;
-      let totalBusinessExpenses = 0;
-      let totalProfitDistributed = 0;
-      let profitAsif = 0;
-      let profitKhalid = 0;
+      let totalOperationalExpenses = 0;
       let paidByAsif = 0;
       let paidByKhalid = 0;
 
@@ -2100,32 +2291,42 @@
 
         if (exp.expense_type === 'Delivery Charges Paid') {
           totalDelivery += amt;
-          totalBusinessExpenses += amt;
+          totalOperationalExpenses += amt;
         } else if (exp.expense_type === 'Supply Freight & Cargo') {
           totalFreight += amt;
-          totalBusinessExpenses += amt;
+          totalOperationalExpenses += amt;
         } else if (exp.expense_type === 'Marketing & Promotions') {
           totalMarketing += amt;
-          totalBusinessExpenses += amt;
+          totalOperationalExpenses += amt;
         } else if (exp.expense_type === 'Other Payment' || exp.expense_type === 'Miscellaneous Payment') {
           totalOtherExpense += amt;
-          totalBusinessExpenses += amt;
-        } else if (exp.expense_type === 'Partner Profit Share' || exp.expense_type === 'Partner Commission') {
-          totalProfitDistributed += amt;
-          if (exp.commission_partner === 'Asif Ali') profitAsif += amt;
-          else if (exp.commission_partner === 'Khalid Saleem') profitKhalid += amt;
+          totalOperationalExpenses += amt;
         }
       });
 
+      // Calculate Total Cash Collected in Hand & Courier Deductions
       let totalCustomerCash = 0;
+      let totalDispatchedUnits = 0;
+      let totalCourierTaxDeducted = 0;
+
       allOrders.forEach(o => {
+        const isClosedOrDispatched = o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed';
+        const qty = parseInt(o.quantity) || 1;
+
+        if (isClosedOrDispatched) {
+          totalDispatchedUnits += qty;
+        }
+
         if (o.payment_status === 'Received') {
-          if (o.net_payout_amount !== null && o.net_payout_amount !== undefined && o.net_payout_amount > 0) {
-            totalCustomerCash += parseFloat(o.net_payout_amount) || 0;
-          } else if (o.received_cash_amount !== null && o.received_cash_amount !== undefined && o.received_cash_amount !== '') {
-            totalCustomerCash += parseFloat(o.received_cash_amount) || 0;
+          const isCourier = (o.delivery_channel || '').toLowerCase().includes('courier');
+          const collected = parseFloat(o.received_cash_amount) || (parseFloat(o.total_amount) || 0);
+          
+          if (isCourier) {
+            const tax = Math.round(collected * 0.04);
+            totalCourierTaxDeducted += tax;
+            totalCustomerCash += (collected - tax);
           } else {
-            totalCustomerCash += parseFloat(o.total_amount) || 0;
+            totalCustomerCash += collected;
           }
         }
       });
@@ -2134,18 +2335,47 @@
         totalCustomerCash += (parseFloat(i.advance_amount) || 0);
       });
 
-      document.getElementById('statAccCashReceived').innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
-      document.getElementById('statAccTotalExpenses').innerText = 'Rs. ' + totalBusinessExpenses.toLocaleString();
-      document.getElementById('statAccTotalProfitShare').innerText = 'Rs. ' + totalProfitDistributed.toLocaleString();
+      // Purchasing Cost: Rs. 1,750 per unit sold
+      const totalPurchasingCost = totalDispatchedUnits * 1750;
 
-      document.getElementById('statTotalDeliveryExpense').innerText = 'Rs. ' + totalDelivery.toLocaleString();
-      document.getElementById('statTotalFreightExpense').innerText = 'Rs. ' + totalFreight.toLocaleString();
-      document.getElementById('statTotalMarketingExpense').innerText = 'Rs. ' + totalMarketing.toLocaleString();
-      document.getElementById('statTotalOtherExpense').innerText = 'Rs. ' + totalOtherExpense.toLocaleString();
-      document.getElementById('statPaidByAsif').innerText = 'Rs. ' + paidByAsif.toLocaleString();
-      document.getElementById('statPaidByKhalid').innerText = 'Rs. ' + paidByKhalid.toLocaleString();
-      document.getElementById('statProfitAsif').innerText = 'Rs. ' + profitAsif.toLocaleString();
-      document.getElementById('statProfitKhalid').innerText = 'Rs. ' + profitKhalid.toLocaleString();
+      // Partner Profit: Exactly Rs. 200 per sold unit for Asif, and Rs. 200 per sold unit for Khalid
+      const profitAsifEarned = totalDispatchedUnits * 200;
+      const profitKhalidEarned = totalDispatchedUnits * 200;
+      const totalPartnerProfits = profitAsifEarned + profitKhalidEarned;
+
+      // Net Reinvestment Profit Remaining:
+      // Cash in Hand - Operational Expenses - Purchasing Cost (1750/u) - Partner Profits (200/u each)
+      const reinvestmentProfit = totalCustomerCash - totalOperationalExpenses - totalPurchasingCost - totalPartnerProfits;
+
+      const accCash = document.getElementById('statAccCashReceived');
+      const accExp = document.getElementById('statAccTotalExpenses');
+      const accProf = document.getElementById('statAccTotalProfitShare');
+      const accRet = document.getElementById('statAccNetRetainedProfit');
+
+      if (accCash) accCash.innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
+      if (accExp) accExp.innerText = 'Rs. ' + totalOperationalExpenses.toLocaleString();
+      if (accProf) accProf.innerText = 'Rs. ' + totalPartnerProfits.toLocaleString();
+      if (accRet) accRet.innerText = 'Rs. ' + reinvestmentProfit.toLocaleString();
+
+      const delEl = document.getElementById('statTotalDeliveryExpense');
+      const frEl = document.getElementById('statTotalFreightExpense');
+      const mktEl = document.getElementById('statTotalMarketingExpense');
+      const othEl = document.getElementById('statTotalOtherExpense');
+      const purEl = document.getElementById('statTotalPurchasingCost');
+      const taxEl = document.getElementById('statTotalCourierTax');
+      const profAEl = document.getElementById('statProfitAsif');
+      const profKEl = document.getElementById('statProfitKhalid');
+
+      if (delEl) delEl.innerText = 'Rs. ' + totalDelivery.toLocaleString();
+      if (frEl) frEl.innerText = 'Rs. ' + totalFreight.toLocaleString();
+      if (mktEl) mktEl.innerText = 'Rs. ' + totalMarketing.toLocaleString();
+      if (othEl) othEl.innerText = 'Rs. ' + totalOtherExpense.toLocaleString();
+      if (purEl) purEl.innerText = 'Rs. ' + totalPurchasingCost.toLocaleString();
+      if (taxEl) taxEl.innerText = 'Rs. ' + totalCourierTaxDeducted.toLocaleString();
+      if (profAEl) profAEl.innerText = 'Rs. ' + profitAsifEarned.toLocaleString();
+      if (profKEl) profKEl.innerText = 'Rs. ' + profitKhalidEarned.toLocaleString();
+
+      if (!tbody) return;
 
       if (allExpenses.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No records found.</td></tr>`;
@@ -2156,24 +2386,19 @@
         let badge = `<span class="font-bold text-slate-800">${exp.paid_by || 'Business'}</span>`;
         if (exp.expense_type === 'Internal Partner Transfer' && exp.paid_to) {
           badge = `<span class="bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded-md font-bold text-xs">${exp.paid_by} ➔ ${exp.paid_to}</span>`;
-        } else if (exp.expense_type === 'Partner Profit Share' || exp.expense_type === 'Partner Commission') {
-          badge = `<span class="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded-md font-bold text-xs">💰 Profit: ${exp.commission_partner || 'Partner'}</span>`;
         } else if (exp.expense_type === 'Marketing & Promotions') {
           badge = `<span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded-md font-bold text-xs">📢 ${exp.commission_partner || 'Marketing'}</span>`;
         } else if (exp.expense_type === 'Other Payment') {
           badge = `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md font-bold text-xs">📝 ${exp.paid_by || 'Business'}</span>`;
         }
 
-        const isTransfer = exp.expense_type === 'Internal Partner Transfer';
-        const isProfit = exp.expense_type === 'Partner Profit Share' || exp.expense_type === 'Partner Commission';
-
         return `
           <tr class="hover:bg-slate-50 transition border-b">
             <td class="py-2.5 px-3 text-slate-500 font-medium">${exp.created_at ? new Date(exp.created_at).toLocaleDateString() : 'Today'}</td>
-            <td class="py-2.5 px-3 font-bold text-slate-800">${exp.expense_type === 'Partner Commission' ? 'Partner Profit Share' : exp.expense_type}</td>
+            <td class="py-2.5 px-3 font-bold text-slate-800">${exp.expense_type}</td>
             <td class="py-2.5 px-3 text-slate-600">${exp.notes || '—'}</td>
             <td class="py-2.5 px-3">${badge}</td>
-            <td class="py-2.5 px-3 text-right font-black ${isTransfer ? 'text-indigo-600' : isProfit ? 'text-emerald-600' : 'text-rose-600'}">
+            <td class="py-2.5 px-3 text-right font-black text-rose-600">
               Rs. ${Number(exp.amount).toLocaleString()}
             </td>
             <td class="py-2.5 px-3 text-center no-print">
@@ -2196,7 +2421,8 @@
       const total = parseFloat(document.getElementById('instTotalBill').value) || 0;
       const adv = parseFloat(document.getElementById('instAdvanceAmount').value) || 0;
       const remaining = Math.max(0, total - adv);
-      document.getElementById('instRemainingText').innerText = 'Rs. ' + remaining.toLocaleString();
+      const remEl = document.getElementById('instRemainingText');
+      if (remEl) remEl.innerText = 'Rs. ' + remaining.toLocaleString();
     }
 
     async function handleRecordInstallment(e) {
@@ -2241,6 +2467,7 @@
 
     function renderInstallments() {
       const tbody = document.getElementById('installmentsTableBody');
+      if (!tbody) return;
       let totalBooked = 0;
       let totalAdvance = 0;
       let totalRemaining = 0;
@@ -2258,11 +2485,17 @@
         if (item.installment_status === 'Active' && rem > 0) activeCount++;
       });
 
-      document.getElementById('statInstTotalBooked').innerText = 'Rs. ' + totalBooked.toLocaleString();
-      document.getElementById('statInstAdvanceCollected').innerText = 'Rs. ' + totalAdvance.toLocaleString();
-      document.getElementById('statInstRemainingDue').innerText = 'Rs. ' + totalRemaining.toLocaleString();
-      document.getElementById('statInstActiveCount').innerText = activeCount;
-      document.getElementById('installmentsCountBadge').innerText = activeCount;
+      const tbEl = document.getElementById('statInstTotalBooked');
+      const taEl = document.getElementById('statInstAdvanceCollected');
+      const trEl = document.getElementById('statInstRemainingDue');
+      const acEl = document.getElementById('statInstActiveCount');
+      const cbEl = document.getElementById('installmentsCountBadge');
+
+      if (tbEl) tbEl.innerText = 'Rs. ' + totalBooked.toLocaleString();
+      if (taEl) taEl.innerText = 'Rs. ' + totalAdvance.toLocaleString();
+      if (trEl) trEl.innerText = 'Rs. ' + totalRemaining.toLocaleString();
+      if (acEl) acEl.innerText = activeCount;
+      if (cbEl) cbEl.innerText = activeCount;
 
       if (allInstallments.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No installment accounts recorded yet.</td></tr>`;
@@ -2342,10 +2575,10 @@
       if (!confirm("Are you sure you want to delete this installment account record?")) return;
       const { error } = await client.from('installment_orders').delete().eq('id', id);
       if (error) alert("Error: " + error.message);
-      else await loadInstallments();
+      else await loadAllData();
     }
 
-    // --- CSV & EXPORT REPORTS ---
+    // --- EXPORTS ---
     function exportInstallmentsCSV() {
       if (allInstallments.length === 0) return alert("No installment records to export.");
       const headers = ["ID", "Customer Name", "Phone", "Address", "Total Bill (PKR)", "Advance (PKR)", "Remaining (PKR)", "Due Date", "Status", "Notes"];
@@ -2372,14 +2605,13 @@
 
     function exportAccountsCSV() {
       if (allExpenses.length === 0) return alert("No expenses to export.");
-      const headers = ["ID", "Date", "Expense Type", "Description / Campaign Notes", "Paid By", "Beneficiary", "Amount (PKR)"];
+      const headers = ["ID", "Date", "Expense Type", "Description / Details", "Paid By", "Amount (PKR)"];
       const rows = allExpenses.map(e => [
         e.id,
         e.created_at ? new Date(e.created_at).toLocaleDateString() : '',
         `"${(e.expense_type || '').replace(/"/g, '""')}"`,
         `"${(e.notes || '').replace(/"/g, '""')}"`,
         `"${(e.paid_by || '').replace(/"/g, '""')}"`,
-        `"${(e.commission_partner || e.paid_to || '').replace(/"/g, '""')}"`,
         e.amount
       ]);
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
@@ -2392,29 +2624,37 @@
     }
 
     function exportConfirmedCustomersCSV() {
-      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched');
+      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed');
       if (confirmedList.length === 0) return alert("No confirmed orders to export.");
-      const headers = ["Order ID", "Customer Name", "Phone / WhatsApp", "Address", "Shade", "Quantity", "Total Bill (PKR)", "Delivery Route", "Payment Status", "Cash Collected (PKR)", "Courier Tax (4%)", "Net In-Hand (PKR)", "Remaining Balance (PKR)", "Booking Date"];
-      const rows = confirmedList.map(o => [
-        o.id,
-        `"${(o.customer_name || '').replace(/"/g, '""')}"`,
-        `"${(o.customer_phone || '').replace(/"/g, '""')}"`,
-        `"${(o.customer_address || '').replace(/"/g, '""')}"`,
-        `"${(o.shade_name || '').replace(/"/g, '""')}"`,
-        o.quantity,
-        o.total_amount || (o.quantity * 2500),
-        o.delivery_channel || 'Courier Service',
-        o.payment_status || 'Pending',
-        (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : (o.payment_status === 'Received' ? o.total_amount : '0'),
-        o.courier_tax_deduction || 0,
-        o.net_payout_amount || o.total_amount,
-        (o.remaining_cash_amount !== null && o.remaining_cash_amount !== undefined) ? o.remaining_cash_amount : (o.payment_status === 'Received' ? 0 : o.total_amount),
-        o.created_at ? new Date(o.created_at).toLocaleDateString() : ''
-      ]);
+      const headers = ["Order ID", "Customer Name", "Phone / WhatsApp", "Address", "Shade", "Quantity", "Total Bill (PKR)", "Route", "Payment Status", "Cash Collected", "Courier Tax (4%)", "Net In-Hand", "Remaining Balance", "Date"];
+      const rows = confirmedList.map(o => {
+        const isCourier = (o.delivery_channel || '').toLowerCase().includes('courier');
+        const collected = parseFloat(o.received_cash_amount) || (o.payment_status === 'Received' ? o.total_amount : 0);
+        const tax = isCourier && collected > 0 ? Math.round(collected * 0.04) : 0;
+        const net = collected - tax;
+        const remaining = Math.max(0, (o.total_amount || 0) - collected);
+
+        return [
+          o.id,
+          `"${(o.customer_name || '').replace(/"/g, '""')}"`,
+          `"${(o.customer_phone || '').replace(/"/g, '""')}"`,
+          `"${(o.customer_address || '').replace(/"/g, '""')}"`,
+          `"${(o.shade_name || '').replace(/"/g, '""')}"`,
+          o.quantity,
+          o.total_amount || (o.quantity * 2500),
+          o.delivery_channel || 'Courier Service',
+          o.payment_status || 'Pending',
+          collected,
+          tax,
+          net,
+          remaining,
+          o.created_at ? new Date(o.created_at).toLocaleDateString() : ''
+        ];
+      });
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
-      link.setAttribute("download", `KS_Traders_Confirmed_Orders_Ledger_${new Date().toISOString().slice(0,10)}.csv`);
+      link.setAttribute("download", `KS_Traders_Confirmed_Orders_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
