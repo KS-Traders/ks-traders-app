@@ -25,30 +25,22 @@
   <!-- LOGIN OVERLAY -->
   <div id="loginOverlay" class="fixed inset-0 z-50 bg-[#0f172a]/95 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl border border-slate-200 text-center space-y-5">
-      <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">
-        🍏
-      </div>
+      <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">🍏</div>
       <div>
         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">KS Traders Admin</h2>
         <p class="text-xs text-slate-500 mt-1">Please sign in to access dashboard & accounts</p>
       </div>
-
       <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
           <input type="text" id="loginUsername" required placeholder="asif or khalid" autocomplete="username" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:outline-emerald-600" />
         </div>
-
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
           <input type="password" id="loginPassword" required placeholder="Enter password" autocomplete="current-password" class="w-full border border-slate-300 rounded-xl p-3 text-sm font-semibold focus:outline-emerald-600" />
         </div>
-
         <p id="loginErrorMsg" class="text-xs text-rose-600 font-bold hidden text-center">Invalid username or password.</p>
-
-        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">
-          Sign In to Dashboard
-        </button>
+        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">Sign In to Dashboard</button>
       </form>
       <p class="text-[11px] text-slate-400">Authorized access for Asif Ali & Khalid Saleem only</p>
     </div>
@@ -57,7 +49,6 @@
   <!-- MAIN APP CONTAINER -->
   <div id="mainDashboardApp" class="hidden">
 
-    <!-- Top Navigation Bar -->
     <header class="bg-[#0f172a] text-white shadow-md sticky top-0 z-30 no-print">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div class="flex items-center gap-3">
@@ -68,53 +59,23 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <span id="loggedInBadge" class="bg-indigo-900/60 text-indigo-300 border border-indigo-700 text-[11px] font-bold px-2.5 py-1 rounded-lg">
-            👤 Partner
-          </span>
-          <a href="order.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow transition flex items-center gap-1.5">
-            🛒 Open Store
-          </a>
-          <button onclick="loadAllData()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 transition flex items-center gap-1">
-            🔄 Refresh
-          </button>
-          <button onclick="handleAdminLogout()" class="bg-rose-900/80 hover:bg-rose-800 text-rose-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-rose-700 transition flex items-center gap-1">
-            🚪 Logout
-          </button>
+          <span id="loggedInBadge" class="bg-indigo-900/60 text-indigo-300 border border-indigo-700 text-[11px] font-bold px-2.5 py-1 rounded-lg">👤 Partner</span>
+          <a href="order.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold shadow transition flex items-center gap-1.5">🛒 Open Store</a>
+          <button onclick="loadAllData()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 transition flex items-center gap-1">🔄 Refresh</button>
+          <button onclick="handleAdminLogout()" class="bg-rose-900/80 hover:bg-rose-800 text-rose-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-rose-700 transition flex items-center gap-1">🚪 Logout</button>
         </div>
       </div>
     </header>
 
-    <!-- 7 Navigation Tabs -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 no-print">
       <div class="flex flex-wrap gap-2">
-        <button onclick="switchTab('inventory')" id="tab-inventory" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-          📦 Stock & Inventory
-        </button>
-
-        <!-- PAGE 2: RENAMED TO ORDERS -->
-        <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">
-          📋 Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
-        </button>
-
-        <button onclick="switchTab('record-sale')" id="tab-record-sale" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-          ➕ Record Sale / Advance
-        </button>
-
-        <button onclick="switchTab('inward')" id="tab-inward" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-          📥 Inward Stock
-        </button>
-
-        <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-          📊 Analytics & History
-        </button>
-
-        <button onclick="switchTab('accounts')" id="tab-accounts" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-          💰 Accounts & Expenses
-        </button>
-
-        <button onclick="switchTab('installments')" id="tab-installments" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">
-          📅 Installments & Khata <span id="installmentsCountBadge" class="bg-amber-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span>
-        </button>
+        <button onclick="switchTab('inventory')" id="tab-inventory" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">📦 Stock & Inventory</button>
+        <button onclick="switchTab('orders')" id="tab-orders" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-[#581c87] text-white border-2 border-indigo-500 shadow-md transition flex items-center gap-1.5">📋 Orders <span id="ordersBadgeCount" class="bg-rose-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span></button>
+        <button onclick="switchTab('record-sale')" id="tab-record-sale" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">➕ Record Sale / Advance</button>
+        <button onclick="switchTab('inward')" id="tab-inward" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">📥 Inward Stock</button>
+        <button onclick="switchTab('analytics')" id="tab-analytics" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">📊 Analytics & History</button>
+        <button onclick="switchTab('accounts')" id="tab-accounts" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">💰 Accounts & Expenses</button>
+        <button onclick="switchTab('installments')" id="tab-installments" class="px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5">📅 Installments & Khata <span id="installmentsCountBadge" class="bg-amber-500 text-white px-2 py-0.5 rounded-full text-xs font-black">0</span></button>
       </div>
     </div>
 
@@ -132,14 +93,11 @@
               <span class="text-3xl">💎</span>
               <div>
                 <span class="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Total Retail Stock Value</span>
-                <div class="flex items-baseline gap-1.5 justify-end">
-                  <span id="totalStockValueHeader" class="text-xl sm:text-2xl font-black text-emerald-700">Rs. 0</span>
-                </div>
+                <div class="flex items-baseline gap-1.5 justify-end"><span id="totalStockValueHeader" class="text-xl sm:text-2xl font-black text-emerald-700">Rs. 0</span></div>
                 <p class="text-[10px] text-emerald-600 font-semibold" id="totalUnitsFormula">Calculating stock...</p>
               </div>
             </div>
           </div>
-
           <div id="inventoryCardsList" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2"></div>
         </div>
 
@@ -149,11 +107,8 @@
               <h3 class="text-base font-bold text-slate-900">📊 Inventory Stock Breakdown & Units Sold Summary</h3>
               <p class="text-xs text-slate-500 mt-0.5">Accurate unit breakdown across distinct shades.</p>
             </div>
-            <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border transition">
-              🔄 Refresh
-            </button>
+            <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border transition">🔄 Refresh</button>
           </div>
-
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
@@ -166,9 +121,7 @@
                 </tr>
               </thead>
               <tbody id="inventorySummaryTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
-                <tr>
-                  <td colspan="5" class="text-center py-6 text-slate-400">Loading inventory data...</td>
-                </tr>
+                <tr><td colspan="5" class="text-center py-6 text-slate-400">Loading inventory data...</td></tr>
               </tbody>
               <tfoot id="inventorySummaryTableFoot" class="bg-slate-50/80 font-black text-slate-900 border-t-2 border-slate-200"></tfoot>
             </table>
@@ -176,7 +129,7 @@
         </div>
       </section>
 
-      <!-- TAB 2: ORDERS (UPDATED TITLE & PLATFORM / DISPATCH DROPDOWNS) -->
+      <!-- TAB 2: ORDERS -->
       <section id="view-orders" class="space-y-4">
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -184,41 +137,24 @@
               <h2 class="text-base sm:text-lg font-bold text-slate-900">Orders Management</h2>
               <p class="text-xs text-slate-500">Track order acquisition source (WhatsApp, Facebook, Instagram, Cart, TikTok, Twitter) and delivery channel.</p>
             </div>
-            <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">
-              🔄 Refresh
-            </button>
+            <button onclick="loadAllData()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-200 flex items-center gap-1">🔄 Refresh</button>
           </div>
-
-          <!-- Workflow Filters -->
           <div class="bg-slate-50 p-2 rounded-xl border border-slate-200 flex flex-wrap gap-1.5 items-center">
             <span class="text-xs font-bold text-slate-500 mr-1">Filter View:</span>
-            <button onclick="filterOrders('Active / Open')" id="subFilter-Active" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition">
-              🟢 Active Orders (<span id="count-active">0</span>)
-            </button>
-            <button onclick="filterOrders('Pending')" id="subFilter-Pending" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-              Advance Bookings (<span id="count-pending">0</span>)
-            </button>
-            <button onclick="filterOrders('Confirmed')" id="subFilter-Confirmed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-              Confirmed (<span id="count-confirmed">0</span>)
-            </button>
-            <button onclick="filterOrders('Dispatched')" id="subFilter-Dispatched" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-              Dispatched (<span id="count-dispatched">0</span>)
-            </button>
-            <button onclick="filterOrders('Closed')" id="subFilter-Closed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-              📁 Closed / Delivered (<span id="count-closed">0</span>)
-            </button>
-            <button onclick="filterOrders('All')" id="subFilter-All" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">
-              All (<span id="count-all">0</span>)
-            </button>
+            <button onclick="filterOrders('Active / Open')" id="subFilter-Active" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-100 text-emerald-800 transition">🟢 Active Orders (<span id="count-active">0</span>)</button>
+            <button onclick="filterOrders('Pending')" id="subFilter-Pending" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">Advance Bookings (<span id="count-pending">0</span>)</button>
+            <button onclick="filterOrders('Confirmed')" id="subFilter-Confirmed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">Confirmed (<span id="count-confirmed">0</span>)</button>
+            <button onclick="filterOrders('Dispatched')" id="subFilter-Dispatched" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">Dispatched (<span id="count-dispatched">0</span>)</button>
+            <button onclick="filterOrders('Closed')" id="subFilter-Closed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">📁 Closed / Delivered (<span id="count-closed">0</span>)</button>
+            <button onclick="filterOrders('All')" id="subFilter-All" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-white transition">All (<span id="count-all">0</span>)</button>
           </div>
-
           <div id="ordersCardsList" class="space-y-4 pt-2">
             <div class="p-12 text-center text-slate-400">Loading orders...</div>
           </div>
         </div>
       </section>
 
-      <!-- TAB 3: RECORD SALE / ADVANCE (WITH PLATFORM & DISPATCH DROPDOWNS) -->
+      <!-- TAB 3: RECORD SALE -->
       <section id="view-record-sale" class="hidden space-y-4">
         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm max-w-2xl mx-auto space-y-4">
           <h2 class="text-base sm:text-lg font-bold text-slate-900 border-b pb-3">➕ Record Manual Direct Sale / Advance Booking</h2>
@@ -227,14 +163,11 @@
               <label class="block text-xs font-semibold text-slate-700 mb-1">Customer Name *</label>
               <input type="text" id="manualCustName" required placeholder="Customer Full Name" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
             </div>
-            
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Phone / WhatsApp *</label>
                 <input type="tel" id="manualCustPhone" required placeholder="0336-1234567" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
-              
-              <!-- Order Received By Dropdown -->
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Order Received By *</label>
                 <select id="manualOrderReceivedBy" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
@@ -246,8 +179,6 @@
                   <option value="Twitter">𝕏 Twitter (X)</option>
                 </select>
               </div>
-
-              <!-- Order Dispatched Through Dropdown -->
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Dispatched Through *</label>
                 <select id="manualDispatchThrough" onchange="autoAdjustDeliveryPrice()" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600">
@@ -256,7 +187,6 @@
                 </select>
               </div>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Booked By Partner</label>
@@ -270,12 +200,10 @@
                 <input type="email" id="manualCustEmail" placeholder="customer@example.com" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
             </div>
-
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Complete Address / City</label>
               <input type="text" id="manualAddress" required placeholder="Address or City" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Select Shade *</label>
@@ -290,16 +218,12 @@
                 <input type="number" id="manualPrice" value="2500" min="0" oninput="calcManualTotal()" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold text-emerald-700 focus:outline-emerald-600" />
               </div>
             </div>
-
             <div class="flex justify-between items-center bg-slate-50 p-3.5 rounded-xl border border-slate-200">
               <span class="text-xs font-bold text-slate-700">Total Customer Bill:</span>
               <span id="manualTotalText" class="text-base font-black text-emerald-700">Rs. 2,500</span>
             </div>
-
             <div class="pt-2">
-              <button type="submit" id="saveManualSaleBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-                Save & Record Order
-              </button>
+              <button type="submit" id="saveManualSaleBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">Save & Record Order</button>
             </div>
           </form>
         </div>
@@ -324,14 +248,12 @@
                 <input type="number" id="inwardCostPrice" min="0" value="1750" placeholder="1750" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold focus:outline-emerald-600" />
               </div>
             </div>
-            <button type="submit" id="saveInwardBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-              Confirm Inward Stock & Update Inventory
-            </button>
+            <button type="submit" id="saveInwardBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">Confirm Inward Stock & Update Inventory</button>
           </form>
         </div>
       </section>
 
-      <!-- TAB 5: ANALYTICS & HISTORY (CORRECT 4% = 112 ON 2800, 100 ON 2500) -->
+      <!-- TAB 5: ANALYTICS & HISTORY -->
       <section id="view-analytics" class="hidden space-y-6 print-area">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3 no-print">
           <div>
@@ -340,50 +262,38 @@
           </div>
           <div class="flex flex-wrap items-center gap-2">
             <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleCSVImport(event)" />
-            <button onclick="document.getElementById('csvFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-              📥 Import CSV
-            </button>
-            <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-              📄 Export PDF
-            </button>
-            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-              📊 Export All Orders CSV
-            </button>
+            <button onclick="document.getElementById('csvFileInput').click()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">📥 Import CSV</button>
+            <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">📄 Export PDF</button>
+            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">📊 Export All Orders CSV</button>
           </div>
         </div>
 
-        <!-- 6 KPI CARDS -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-[11px] font-bold text-slate-500 uppercase">Stock Valuation (Retail)</p>
             <h3 id="statStockValuePKR" class="text-xl font-black text-slate-900 mt-1">Rs. 0</h3>
             <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Live warehouse stock</p>
           </div>
-
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-[11px] font-bold text-slate-500 uppercase">Total Sales Booked</p>
             <h3 id="statTotalSales" class="text-xl font-black text-slate-900 mt-1">Rs. 0</h3>
-            <p class="text-[10px] text-slate-400 mt-0.5">Orders + Installments</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">Confirmed/Dispatched Orders + Installments</p>
           </div>
-
           <div class="bg-white p-4 rounded-2xl border-2 border-indigo-300 shadow-sm bg-indigo-50/20">
             <p class="text-[11px] font-bold text-indigo-900 uppercase">Total Net Cash Received</p>
             <h3 id="statTotalCashReceived" class="text-xl font-black text-indigo-700 mt-1">Rs. 0</h3>
-            <p class="text-[10px] text-indigo-600 font-semibold mt-0.5">In-Person + Courier Net</p>
+            <p class="text-[10px] text-indigo-600 font-semibold mt-0.5">In-Person + Courier Net (received only)</p>
           </div>
-
           <div class="bg-white p-4 rounded-2xl border-2 border-emerald-300 shadow-sm bg-emerald-50/20">
             <p class="text-[10px] font-bold text-emerald-800 uppercase">🛵 In-Person Cash (Hyd)</p>
             <h3 id="statCashInPerson" class="text-lg font-black text-emerald-700 mt-1">Rs. 0</h3>
             <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Direct full cash</p>
           </div>
-
           <div class="bg-white p-4 rounded-2xl border-2 border-blue-300 shadow-sm bg-blue-50/20">
             <p class="text-[10px] font-bold text-blue-900 uppercase">📦 Courier Net In-Hand</p>
             <h3 id="statCashCourier" class="text-lg font-black text-blue-700 mt-1">Rs. 0</h3>
             <p class="text-[10px] text-blue-600 font-semibold mt-0.5">After 4% courier deduction</p>
           </div>
-
           <div class="bg-white p-4 rounded-2xl border-2 border-amber-300 shadow-sm bg-amber-50/20">
             <p class="text-[11px] font-bold text-amber-900 uppercase">Pending Cash Collection</p>
             <h3 id="statPendingValue" class="text-xl font-black text-amber-700 mt-1">Rs. 0</h3>
@@ -391,23 +301,17 @@
           </div>
         </div>
 
-        <!-- CHARTS SECTION -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <h4 class="text-sm font-bold text-slate-800 mb-4">Orders Status Breakdown</h4>
-            <div class="relative w-full h-64">
-              <canvas id="orderStatusChart"></canvas>
-            </div>
+            <div class="relative w-full h-64"><canvas id="orderStatusChart"></canvas></div>
           </div>
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
             <h4 class="text-sm font-bold text-slate-800 mb-4">Sales by Shade</h4>
-            <div class="relative w-full h-64 flex items-center justify-center">
-              <canvas id="shadeBreakdownChart"></canvas>
-            </div>
+            <div class="relative w-full h-64 flex items-center justify-center"><canvas id="shadeBreakdownChart"></canvas></div>
           </div>
         </div>
 
-        <!-- CONFIRMED ORDERS TABLE -->
         <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-4">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4">
             <div>
@@ -417,31 +321,16 @@
               </div>
               <p class="text-xs text-slate-500 mt-0.5">Courier 4% deduction: Exactly Rs. 112 per Rs. 2,800 total bill (Net Rs. 2,688 per unit).</p>
             </div>
-
-            <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">
-              📥 Extract Confirmed Customers (CSV)
-            </button>
+            <button onclick="exportConfirmedCustomersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm no-print">📥 Extract Confirmed Customers (CSV)</button>
           </div>
-
           <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-wrap gap-2 items-center text-xs no-print">
             <span class="font-bold text-slate-600">Filter By Route:</span>
-            <button onclick="setCustomerRouteFilter('All')" id="routeFilter-All" class="px-3 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-900 transition">
-              All Orders
-            </button>
-            <button onclick="setCustomerRouteFilter('InPerson')" id="routeFilter-Hyd" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
-              🛵 In-Person (Hyderabad)
-            </button>
-            <button onclick="setCustomerRouteFilter('Courier')" id="routeFilter-Courier" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
-              📦 Courier Service
-            </button>
-            <button onclick="setCustomerRouteFilter('Pending')" id="routeFilter-Pending" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
-              ⏳ Pending / Partial Balance
-            </button>
-            <button onclick="setCustomerRouteFilter('Received')" id="routeFilter-Received" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">
-              ✅ Fully Paid
-            </button>
+            <button onclick="setCustomerRouteFilter('All')" id="routeFilter-All" class="px-3 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-900 transition">All Orders</button>
+            <button onclick="setCustomerRouteFilter('InPerson')" id="routeFilter-Hyd" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">🛵 In-Person (Hyderabad)</button>
+            <button onclick="setCustomerRouteFilter('Courier')" id="routeFilter-Courier" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">📦 Courier Service</button>
+            <button onclick="setCustomerRouteFilter('Pending')" id="routeFilter-Pending" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">⏳ Pending / Partial Balance</button>
+            <button onclick="setCustomerRouteFilter('Received')" id="routeFilter-Received" class="px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition">✅ Fully Paid</button>
           </div>
-
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
@@ -460,30 +349,27 @@
                 </tr>
               </thead>
               <tbody id="confirmedCustomersTableBody" class="divide-y divide-slate-100 text-slate-700 font-medium">
-                <tr>
-                  <td colspan="11" class="text-center py-8 text-slate-400">Loading orders...</td>
-                </tr>
+                <tr><td colspan="11" class="text-center py-8 text-slate-400">Loading orders...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- TAB 6: ACCOUNTS & EXPENSES (WITH 1750 UNIT COST & REINVESTMENT PROFIT) -->
+      <!-- TAB 6: ACCOUNTS & EXPENSES -->
       <section id="view-accounts" class="hidden space-y-6">
-        
+
         <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
             <span class="text-xs font-bold uppercase tracking-widest text-indigo-300">KS Traders Business Accounts</span>
             <h2 class="text-xl font-black mt-0.5">Accounts, Product Cost & Profit Distribution Ledger</h2>
-            <p class="text-xs text-slate-300 mt-1">Deducting Rs. 1,750 unit cost, 4% tax, operational expenses, and Rs. 200 partner profit share per unit for Asif & Khalid.</p>
+            <p class="text-xs text-slate-300 mt-1">Only RECEIVED payments count: Rs. 1,750 unit cost, 4% courier tax, expenses and Rs. 200 profit per PAID unit for Asif & Khalid are deducted. Pending amounts are excluded.</p>
           </div>
-
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full md:w-auto">
             <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-emerald-400/50 text-center">
               <span class="text-[10px] text-emerald-300 font-semibold block uppercase">Total Cash in Hand</span>
               <span id="statAccCashReceived" class="text-xl font-black text-emerald-400">Rs. 0</span>
-              <span class="text-[9px] text-emerald-300/80 block mt-0.5">Net In-Hand Collected</span>
+              <span class="text-[9px] text-emerald-300/80 block mt-0.5">Received only (net)</span>
             </div>
             <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-rose-400/50 text-center">
               <span class="text-[10px] text-rose-300 font-semibold block uppercase">Total Expenses</span>
@@ -491,19 +377,41 @@
               <span class="text-[9px] text-rose-300/80 block mt-0.5">Cargo, TCS, Ads, Others</span>
             </div>
             <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-purple-400/50 text-center">
-              <span class="text-[10px] text-purple-300 font-semibold block uppercase">Partners Share (Rs. 200/unit)</span>
+              <span class="text-[10px] text-purple-300 font-semibold block uppercase">Partners Share (Rs. 200/paid unit)</span>
               <span id="statAccTotalProfitShare" class="text-xl font-black text-purple-300">Rs. 0</span>
-              <span class="text-[9px] text-purple-300/80 block mt-0.5">Asif (Rs. 200) + Khalid (Rs. 200)</span>
+              <span id="statAccProfitSub" class="text-[9px] text-purple-300/80 block mt-0.5">Asif + Khalid</span>
             </div>
             <div class="bg-emerald-600/30 backdrop-blur-md px-4 py-3 rounded-2xl border-2 border-emerald-400 text-center">
               <span class="text-[10px] text-emerald-200 font-bold block uppercase">Remaining for Reinvestment</span>
               <span id="statAccNetRetainedProfit" class="text-xl font-black text-emerald-300">Rs. 0</span>
-              <span class="text-[9px] text-emerald-200/80 block mt-0.5">Net business retained profit</span>
+              <span class="text-[9px] text-emerald-200/80 block mt-0.5">After all deductions</span>
             </div>
           </div>
         </div>
 
-        <!-- 8 Metric KPI Cards -->
+        <!-- SALES vs RECEIVED vs PENDING -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-2.5">
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Total Sales (Booked)</p>
+            <h3 id="accTotalSales" class="text-base font-black text-slate-900 mt-1">Rs. 0</h3>
+            <p id="accSoldUnits" class="text-[10px] text-slate-400 mt-0.5">0 units sold</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border-2 border-emerald-300 bg-emerald-50/30 shadow-sm">
+            <p class="text-[10px] font-bold text-emerald-800 uppercase">Payment Received (Gross)</p>
+            <h3 id="accReceivedGross" class="text-base font-black text-emerald-700 mt-1">Rs. 0</h3>
+            <p id="accPaidUnits" class="text-[10px] text-emerald-600 mt-0.5">0 units paid</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border-2 border-amber-300 bg-amber-50/30 shadow-sm">
+            <p class="text-[10px] font-bold text-amber-900 uppercase">Pending Amount</p>
+            <h3 id="accPendingAmount" class="text-base font-black text-amber-700 mt-1">Rs. 0</h3>
+            <p id="accPendingUnits" class="text-[10px] text-amber-600 mt-0.5">0 units pending</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2">
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Note</p>
+            <p class="text-[11px] text-slate-600 mt-1 font-semibold">Pending amounts are NOT included in Cash in Hand, Partner Profit or Reinvestment. They are added automatically once payment is marked Received.</p>
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-8 gap-2.5">
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
             <p class="text-[10px] font-bold text-slate-500 uppercase">TCS / Courier</p>
@@ -522,7 +430,7 @@
             <h3 id="statTotalOtherExpense" class="text-base font-black text-slate-800 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
-            <p class="text-[10px] font-bold text-slate-500 uppercase">Product Cost (1750/u)</p>
+            <p class="text-[10px] font-bold text-slate-500 uppercase">Product Cost (1750/paid u)</p>
             <h3 id="statTotalPurchasingCost" class="text-base font-black text-slate-800 mt-1">Rs. 0</h3>
           </div>
           <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm">
@@ -541,9 +449,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-            <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
-              <span>💳</span> Record Expense, Ads or Partner Transfer
-            </h3>
+            <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2"><span>💳</span> Record Expense, Ads or Partner Transfer</h3>
             <form onsubmit="handleRecordExpense(event)" class="space-y-3.5">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Entry Category *</label>
@@ -556,7 +462,6 @@
                   <option value="Miscellaneous Payment">🏷️ Miscellaneous Payment</option>
                 </select>
               </div>
-
               <div id="marketingPlatformDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
                 <label class="block text-xs font-bold text-indigo-900">Promotion Platform: *</label>
                 <select id="marketingPlatformSelect" class="w-full border rounded-lg p-2 font-bold bg-white text-xs">
@@ -568,7 +473,6 @@
                   <option value="Printing / Flyers / Posters">📄 Printing Posters / Promotional Material</option>
                 </select>
               </div>
-
               <div id="partnerTransferDiv" class="hidden bg-indigo-50 border border-indigo-200 p-3 rounded-xl space-y-2">
                 <label class="block text-xs font-bold text-indigo-900">Transfer Direction (Reimbursement):</label>
                 <div class="grid grid-cols-2 gap-2 text-xs">
@@ -588,12 +492,10 @@
                   </div>
                 </div>
               </div>
-
               <div id="specifyDetailDiv" class="hidden">
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Specify Description *</label>
                 <input type="text" id="expenseSpecifyDesc" placeholder="e.g. Hyderabad delivery fuel, flyer printing" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
-
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block text-xs font-semibold text-slate-700 mb-1">Amount (Rs.) *</label>
@@ -608,15 +510,11 @@
                   </select>
                 </div>
               </div>
-
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Reference Notes (Details)</label>
                 <input type="text" id="expenseNotes" placeholder="e.g. Fuel for deliveries, packaging tape" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
-
-              <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-                Save Entry to Ledger
-              </button>
+              <button type="submit" id="saveExpenseBtn" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">Save Entry to Ledger</button>
             </form>
           </div>
 
@@ -627,18 +525,11 @@
                 <p class="text-xs text-slate-400">All business payments, marketing promotions, partner profit distributions and transfers</p>
               </div>
               <div class="flex items-center gap-2">
-                <button onclick="exportAccountsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                  📊 Export CSV
-                </button>
-                <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                  📄 Export PDF
-                </button>
-                <button onclick="loadExpenses()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">
-                  🔄
-                </button>
+                <button onclick="exportAccountsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">📊 Export CSV</button>
+                <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">📄 Export PDF</button>
+                <button onclick="loadExpenses()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">🔄</button>
               </div>
             </div>
-
             <div class="overflow-x-auto max-h-[440px] overflow-y-auto">
               <table class="w-full text-left border-collapse text-xs sm:text-sm">
                 <thead class="sticky top-0 bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
@@ -652,9 +543,7 @@
                   </tr>
                 </thead>
                 <tbody id="expensesTableBody" class="divide-y divide-slate-100 font-medium">
-                  <tr>
-                    <td colspan="6" class="text-center py-8 text-slate-400">Loading ledger...</td>
-                  </tr>
+                  <tr><td colspan="6" class="text-center py-8 text-slate-400">Loading ledger...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -689,9 +578,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-            <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2">
-              <span>📅</span> Book New Installment Customer
-            </h3>
+            <h3 class="text-base font-bold text-slate-900 border-b pb-3 flex items-center gap-2"><span>📅</span> Book New Installment Customer</h3>
             <form onsubmit="handleRecordInstallment(event)" class="space-y-3.5">
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Customer Full Name *</label>
@@ -715,25 +602,19 @@
                   <input type="number" id="instAdvanceAmount" min="0" required oninput="calcRemainingInstallment()" placeholder="e.g. 2000" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-bold text-emerald-700 focus:outline-emerald-600" />
                 </div>
               </div>
-
               <div class="flex justify-between items-center bg-amber-50 border border-amber-200 p-3 rounded-xl">
                 <span class="text-xs font-bold text-amber-900">Remaining Balance Due:</span>
                 <span id="instRemainingText" class="text-base font-black text-amber-800">Rs. 0</span>
               </div>
-
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Final Due Date *</label>
                 <input type="date" id="instDueDate" required class="w-full border rounded-lg p-2.5 text-xs sm:text-sm font-semibold bg-white focus:outline-emerald-600" />
               </div>
-
               <div>
                 <label class="block text-xs font-semibold text-slate-700 mb-1">Item / Terms Notes</label>
                 <input type="text" id="instNotes" placeholder="e.g. 2 Packs Natural Black" class="w-full border rounded-lg p-2.5 text-xs sm:text-sm focus:outline-emerald-600" />
               </div>
-
-              <button type="submit" id="saveInstallmentBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">
-                Create Installment Account
-              </button>
+              <button type="submit" id="saveInstallmentBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs sm:text-sm shadow transition">Create Installment Account</button>
             </form>
           </div>
 
@@ -744,18 +625,11 @@
                 <p class="text-xs text-slate-400">Track remaining payments, overdue dates, and record cash collected</p>
               </div>
               <div class="flex items-center gap-2">
-                <button onclick="exportInstallmentsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                  📊 Export CSV
-                </button>
-                <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
-                  📄 Print PDF
-                </button>
-                <button onclick="loadInstallments()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">
-                  🔄
-                </button>
+                <button onclick="exportInstallmentsCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">📊 Export CSV</button>
+                <button onclick="window.print()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">📄 Print PDF</button>
+                <button onclick="loadInstallments()" class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border">🔄</button>
               </div>
             </div>
-
             <div class="overflow-x-auto max-h-[460px] overflow-y-auto">
               <table class="w-full text-left border-collapse text-xs sm:text-sm">
                 <thead class="sticky top-0 bg-slate-50 text-slate-500 border-b text-[11px] uppercase tracking-wider">
@@ -770,9 +644,7 @@
                   </tr>
                 </thead>
                 <tbody id="installmentsTableBody" class="divide-y divide-slate-100 font-medium">
-                  <tr>
-                    <td colspan="7" class="text-center py-8 text-slate-400">Loading installment accounts...</td>
-                  </tr>
+                  <tr><td colspan="7" class="text-center py-8 text-slate-400">Loading installment accounts...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -782,7 +654,7 @@
 
     </main>
 
-    <!-- MODAL: DETAILED PRODUCT EDIT -->
+    <!-- MODAL: PRODUCT EDIT -->
     <div id="editProductModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
       <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
         <div class="flex justify-between items-center border-b pb-3">
@@ -864,7 +736,7 @@
       </div>
     </div>
 
-    <!-- MODAL: EDIT CUSTOMER ORDER (WITH PLATFORM & DISPATCH DROPDOWNS) -->
+    <!-- MODAL: EDIT ORDER -->
     <div id="editOrderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b pb-3">
@@ -874,7 +746,6 @@
           </div>
           <button onclick="closeOrderModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold leading-none">&times;</button>
         </div>
-
         <form onsubmit="saveOrderChanges(event)" class="space-y-3.5">
           <input type="hidden" id="editOrderId" />
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -887,7 +758,6 @@
               <input type="tel" id="editCustPhone" required class="w-full border rounded-lg p-2 text-xs sm:text-sm font-semibold focus:outline-emerald-600" />
             </div>
           </div>
-
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-semibold text-slate-600 mb-1">Order Received By *</label>
@@ -908,12 +778,10 @@
               </select>
             </div>
           </div>
-
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Address & Delivery Details *</label>
             <textarea id="editCustAddress" required rows="2" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-normal focus:outline-emerald-600"></textarea>
           </div>
-
           <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl space-y-3">
             <p class="text-xs font-bold text-slate-700 uppercase">Items & Pricing</p>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -931,7 +799,6 @@
               </div>
             </div>
           </div>
-
           <div>
             <label class="block text-xs font-semibold text-slate-600 mb-1">Order Status</label>
             <select id="editOrderStatus" class="w-full border rounded-lg p-2 text-xs sm:text-sm font-bold bg-white focus:outline-emerald-600">
@@ -942,7 +809,6 @@
               <option value="Cancelled">Cancelled</option>
             </select>
           </div>
-
           <div class="flex justify-end gap-2 pt-3 border-t">
             <button type="button" onclick="closeOrderModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-bold transition">Cancel</button>
             <button type="submit" id="saveOrderBtn" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow transition">Save Order Changes</button>
@@ -967,7 +833,6 @@
       const user = document.getElementById('loginUsername').value.trim().toLowerCase();
       const pass = document.getElementById('loginPassword').value.trim();
       const errorMsg = document.getElementById('loginErrorMsg');
-
       if (VALID_USERS[user] && VALID_USERS[user] === pass) {
         const displayName = user === 'asif' ? 'Asif Ali' : 'Khalid Saleem';
         sessionStorage.setItem('ks_traders_logged_in_user', displayName);
@@ -1004,14 +869,32 @@
     let statusChartInstance = null;
     let shadeChartInstance = null;
 
+    // ===== SHARED MONEY HELPER: only RECEIVED money counts =====
+    const SETTLEMENT_STATUSES = ['Confirmed', 'Dispatched', 'Delivered / Closed'];
+
+    function orderMoney(o) {
+      const qty = parseInt(o.quantity) || 1;
+      const total = parseFloat(o.total_amount) || (qty * (parseFloat(o.sold_price_per_unit) || 2500));
+      const isCourier = (o.delivery_channel || '').toLowerCase().includes('courier');
+      const hasCash = o.received_cash_amount !== null && o.received_cash_amount !== undefined && o.received_cash_amount !== '';
+      let collected = hasCash ? (parseFloat(o.received_cash_amount) || 0) : 0;
+      if (o.payment_status === 'Received' && collected === 0) collected = total;
+      // NOTE: collected is NOT capped at the saved bill (courier orders are collected at 2,800/unit
+      // even if the order was saved at 2,500/unit). Tax is always 4% of what was collected.
+      const tax = isCourier ? Math.round(collected * 0.04) : 0;
+      return {
+        qty, total, isCourier, collected, tax,
+        net: collected - tax,
+        pending: Math.max(0, total - collected),
+        paidUnits: total > 0 ? qty * Math.min(1, collected / total) : 0
+      };
+    }
+    function fmtUnits(n) { return (Math.round(n * 100) / 100).toString(); }
+    function rs(n) { return 'Rs. ' + Math.round(n).toLocaleString(); }
+
     async function loadAllData() {
       try {
-        await Promise.allSettled([
-          loadProducts(),
-          loadOrders(),
-          loadExpenses(),
-          loadInstallments()
-        ]);
+        await Promise.allSettled([loadProducts(), loadOrders(), loadExpenses(), loadInstallments()]);
         updateAnalytics();
         renderInventorySummaryTable();
       } catch (err) {
@@ -1022,52 +905,29 @@
     async function loadProducts() {
       try {
         const { data, error } = await client.from('products').select('*').order('id');
-        if (!error && data) {
-          allProducts = data;
-          renderInventory();
-          populateShadeSelects();
-        }
-      } catch (e) {
-        console.error("Error loading products:", e);
-      }
+        if (!error && data) { allProducts = data; renderInventory(); populateShadeSelects(); }
+      } catch (e) { console.error("Error loading products:", e); }
     }
 
     async function loadOrders() {
       try {
         const { data, error } = await client.from('sales_orders').select('*').order('id', { ascending: false });
-        if (!error && data) {
-          allOrders = data;
-          renderOrders();
-          updateCounts();
-          renderConfirmedCustomersTable();
-        }
-      } catch (e) {
-        console.error("Error loading orders:", e);
-      }
+        if (!error && data) { allOrders = data; renderOrders(); updateCounts(); renderConfirmedCustomersTable(); }
+      } catch (e) { console.error("Error loading orders:", e); }
     }
 
     async function loadExpenses() {
       try {
         const { data, error } = await client.from('expenses_account').select('*').order('id', { ascending: false });
-        if (!error && data) {
-          allExpenses = data;
-          renderExpenses();
-        }
-      } catch (e) {
-        console.error("Error loading expenses:", e);
-      }
+        if (!error && data) { allExpenses = data; renderExpenses(); }
+      } catch (e) { console.error("Error loading expenses:", e); }
     }
 
     async function loadInstallments() {
       try {
         const { data, error } = await client.from('installment_orders').select('*').order('id', { ascending: false });
-        if (!error && data) {
-          allInstallments = data;
-          renderInstallments();
-        }
-      } catch (e) {
-        console.error("Error loading installments:", e);
-      }
+        if (!error && data) { allInstallments = data; renderInstallments(); }
+      } catch (e) { console.error("Error loading installments:", e); }
     }
 
     function switchTab(tabId) {
@@ -1083,23 +943,10 @@
           btn.className = "px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-white text-slate-700 border border-slate-200 shadow-sm transition flex items-center gap-1.5";
         }
       });
-
-      if (tabId === 'inventory') {
-        renderInventory();
-        renderInventorySummaryTable();
-      }
-      if (tabId === 'analytics') {
-        setTimeout(() => {
-          updateAnalytics();
-          renderConfirmedCustomersTable();
-        }, 50);
-      }
-      if (tabId === 'accounts') {
-        renderExpenses();
-      }
-      if (tabId === 'installments') {
-        renderInstallments();
-      }
+      if (tabId === 'inventory') { renderInventory(); renderInventorySummaryTable(); }
+      if (tabId === 'analytics') { setTimeout(() => { updateAnalytics(); renderConfirmedCustomersTable(); }, 50); }
+      if (tabId === 'accounts') { renderExpenses(); }
+      if (tabId === 'installments') { renderInstallments(); }
     }
 
     function filterOrders(filter) {
@@ -1127,18 +974,14 @@
         { id: 'routeFilter-Pending', match: 'Pending' },
         { id: 'routeFilter-Received', match: 'Received' }
       ];
-
       buttons.forEach(b => {
         const el = document.getElementById(b.id);
         if (el) {
-          if (b.match === route) {
-            el.className = "px-3 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-900 transition";
-          } else {
-            el.className = "px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition";
-          }
+          el.className = b.match === route
+            ? "px-3 py-1.5 rounded-lg font-bold bg-blue-100 text-blue-900 transition"
+            : "px-3 py-1.5 rounded-lg font-bold text-slate-600 hover:bg-white transition";
         }
       });
-
       renderConfirmedCustomersTable();
     }
 
@@ -1148,22 +991,10 @@
       const confirmed = allOrders.filter(o => o.order_status === 'Confirmed').length;
       const dispatched = allOrders.filter(o => o.order_status === 'Dispatched').length;
       const closed = allOrders.filter(o => o.order_status === 'Delivered / Closed').length;
-
-      const actEl = document.getElementById('count-active');
-      const penEl = document.getElementById('count-pending');
-      const conEl = document.getElementById('count-confirmed');
-      const disEl = document.getElementById('count-dispatched');
-      const cloEl = document.getElementById('count-closed');
-      const allEl = document.getElementById('count-all');
-      const badgeEl = document.getElementById('ordersBadgeCount');
-
-      if (actEl) actEl.innerText = activeOpen;
-      if (penEl) penEl.innerText = pending;
-      if (conEl) conEl.innerText = confirmed;
-      if (disEl) disEl.innerText = dispatched;
-      if (cloEl) cloEl.innerText = closed;
-      if (allEl) allEl.innerText = allOrders.length;
-      if (badgeEl) badgeEl.innerText = activeOpen;
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+      set('count-active', activeOpen); set('count-pending', pending); set('count-confirmed', confirmed);
+      set('count-dispatched', dispatched); set('count-closed', closed); set('count-all', allOrders.length);
+      set('ordersBadgeCount', activeOpen);
     }
 
     // --- INVENTORY RENDERING ---
@@ -1179,52 +1010,30 @@
         const retailPrice = parseFloat(p.default_sale_price) || 2500;
         const costPrice = parseFloat(p.cost_price_per_unit) || 1750;
         const itemValuationRetail = units * retailPrice;
-        
         if (units > 0) {
           totalStockValueRetail += itemValuationRetail;
           totalUnitsInStock += units;
           unitsBreakdown.push(`${units} ${p.shade_name.replace('Apple Hair Colour – ', '').replace('Apple Hair Colour - ', '')}`);
         }
-
         return `
           <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between space-y-4">
             <div>
               <div class="flex justify-between items-start">
                 <h3 class="text-base font-bold text-slate-900">${p.shade_name}</h3>
-                <span class="text-xs px-2.5 py-1 rounded-full font-bold ${units > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                  ${units > 0 ? units + ' in stock' : 'Out of stock'}
-                </span>
+                <span class="text-xs px-2.5 py-1 rounded-full font-bold ${units > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${units > 0 ? units + ' in stock' : 'Out of stock'}</span>
               </div>
-
               <div class="grid grid-cols-3 gap-2 mt-4 text-center">
-                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  <span class="text-[11px] text-slate-500 block">Retail Price</span>
-                  <span class="text-sm font-bold text-emerald-700">Rs. ${retailPrice.toLocaleString()}</span>
-                </div>
-                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  <span class="text-[11px] text-slate-500 block">Cost Price</span>
-                  <span class="text-sm font-bold text-slate-700">Rs. ${costPrice.toLocaleString()}</span>
-                </div>
-                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  <span class="text-[11px] text-slate-500 block">Current Stock</span>
-                  <span class="text-sm font-bold text-slate-800">${units} units</span>
-                </div>
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-[11px] text-slate-500 block">Retail Price</span><span class="text-sm font-bold text-emerald-700">Rs. ${retailPrice.toLocaleString()}</span></div>
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-[11px] text-slate-500 block">Cost Price</span><span class="text-sm font-bold text-slate-700">Rs. ${costPrice.toLocaleString()}</span></div>
+                <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100"><span class="text-[11px] text-slate-500 block">Current Stock</span><span class="text-sm font-bold text-slate-800">${units} units</span></div>
               </div>
             </div>
-            
             <div class="flex items-center gap-2 pt-2 border-t">
-              <button type="button" onclick="quickEditStockPrompt(${p.id}, ${units}, ${retailPrice})" class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
-                ✏️ Quick Edit
-              </button>
-              <button type="button" onclick="openProductModal(${p.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs transition">
-                ⚙️ Details
-              </button>
-              <button type="button" onclick="deleteProduct(${p.id}, '${p.shade_name.replace(/'/g, "\\'")}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1">
-                🗑 Delete
-              </button>
+              <button type="button" onclick="quickEditStockPrompt(${p.id}, ${units}, ${retailPrice})" class="flex-1 bg-slate-900 hover:bg-black text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm">✏️ Quick Edit</button>
+              <button type="button" onclick="openProductModal(${p.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs transition">⚙️ Details</button>
+              <button type="button" onclick="deleteProduct(${p.id}, '${p.shade_name.replace(/'/g, "\\'")}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center gap-1">🗑 Delete</button>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
 
       const valH = document.getElementById('totalStockValueHeader');
@@ -1236,150 +1045,89 @@
     async function quickEditStockPrompt(prodId, currentUnits, currentPrice) {
       const newStock = prompt(`Update Current Stock Quantity for this shade:`, currentUnits);
       if (newStock === null) return;
-      
       const newPrice = prompt(`Update Retail Selling Price (Rs.):`, currentPrice);
       if (newPrice === null) return;
-
       const parsedStock = parseInt(newStock);
       const parsedPrice = parseFloat(newPrice);
-
-      if (isNaN(parsedStock) || isNaN(parsedPrice)) {
-        return alert("Please enter valid numeric values for stock and price.");
-      }
-
-      const { error } = await client.from('products').update({
-        current_stock: parsedStock,
-        default_sale_price: parsedPrice
-      }).eq('id', prodId);
-
-      if (error) {
-        alert("Error updating product: " + error.message);
-      } else {
-        alert("Stock quantity and price updated successfully!");
-        await loadAllData();
-      }
+      if (isNaN(parsedStock) || isNaN(parsedPrice)) return alert("Please enter valid numeric values for stock and price.");
+      const { error } = await client.from('products').update({ current_stock: parsedStock, default_sale_price: parsedPrice }).eq('id', prodId);
+      if (error) alert("Error updating product: " + error.message);
+      else { alert("Stock quantity and price updated successfully!"); await loadAllData(); }
     }
 
     function openProductModal(prodId) {
       const prod = allProducts.find(p => p.id === prodId);
       if (!prod) return alert("Product not found.");
-
       document.getElementById('editProdId').value = prod.id;
       document.getElementById('editProdName').value = prod.shade_name;
       document.getElementById('editProdSalePrice').value = prod.default_sale_price || 2500;
       document.getElementById('editProdCostPrice').value = prod.cost_price_per_unit || 1750;
       document.getElementById('editProdStock').value = prod.current_stock || 0;
-
       document.getElementById('editProductModal').classList.remove('hidden');
     }
 
-    function closeProductModal() {
-      document.getElementById('editProductModal').classList.add('hidden');
-    }
+    function closeProductModal() { document.getElementById('editProductModal').classList.add('hidden'); }
 
     async function saveProductChanges(e) {
       e.preventDefault();
       const prodId = parseInt(document.getElementById('editProdId').value);
       const btn = document.getElementById('saveProdBtn');
-      btn.disabled = true;
-      btn.innerText = "Saving...";
-
+      btn.disabled = true; btn.innerText = "Saving...";
       const updated = {
         default_sale_price: parseFloat(document.getElementById('editProdSalePrice').value) || 2500,
         current_stock: parseInt(document.getElementById('editProdStock').value) || 0
       };
-
       const costInput = document.getElementById('editProdCostPrice').value;
-      if (costInput !== '') {
-        updated.cost_price_per_unit = parseFloat(costInput) || 1750;
-      }
-
+      if (costInput !== '') updated.cost_price_per_unit = parseFloat(costInput) || 1750;
       const { error } = await client.from('products').update(updated).eq('id', prodId);
-      btn.disabled = false;
-      btn.innerText = "Save Changes";
-
-      if (error) {
-        alert("Error saving: " + error.message);
-      } else {
-        closeProductModal();
-        alert("Product updated successfully!");
-        await loadAllData();
-      }
+      btn.disabled = false; btn.innerText = "Save Changes";
+      if (error) alert("Error saving: " + error.message);
+      else { closeProductModal(); alert("Product updated successfully!"); await loadAllData(); }
     }
 
     async function deleteProduct(prodId, shadeName) {
       if (!confirm(`Are you sure you want to delete "${shadeName}" from inventory?`)) return;
-
       await client.from('sales_orders').update({ product_id: null }).eq('product_id', prodId);
-
       const { error } = await client.from('products').delete().eq('id', prodId);
-      
-      if (error) {
-        alert("Error deleting: " + error.message);
-      } else {
-        alert(`Product "${shadeName}" deleted successfully!`);
-        await loadAllData();
-      }
+      if (error) alert("Error deleting: " + error.message);
+      else { alert(`Product "${shadeName}" deleted successfully!`); await loadAllData(); }
     }
 
     function normalizeShade(s) {
-      return (s || '')
-        .replace(/Apple Hair Colour\s*[-–]\s*/i, '')
-        .trim()
-        .toLowerCase();
+      return (s || '').replace(/Apple Hair Colour\s*[-–]\s*/i, '').trim().toLowerCase();
     }
 
     function renderInventorySummaryTable() {
       const tbody = document.getElementById('inventorySummaryTableBody');
       const tfoot = document.getElementById('inventorySummaryTableFoot');
       if (!tbody) return;
-
       if (allProducts.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">No products recorded.</td></tr>`;
         return;
       }
-
-      let grandAvailableUnits = 0;
-      let grandSoldUnits = 0;
-      let grandValuation = 0;
+      let grandAvailableUnits = 0, grandSoldUnits = 0, grandValuation = 0;
 
       tbody.innerHTML = allProducts.map(p => {
         const available = parseInt(p.current_stock) || 0;
         const retail = parseFloat(p.default_sale_price) || 2500;
         const valuation = available * retail;
         const targetClean = normalizeShade(p.shade_name);
-
         let sold = 0;
         allOrders.forEach(o => {
           if (o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed') {
-            if (o.product_id === p.id) {
-              sold += (o.quantity || 1);
-            } else {
-              const orderClean = normalizeShade(o.shade_name);
-              if (orderClean === targetClean) {
-                sold += (o.quantity || 1);
-              }
-            }
+            if (o.product_id === p.id) sold += (o.quantity || 1);
+            else if (normalizeShade(o.shade_name) === targetClean) sold += (o.quantity || 1);
           }
         });
-
-        grandAvailableUnits += available;
-        grandSoldUnits += sold;
-        grandValuation += valuation;
-
+        grandAvailableUnits += available; grandSoldUnits += sold; grandValuation += valuation;
         return `
           <tr class="hover:bg-slate-50 transition border-b">
             <td class="py-3 px-3 font-bold text-slate-800">${p.shade_name}</td>
-            <td class="py-3 px-3 text-center">
-              <span class="px-2.5 py-0.5 rounded-full font-black text-xs ${available > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'}">
-                ${available} units
-              </span>
-            </td>
+            <td class="py-3 px-3 text-center"><span class="px-2.5 py-0.5 rounded-full font-black text-xs ${available > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'}">${available} units</span></td>
             <td class="py-3 px-3 text-center font-black text-blue-700">${sold} units</td>
             <td class="py-3 px-3 text-right font-bold text-slate-700">Rs. ${retail.toLocaleString()}</td>
             <td class="py-3 px-3 text-right font-black text-emerald-700">Rs. ${valuation.toLocaleString()}</td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
 
       if (tfoot) {
@@ -1390,8 +1138,7 @@
             <td class="py-3 px-3 text-center text-blue-800 text-sm">${grandSoldUnits} Dispatched</td>
             <td class="py-3 px-3 text-right text-xs text-slate-400">—</td>
             <td class="py-3 px-3 text-right text-emerald-700 text-base">Rs. ${grandValuation.toLocaleString()}</td>
-          </tr>
-        `;
+          </tr>`;
       }
     }
 
@@ -1407,20 +1154,13 @@
     function autoFillPrice() {
       const select = document.getElementById('manualShadeSelect');
       if (!select) return;
-      const selected = select.options[select.selectedIndex];
-      if (selected) {
-        autoAdjustDeliveryPrice();
-      }
+      if (select.options[select.selectedIndex]) autoAdjustDeliveryPrice();
     }
 
     function autoAdjustDeliveryPrice() {
       const dispatch = document.getElementById('manualDispatchThrough').value;
       const priceInput = document.getElementById('manualPrice');
-      if (dispatch === 'Courier') {
-        priceInput.value = 2800; // Base 2500 + 300 Delivery
-      } else {
-        priceInput.value = 2500; // Free in-person Hyderabad
-      }
+      priceInput.value = dispatch === 'Courier' ? 2800 : 2500;
       calcManualTotal();
     }
 
@@ -1435,7 +1175,6 @@
       e.preventDefault();
       const btn = document.getElementById('saveManualSaleBtn');
       btn.disabled = true;
-
       const prodId = parseInt(document.getElementById('manualShadeSelect').value);
       const prod = allProducts.find(p => p.id === prodId);
       const qty = parseInt(document.getElementById('manualQty').value);
@@ -1445,7 +1184,6 @@
       const address = document.getElementById('manualAddress').value.trim();
       const orderSource = document.getElementById('manualOrderReceivedBy').value;
       const dispatchRoute = document.getElementById('manualDispatchThrough').value;
-
       const fullShippingDetails = email ? `${address} [Email: ${email}]` : address;
 
       const payload = {
@@ -1466,7 +1204,6 @@
 
       const { error } = await client.from('sales_orders').insert([payload]);
       btn.disabled = false;
-
       if (error) alert("Error recording order: " + error.message);
       else {
         alert("Order recorded successfully!");
@@ -1480,44 +1217,29 @@
       e.preventDefault();
       const btn = document.getElementById('saveInwardBtn');
       btn.disabled = true;
-
       const prodId = parseInt(document.getElementById('inwardShadeSelect').value);
       const qty = parseInt(document.getElementById('inwardQty').value);
       const cost = parseFloat(document.getElementById('inwardCostPrice').value) || 1750;
-
       const prod = allProducts.find(p => p.id === prodId);
       if (prod) {
         const newStock = (prod.current_stock || 0) + qty;
-        const updatePayload = { current_stock: newStock, cost_price_per_unit: cost };
-
-        const { error } = await client.from('products').update(updatePayload).eq('id', prodId);
+        const { error } = await client.from('products').update({ current_stock: newStock, cost_price_per_unit: cost }).eq('id', prodId);
         btn.disabled = false;
         if (error) alert("Error: " + error.message);
-        else {
-          alert(`Added ${qty} units to ${prod.shade_name}!`);
-          switchTab('inventory');
-          await loadAllData();
-        }
-      }
+        else { alert(`Added ${qty} units to ${prod.shade_name}!`); switchTab('inventory'); await loadAllData(); }
+      } else { btn.disabled = false; }
     }
 
-    // --- ORDERS LIST (PAGE 2) ---
+    // --- ORDERS LIST ---
     function renderOrders() {
       const container = document.getElementById('ordersCardsList');
       if (!container) return;
       let filtered = allOrders;
-
-      if (currentFilter === 'Active / Open') {
-        filtered = allOrders.filter(o => o.order_status !== 'Delivered / Closed' && o.order_status !== 'Cancelled');
-      } else if (currentFilter === 'Pending') {
-        filtered = allOrders.filter(o => o.order_status === 'Advance Booking' || o.order_status === 'Pending');
-      } else if (currentFilter === 'Confirmed') {
-        filtered = allOrders.filter(o => o.order_status === 'Confirmed');
-      } else if (currentFilter === 'Dispatched') {
-        filtered = allOrders.filter(o => o.order_status === 'Dispatched');
-      } else if (currentFilter === 'Closed') {
-        filtered = allOrders.filter(o => o.order_status === 'Delivered / Closed');
-      }
+      if (currentFilter === 'Active / Open') filtered = allOrders.filter(o => o.order_status !== 'Delivered / Closed' && o.order_status !== 'Cancelled');
+      else if (currentFilter === 'Pending') filtered = allOrders.filter(o => o.order_status === 'Advance Booking' || o.order_status === 'Pending');
+      else if (currentFilter === 'Confirmed') filtered = allOrders.filter(o => o.order_status === 'Confirmed');
+      else if (currentFilter === 'Dispatched') filtered = allOrders.filter(o => o.order_status === 'Dispatched');
+      else if (currentFilter === 'Closed') filtered = allOrders.filter(o => o.order_status === 'Delivered / Closed');
 
       if (filtered.length === 0) {
         container.innerHTML = `<div class="p-12 text-center text-slate-400 bg-slate-50 rounded-xl border border-slate-200">No orders found in this view.</div>`;
@@ -1545,9 +1267,7 @@
                 <div class="flex items-center gap-2">
                   <h3 class="text-base font-bold text-slate-900">${order.customer_name || 'Customer'}</h3>
                   <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${badgeBg}">${order.order_status || 'Advance Booking'}</span>
-                  <span class="text-xs px-2 py-0.5 rounded-full font-bold ${isCourier ? 'bg-blue-50 text-blue-800 border border-blue-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}">
-                    ${isCourier ? '📦 Courier' : '🛵 In-Person'}
-                  </span>
+                  <span class="text-xs px-2 py-0.5 rounded-full font-bold ${isCourier ? 'bg-blue-50 text-blue-800 border border-blue-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}">${isCourier ? '📦 Courier' : '🛵 In-Person'}</span>
                 </div>
                 <p class="text-xs text-slate-400 mt-0.5">Placed: ${order.created_at ? new Date(order.created_at).toLocaleString() : 'Recent'} • Ref: #${order.id}</p>
               </div>
@@ -1562,17 +1282,11 @@
                 <p><span class="font-semibold text-slate-500">Phone:</span> <span class="font-bold text-slate-800">${order.customer_phone || 'N/A'}</span></p>
                 <p><span class="font-semibold text-slate-500">Address:</span> <span class="font-normal text-slate-700">${order.customer_address || 'N/A'}</span></p>
                 <p><span class="font-semibold text-slate-500">Acquisition Source:</span> <span class="font-bold text-indigo-700">${order.sold_by || 'Online Storefront'}</span></p>
-                
                 <div class="flex items-center gap-2 pt-2">
-                  <a href="https://wa.me/${formattedPhone}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1 shadow-sm">
-                    💬 WhatsApp
-                  </a>
-                  <a href="tel:${order.customer_phone}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1">
-                    📞 Call
-                  </a>
+                  <a href="https://wa.me/${formattedPhone}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1 shadow-sm">💬 WhatsApp</a>
+                  <a href="tel:${order.customer_phone}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold inline-flex items-center gap-1">📞 Call</a>
                 </div>
               </div>
-
               <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-100 flex flex-col justify-between">
                 <div>
                   <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">ORDER ITEMS & ROUTE:</span>
@@ -1588,57 +1302,22 @@
             </div>
 
             <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
-              <button onclick="openConvertModal(${order.id})" class="bg-purple-700 hover:bg-purple-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
-                📅 Convert to Installment
-              </button>
-
-              <button onclick="openEditOrderModal(${order.id})" class="bg-[#d97706] hover:bg-[#b45309] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
-                ✏️ Edit
-              </button>
-
-              ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' && order.order_status !== 'Delivered / Closed' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  ✓ Confirm
-                </button>
-              ` : ''}
-
-              ${order.order_status !== 'Dispatched' && order.order_status !== 'Delivered / Closed' ? `
-                <button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  🚚 Dispatch
-                </button>
-              ` : ''}
-
-              ${order.order_status === 'Dispatched' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Delivered / Closed')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                  ✓ Close Order (Delivered)
-                </button>
-              ` : ''}
-
-              ${isClosed ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition">
-                  Re-open
-                </button>
-              ` : ''}
-
-              ${order.order_status !== 'Cancelled' ? `
-                <button onclick="updateOrderStatus(${order.id}, 'Cancelled')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-2 rounded-xl text-xs font-bold border border-rose-200 transition">
-                  Cancel
-                </button>
-              ` : ''}
-
-              <button onclick="deleteOrder(${order.id})" class="bg-slate-100 text-slate-500 hover:bg-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">
-                🗑
-              </button>
+              <button onclick="openConvertModal(${order.id})" class="bg-purple-700 hover:bg-purple-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">📅 Convert to Installment</button>
+              <button onclick="openEditOrderModal(${order.id})" class="bg-[#d97706] hover:bg-[#b45309] text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">✏️ Edit</button>
+              ${order.order_status !== 'Confirmed' && order.order_status !== 'Dispatched' && order.order_status !== 'Delivered / Closed' ? `<button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">✓ Confirm</button>` : ''}
+              ${order.order_status !== 'Dispatched' && order.order_status !== 'Delivered / Closed' ? `<button onclick="dispatchOrder(${order.id}, ${order.product_id}, ${order.quantity})" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">🚚 Dispatch</button>` : ''}
+              ${order.order_status === 'Dispatched' ? `<button onclick="updateOrderStatus(${order.id}, 'Delivered / Closed')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">✓ Close Order (Delivered)</button>` : ''}
+              ${isClosed ? `<button onclick="updateOrderStatus(${order.id}, 'Confirmed')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition">Re-open</button>` : ''}
+              ${order.order_status !== 'Cancelled' ? `<button onclick="updateOrderStatus(${order.id}, 'Cancelled')" class="bg-rose-50 text-rose-600 hover:bg-rose-100 px-3 py-2 rounded-xl text-xs font-bold border border-rose-200 transition">Cancel</button>` : ''}
+              <button onclick="deleteOrder(${order.id})" class="bg-slate-100 text-slate-500 hover:bg-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition">🗑</button>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
     }
 
     function openConvertModal(orderId) {
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
-
       const total = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
       document.getElementById('convOrderId').value = order.id;
       document.getElementById('convCustName').value = order.customer_name || '';
@@ -1646,18 +1325,14 @@
       document.getElementById('convCustAddress').value = order.customer_address || '';
       document.getElementById('convTotalBill').value = total;
       document.getElementById('convAdvance').value = 0;
-      
       const nextDue = new Date();
       nextDue.setDate(nextDue.getDate() + 15);
       document.getElementById('convDueDate').value = nextDue.toISOString().split('T')[0];
-
       calcConvertRemaining();
       document.getElementById('convertInstallmentModal').classList.remove('hidden');
     }
 
-    function closeConvertModal() {
-      document.getElementById('convertInstallmentModal').classList.add('hidden');
-    }
+    function closeConvertModal() { document.getElementById('convertInstallmentModal').classList.add('hidden'); }
 
     function calcConvertRemaining() {
       const tot = parseFloat(document.getElementById('convTotalBill').value) || 0;
@@ -1671,7 +1346,6 @@
       const total = parseFloat(document.getElementById('convTotalBill').value) || 0;
       const advance = parseFloat(document.getElementById('convAdvance').value) || 0;
       const remaining = Math.max(0, total - advance);
-
       const payload = {
         customer_name: document.getElementById('convCustName').value.trim(),
         customer_phone: document.getElementById('convCustPhone').value.trim(),
@@ -1683,15 +1357,9 @@
         installment_status: remaining === 0 ? 'Completed' : 'Active',
         notes: `Converted from Order #${orderId}`
       };
-
       const { error: instErr } = await client.from('installment_orders').insert([payload]);
       if (instErr) return alert("Error converting: " + instErr.message);
-
-      await client.from('sales_orders').update({
-        order_status: 'Confirmed',
-        notes: 'Converted to Installment Plan'
-      }).eq('id', orderId);
-
+      await client.from('sales_orders').update({ order_status: 'Confirmed', notes: 'Converted to Installment Plan' }).eq('id', orderId);
       closeConvertModal();
       alert("Order converted to Installment Plan successfully!");
       await loadAllData();
@@ -1701,7 +1369,6 @@
     function openEditOrderModal(orderId) {
       const order = allOrders.find(o => o.id === orderId);
       if (!order) return;
-
       document.getElementById('editOrderId').value = order.id;
       document.getElementById('editOrderRefDisplay').innerText = `Ref: #${order.id} • ${order.shade_name}`;
       document.getElementById('editCustName').value = order.customer_name || '';
@@ -1711,10 +1378,8 @@
       document.getElementById('editOrderPrice').value = order.sold_price_per_unit || 2500;
       document.getElementById('editOrderTotal').value = order.total_amount || (order.quantity * (order.sold_price_per_unit || 2500));
       document.getElementById('editOrderStatus').value = order.order_status || 'Advance Booking';
-
       const isCourier = (order.delivery_channel || '').toLowerCase().includes('courier');
       document.getElementById('editDispatchThrough').value = isCourier ? 'Courier' : 'InPerson';
-
       const soldByStr = (order.sold_by || '').toLowerCase();
       let src = 'WhatsApp';
       if (soldByStr.includes('facebook')) src = 'Facebook';
@@ -1723,13 +1388,10 @@
       else if (soldByStr.includes('tiktok')) src = 'TikTok';
       else if (soldByStr.includes('twitter')) src = 'Twitter';
       document.getElementById('editOrderReceivedBy').value = src;
-
       document.getElementById('editOrderModal').classList.remove('hidden');
     }
 
-    function closeOrderModal() {
-      document.getElementById('editOrderModal').classList.add('hidden');
-    }
+    function closeOrderModal() { document.getElementById('editOrderModal').classList.add('hidden'); }
 
     function recalcOrderTotal() {
       const qty = parseFloat(document.getElementById('editOrderQty').value) || 0;
@@ -1741,12 +1403,9 @@
       e.preventDefault();
       const orderId = parseInt(document.getElementById('editOrderId').value);
       const btn = document.getElementById('saveOrderBtn');
-      btn.innerText = "Saving...";
-      btn.disabled = true;
-
+      btn.innerText = "Saving..."; btn.disabled = true;
       const orderSource = document.getElementById('editOrderReceivedBy').value;
       const dispatchRoute = document.getElementById('editDispatchThrough').value;
-
       const updatedPayload = {
         customer_name: document.getElementById('editCustName').value.trim(),
         customer_phone: document.getElementById('editCustPhone').value.trim(),
@@ -1758,16 +1417,10 @@
         sold_by: `Partner (${orderSource})`,
         delivery_channel: dispatchRoute === 'Courier' ? 'Courier Service' : 'Hyderabad In-Person'
       };
-
       const { error } = await client.from('sales_orders').update(updatedPayload).eq('id', orderId);
-      btn.innerText = "Save Order Changes";
-      btn.disabled = false;
-
+      btn.innerText = "Save Order Changes"; btn.disabled = false;
       if (error) alert("Error updating order: " + error.message);
-      else {
-        closeOrderModal();
-        await loadAllData();
-      }
+      else { closeOrderModal(); await loadAllData(); }
     }
 
     async function updateOrderStatus(orderId, newStatus) {
@@ -1779,20 +1432,16 @@
 
     async function dispatchOrder(orderId, productId, qty) {
       if (!confirm(`Confirm dispatch of ${qty} unit(s)? This will deduct ${qty} from your inventory stock.`)) return;
-
       const prod = allProducts.find(p => p.id === productId);
       if (prod && prod.current_stock < qty) {
         if (!confirm(`Warning: Only ${prod.current_stock} units left in stock. Deduct anyway?`)) return;
       }
-
       const { error: orderErr } = await client.from('sales_orders').update({ order_status: 'Dispatched' }).eq('id', orderId);
       if (orderErr) return alert("Error: " + orderErr.message);
-
       if (prod) {
         const newStock = Math.max(0, (prod.current_stock || 0) - qty);
         await client.from('products').update({ current_stock: newStock }).eq('id', productId);
       }
-
       await loadAllData();
       alert("Order marked as Dispatched and inventory stock updated!");
     }
@@ -1804,95 +1453,49 @@
       else await loadAllData();
     }
 
-    // --- ANALYTICS CALCULATIONS ---
+    // --- ANALYTICS (RECEIVED-ONLY LOGIC) ---
     function updateAnalytics() {
-      let totalSalesBooked = 0;
-      let netGrossProfit = 0;
-      let inPersonCash = 0;
-      let courierNetCash = 0;
-      let pendingCashCollection = 0;
-      let stockValueRetail = 0;
+      let totalSales = 0, inPersonCash = 0, courierNetCash = 0, pendingCash = 0, stockValueRetail = 0;
+      let black = 0, brown = 0, pendingCnt = 0, confirmedCnt = 0, dispatchedCnt = 0;
 
-      let shadeBlackCount = 0;
-      let shadeBrownCount = 0;
-      let pendingOrdersCount = 0;
-      let confirmedOrdersCount = 0;
-      let dispatchedOrdersCount = 0;
-
-      allOrders.forEach(order => {
-        const orderTotal = parseFloat(order.total_amount) || (order.quantity * (order.sold_price_per_unit || 2500));
-        const shade = (order.shade_name || '').toLowerCase();
-        const payStatus = order.payment_status || 'Pending';
-        const route = (order.delivery_channel || '').toLowerCase();
-        const isCourier = route.includes('courier');
-
-        if (order.order_status !== 'Cancelled') {
-          totalSalesBooked += orderTotal;
-
-          const prod = allProducts.find(p => p.id === order.product_id);
-          const cost = prod ? (parseFloat(prod.cost_price_per_unit) || 1750) : 1750;
-          netGrossProfit += orderTotal - ((order.quantity || 1) * cost);
-
-          if (shade.includes('black')) shadeBlackCount += (order.quantity || 1);
-          if (shade.includes('dark brown')) shadeBrownCount += (order.quantity || 1);
+      allOrders.forEach(o => {
+        const shade = (o.shade_name || '').toLowerCase();
+        const q = parseInt(o.quantity) || 1;
+        if (o.order_status !== 'Cancelled') {
+          if (shade.includes('black')) black += q;
+          if (shade.includes('dark brown')) brown += q;
         }
+        if (o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed') dispatchedCnt++;
+        else if (o.order_status === 'Confirmed') confirmedCnt++;
+        else if (o.order_status === 'Advance Booking' || o.order_status === 'Pending') pendingCnt++;
 
-        if (order.order_status === 'Dispatched' || order.order_status === 'Delivered / Closed') dispatchedOrdersCount++;
-        else if (order.order_status === 'Confirmed') confirmedOrdersCount++;
-        else if (order.order_status === 'Advance Booking' || order.order_status === 'Pending') pendingOrdersCount++;
-
-        if (payStatus === 'Received') {
-          if (isCourier) {
-            let collected = order.received_cash_amount !== null && order.received_cash_amount !== undefined 
-              ? parseFloat(order.received_cash_amount) 
-              : orderTotal;
-            // Exact 4% Courier Deduction: Rs. 112 on Rs. 2,800 -> Net Rs. 2,688
-            let netCourierAmt = collected - Math.round(collected * 0.04);
-            courierNetCash += netCourierAmt;
-          } else {
-            let collectedHyd = order.received_cash_amount !== null && order.received_cash_amount !== undefined 
-              ? parseFloat(order.received_cash_amount) 
-              : orderTotal;
-            inPersonCash += collectedHyd;
-          }
-        } else {
-          pendingCashCollection += orderTotal;
-        }
+        if (!SETTLEMENT_STATUSES.includes(o.order_status)) return;
+        const m = orderMoney(o);
+        totalSales += m.total;
+        pendingCash += m.pending;
+        if (m.isCourier) courierNetCash += m.net; else inPersonCash += m.net;
       });
 
-      allInstallments.forEach(inst => {
-        const adv = parseFloat(inst.advance_amount) || 0;
-        const rem = parseFloat(inst.remaining_amount) || 0;
-        const tot = parseFloat(inst.total_amount) || 0;
-
-        inPersonCash += adv;
-        pendingCashCollection += rem;
-        totalSalesBooked += tot;
+      allInstallments.forEach(i => {
+        totalSales += parseFloat(i.total_amount) || 0;
+        inPersonCash += parseFloat(i.advance_amount) || 0;
+        pendingCash += parseFloat(i.remaining_amount) || 0;
       });
 
-      allProducts.forEach(prod => {
-        const currentQty = parseInt(prod.current_stock) || 0;
-        const currentPrice = parseFloat(prod.default_sale_price) || 2500;
-        stockValueRetail += currentQty * currentPrice;
+      allProducts.forEach(p => {
+        stockValueRetail += (parseInt(p.current_stock) || 0) * (parseFloat(p.default_sale_price) || 2500);
       });
 
-      const grandNetCashReceived = inPersonCash + courierNetCash;
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = rs(v); };
+      set('statStockValuePKR', stockValueRetail);
+      set('statTotalSales', totalSales);
+      set('statTotalCashReceived', inPersonCash + courierNetCash);
+      set('statCashInPerson', inPersonCash);
+      set('statCashCourier', courierNetCash);
+      set('statPendingValue', pendingCash);
 
-      const svEl = document.getElementById('statStockValuePKR');
-      const tsEl = document.getElementById('statTotalSales');
-      const crEl = document.getElementById('statTotalCashReceived');
-      const cipEl = document.getElementById('statCashInPerson');
-      const ccEl = document.getElementById('statCashCourier');
-      const pvEl = document.getElementById('statPendingValue');
-
-      if (svEl) svEl.innerText = 'Rs. ' + stockValueRetail.toLocaleString();
-      if (tsEl) tsEl.innerText = 'Rs. ' + totalSalesBooked.toLocaleString();
-      if (crEl) crEl.innerText = 'Rs. ' + grandNetCashReceived.toLocaleString();
-      if (cipEl) cipEl.innerText = 'Rs. ' + inPersonCash.toLocaleString();
-      if (ccEl) ccEl.innerText = 'Rs. ' + courierNetCash.toLocaleString();
-      if (pvEl) pvEl.innerText = 'Rs. ' + pendingCashCollection.toLocaleString();
-
-      renderAnalyticsCharts(pendingOrdersCount, confirmedOrdersCount, dispatchedOrdersCount, shadeBlackCount, shadeBrownCount);
+      renderAnalyticsCharts(pendingCnt, confirmedCnt, dispatchedCnt, black, brown);
+      renderExpenses();
     }
 
     function renderAnalyticsCharts(pending, confirmed, dispatched, blackCount, brownCount) {
@@ -1905,82 +1508,47 @@
             type: 'bar',
             data: {
               labels: ['Pending / Advance', 'Confirmed', 'Dispatched / Closed'],
-              datasets: [{
-                label: 'Orders Count',
-                data: [pending, confirmed, dispatched],
-                backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'],
-                borderRadius: 8
-              }]
+              datasets: [{ label: 'Orders Count', data: [pending, confirmed, dispatched], backgroundColor: ['#f59e0b', '#3b82f6', '#10b981'], borderRadius: 8 }]
             },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { display: false } },
-              scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
           });
         }
-
         const canvas2 = document.getElementById('shadeBreakdownChart');
         if (canvas2 && canvas2.offsetParent !== null) {
           const ctx2 = canvas2.getContext('2d');
           if (shadeChartInstance) shadeChartInstance.destroy();
-
           const totalShades = blackCount + brownCount;
           const dataValues = totalShades > 0 ? [blackCount, brownCount] : [1, 1];
-
           shadeChartInstance = new Chart(ctx2, {
             type: 'doughnut',
-            data: {
-              labels: ['Natural Black', 'Dark Brown'],
-              datasets: [{
-                data: dataValues,
-                backgroundColor: ['#0f172a', '#b45309']
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { position: 'bottom' } }
-            }
+            data: { labels: ['Natural Black', 'Dark Brown'], datasets: [{ data: dataValues, backgroundColor: ['#0f172a', '#b45309'] }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
           });
         }
-      } catch (err) {
-        console.warn("Chart render skipped:", err);
-      }
+      } catch (err) { console.warn("Chart render skipped:", err); }
     }
 
-    // --- EXACT 4% (RS. 112 ON 2800, RS. 100 ON 2500) RECALCULATIONS ---
+    // --- 4% COURIER RECALCULATIONS ---
     function updateRowCalculations(orderId, totalBill) {
       const channelSelect = document.getElementById(`deliveryChannel-${orderId}`);
       const isCourier = channelSelect ? channelSelect.value.includes('Courier') : false;
-
       const cashInput = document.getElementById(`cashInput-${orderId}`);
       const collectedVal = parseFloat(cashInput.value) || 0;
-
-      let taxVal = 0;
-      let netVal = collectedVal;
-
+      let taxVal = 0, netVal = collectedVal;
       if (isCourier && collectedVal > 0) {
-        // Direct 4% deduction: Rs. 112 on Rs. 2,800, Rs. 100 on Rs. 2,500
         taxVal = Math.round(collectedVal * 0.04);
         netVal = collectedVal - taxVal;
       }
-
       const taxEl = document.getElementById(`taxDisplay-${orderId}`);
       const netEl = document.getElementById(`netDisplay-${orderId}`);
       if (taxEl) taxEl.innerText = isCourier ? `Rs. ${taxVal}` : `Rs. 0`;
       if (netEl) netEl.innerText = `Rs. ${netVal.toLocaleString()}`;
-
       const remDisplay = document.getElementById(`remainingCashDisplay-${orderId}`);
       const remaining = Math.max(0, totalBill - collectedVal);
-
       if (remDisplay) {
-        if (remaining === 0) {
-          remDisplay.innerHTML = `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>`;
-        } else {
-          remDisplay.innerHTML = `<span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md font-black text-xs">Rs. ${remaining.toLocaleString()}</span>`;
-        }
+        remDisplay.innerHTML = remaining === 0
+          ? `<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>`
+          : `<span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md font-black text-xs">Rs. ${remaining.toLocaleString()}</span>`;
       }
     }
 
@@ -1988,8 +1556,8 @@
       const tbody = document.getElementById('confirmedCustomersTableBody');
       const badge = document.getElementById('confirmedCustomersBadge');
       if (!tbody) return;
-      
-      let confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed');
+
+      let confirmedList = allOrders.filter(o => SETTLEMENT_STATUSES.includes(o.order_status));
 
       if (customerRouteFilter === 'InPerson') {
         confirmedList = confirmedList.filter(o => (o.delivery_channel || '').toLowerCase().includes('in-person') || (o.delivery_channel || '').toLowerCase().includes('hyderabad'));
@@ -2013,23 +1581,18 @@
         const formattedPhone = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
         const total = o.total_amount || (o.quantity * (o.sold_price_per_unit || 2500));
         const paymentStatus = o.payment_status || 'Pending';
-        const deliveryChannel = o.delivery_channel || ( (o.customer_address || '').toLowerCase().includes('hyderabad') ? 'Hyderabad In-Person' : 'Courier Service' );
+        const deliveryChannel = o.delivery_channel || ((o.customer_address || '').toLowerCase().includes('hyderabad') ? 'Hyderabad In-Person' : 'Courier Service');
         const isCourier = deliveryChannel.toLowerCase().includes('courier');
 
         let initialReceivedVal = (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : '';
-        if (paymentStatus === 'Received' && (initialReceivedVal === '' || initialReceivedVal === null)) {
-          initialReceivedVal = total;
-        }
+        if (paymentStatus === 'Received' && (initialReceivedVal === '' || initialReceivedVal === null)) initialReceivedVal = total;
 
         const collectedNum = parseFloat(initialReceivedVal) || 0;
         let taxNum = 0;
-        if (isCourier && collectedNum > 0) {
-          taxNum = Math.round(collectedNum * 0.04);
-        }
+        if (isCourier && collectedNum > 0) taxNum = Math.round(collectedNum * 0.04);
         const netNum = collectedNum - taxNum;
         const remaining = Math.max(0, total - collectedNum);
 
-        // Extract received platform from string if available
         let src = 'WhatsApp';
         const soldByLower = (o.sold_by || '').toLowerCase();
         if (soldByLower.includes('facebook')) src = 'Facebook';
@@ -2050,69 +1613,46 @@
               </div>
               <p class="text-[11px] text-slate-400 truncate max-w-xs mt-0.5" title="${o.customer_address || ''}">${o.customer_address || ''}</p>
             </td>
-
-            <td class="py-3 px-3">
-              <span class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-2 py-0.5 rounded-md text-xs">
-                ${src}
-              </span>
-            </td>
-
+            <td class="py-3 px-3"><span class="bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold px-2 py-0.5 rounded-md text-xs">${src}</span></td>
             <td class="py-3 px-3">
               <p class="font-black text-emerald-700 text-sm">Rs. ${Number(total).toLocaleString()}</p>
               <span class="text-[10px] text-slate-400 font-semibold block">${o.shade_name || 'Apple Colour'} (${o.quantity} units)</span>
             </td>
-
             <td class="py-3 px-3">
               <select id="deliveryChannel-${o.id}" onchange="updateDeliveryChannel(${o.id}, this.value, ${total})" class="border rounded-lg px-2 py-1 text-xs font-semibold bg-white">
                 <option value="Hyderabad In-Person" ${!isCourier ? 'selected' : ''}>🛵 In-Person (Hyderabad)</option>
                 <option value="Courier Service" ${isCourier ? 'selected' : ''}>📦 Courier Service</option>
               </select>
             </td>
-
             <td class="py-3 px-3">
               <select id="statusSelect-${o.id}" onchange="handlePaymentStatusToggle(${o.id}, ${total}, this.value)" class="border rounded-lg px-2.5 py-1 text-xs font-bold ${paymentStatus === 'Received' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' : 'bg-amber-50 text-amber-800 border-amber-300'}">
                 <option value="Pending" ${paymentStatus === 'Pending' ? 'selected' : ''}>⏳ Pending</option>
                 <option value="Received" ${paymentStatus === 'Received' ? 'selected' : ''}>✅ Received</option>
               </select>
             </td>
-
             <td class="py-3 px-3">
               <div class="flex items-center gap-1">
                 <span class="text-xs font-bold text-slate-400">Rs.</span>
                 <input type="number" id="cashInput-${o.id}" value="${initialReceivedVal}" oninput="updateRowCalculations(${o.id}, ${total})" placeholder="${total}" class="w-20 border border-slate-300 rounded-lg px-2 py-1 text-xs font-bold text-slate-800 focus:outline-emerald-600 bg-white" />
               </div>
             </td>
-
-            <td class="py-3 px-3 font-semibold text-rose-600 text-xs" id="taxDisplay-${o.id}">
-              Rs. ${taxNum.toLocaleString()}
-            </td>
-
-            <td class="py-3 px-3 font-black text-emerald-700 text-xs" id="netDisplay-${o.id}">
-              Rs. ${netNum.toLocaleString()}
-            </td>
-
+            <td class="py-3 px-3 font-semibold text-rose-600 text-xs" id="taxDisplay-${o.id}">Rs. ${taxNum.toLocaleString()}</td>
+            <td class="py-3 px-3 font-black text-emerald-700 text-xs" id="netDisplay-${o.id}">Rs. ${netNum.toLocaleString()}</td>
             <td class="py-3 px-3" id="remainingCashDisplay-${o.id}">
-              ${remaining === 0 
-                ? '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>' 
-                : `<span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md font-black text-xs">Rs. ${remaining.toLocaleString()}</span>`
-              }
+              ${remaining === 0
+                ? '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-black text-xs">Rs. 0 (Paid)</span>'
+                : `<span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded-md font-black text-xs">Rs. ${remaining.toLocaleString()}</span>`}
             </td>
-
             <td class="py-3 px-3 text-center no-print">
-              <button id="saveBtn-${o.id}" onclick="saveOrderPaymentRow(${o.id}, ${total})" class="bg-slate-900 hover:bg-black text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1 mx-auto">
-                💾 Save
-              </button>
+              <button id="saveBtn-${o.id}" onclick="saveOrderPaymentRow(${o.id}, ${total})" class="bg-slate-900 hover:bg-black text-white px-3.5 py-1.5 rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1 mx-auto">💾 Save</button>
             </td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
     }
 
     function handlePaymentStatusToggle(orderId, totalBill, status) {
       const cashInput = document.getElementById(`cashInput-${orderId}`);
-      if (status === 'Received' && (!cashInput.value || parseFloat(cashInput.value) === 0)) {
-        cashInput.value = totalBill;
-      }
+      if (status === 'Received' && (!cashInput.value || parseFloat(cashInput.value) === 0)) cashInput.value = totalBill;
       updateRowCalculations(orderId, totalBill);
     }
 
@@ -2125,15 +1665,13 @@
 
     async function saveOrderPaymentRow(orderId, defaultTotal) {
       const btn = document.getElementById(`saveBtn-${orderId}`);
-      btn.innerText = "⏳ Saving...";
-      btn.disabled = true;
+      btn.innerText = "⏳ Saving..."; btn.disabled = true;
 
-      const statusSelect = document.getElementById(`statusSelect-${orderId}`);
-      const newStatus = statusSelect.value;
+      const newStatus = document.getElementById(`statusSelect-${orderId}`).value;
       const cashInput = document.getElementById(`cashInput-${orderId}`);
       const channelSelect = document.getElementById(`deliveryChannel-${orderId}`);
       const isCourier = channelSelect ? channelSelect.value.includes('Courier') : false;
-      
+
       let amountVal = cashInput.value !== '' ? parseFloat(cashInput.value) : null;
       if (newStatus === 'Received' && (amountVal === null || isNaN(amountVal))) {
         amountVal = defaultTotal;
@@ -2141,17 +1679,14 @@
       }
 
       const collectedNum = amountVal || 0;
-      let taxAmount = 0;
-      let netPayout = collectedNum;
-
+      let taxAmount = 0, netPayout = collectedNum;
       if (isCourier && collectedNum > 0) {
         taxAmount = Math.round(collectedNum * 0.04);
         netPayout = collectedNum - taxAmount;
       }
-
       const remainingAmount = Math.max(0, defaultTotal - collectedNum);
 
-      const updateData = { 
+      const updateData = {
         payment_status: newStatus,
         received_cash_amount: amountVal,
         courier_tax_deduction: taxAmount,
@@ -2160,7 +1695,6 @@
       };
 
       const { error } = await client.from('sales_orders').update(updateData).eq('id', orderId);
-
       btn.disabled = false;
       if (error) {
         btn.innerText = "💾 Save";
@@ -2168,7 +1702,6 @@
       } else {
         btn.innerText = "✓ Saved!";
         setTimeout(() => { btn.innerText = "💾 Save"; }, 1500);
-
         const order = allOrders.find(o => o.id === orderId);
         if (order) {
           order.payment_status = newStatus;
@@ -2177,14 +1710,12 @@
           order.net_payout_amount = netPayout;
           order.remaining_cash_amount = remainingAmount;
         }
-
         updateRowCalculations(orderId, defaultTotal);
         updateAnalytics();
-        renderExpenses();
       }
     }
 
-    // --- ACCOUNTS & EXPENSES (WITH 1750 UNIT COST & REINVESTMENT PROFIT) ---
+    // --- ACCOUNTS & EXPENSES (RECEIVED-ONLY PROFIT & REINVESTMENT) ---
     function handleExpenseTypeChange() {
       const type = document.getElementById('expenseType').value;
       const specifyDiv = document.getElementById('specifyDetailDiv');
@@ -2192,34 +1723,20 @@
       const marketingPlatformDiv = document.getElementById('marketingPlatformDiv');
       const regularPaidByDiv = document.getElementById('regularPaidByDiv');
 
-      if (type === 'Other Payment') {
-        specifyDiv.classList.remove('hidden');
-        document.getElementById('expenseSpecifyDesc').required = true;
-      } else {
-        specifyDiv.classList.add('hidden');
-        document.getElementById('expenseSpecifyDesc').required = false;
-      }
+      if (type === 'Other Payment') { specifyDiv.classList.remove('hidden'); document.getElementById('expenseSpecifyDesc').required = true; }
+      else { specifyDiv.classList.add('hidden'); document.getElementById('expenseSpecifyDesc').required = false; }
 
-      if (type === 'Internal Partner Transfer') {
-        partnerTransferDiv.classList.remove('hidden');
-        regularPaidByDiv.classList.add('hidden');
-      } else {
-        partnerTransferDiv.classList.add('hidden');
-        regularPaidByDiv.classList.remove('hidden');
-      }
+      if (type === 'Internal Partner Transfer') { partnerTransferDiv.classList.remove('hidden'); regularPaidByDiv.classList.add('hidden'); }
+      else { partnerTransferDiv.classList.add('hidden'); regularPaidByDiv.classList.remove('hidden'); }
 
-      if (type === 'Marketing & Promotions') {
-        marketingPlatformDiv.classList.remove('hidden');
-      } else {
-        marketingPlatformDiv.classList.add('hidden');
-      }
+      if (type === 'Marketing & Promotions') marketingPlatformDiv.classList.remove('hidden');
+      else marketingPlatformDiv.classList.add('hidden');
     }
 
     async function handleRecordExpense(e) {
       e.preventDefault();
       const btn = document.getElementById('saveExpenseBtn');
-      btn.disabled = true;
-      btn.innerText = "Saving Entry...";
+      btn.disabled = true; btn.innerText = "Saving Entry...";
 
       const type = document.getElementById('expenseType').value;
       const amount = parseFloat(document.getElementById('expenseAmount').value);
@@ -2238,29 +1755,16 @@
       }
 
       let finalDescription = type;
-      if (type === 'Internal Partner Transfer') {
-        finalDescription = `Reimbursement: ${paidBy} paid to ${paidTo}` + (notes ? ` (${notes})` : '');
-      } else if (type === 'Marketing & Promotions') {
-        finalDescription = `Marketing Spend on ${commissionPartner}` + (notes ? ` (${notes})` : '');
-      } else if (type === 'Other Payment') {
+      if (type === 'Internal Partner Transfer') finalDescription = `Reimbursement: ${paidBy} paid to ${paidTo}` + (notes ? ` (${notes})` : '');
+      else if (type === 'Marketing & Promotions') finalDescription = `Marketing Spend on ${commissionPartner}` + (notes ? ` (${notes})` : '');
+      else if (type === 'Other Payment') {
         finalDescription = specifyDesc ? `Other: ${specifyDesc}` : 'Other Payment';
         if (notes) finalDescription += ` [${notes}]`;
-      } else {
-        if (notes) finalDescription += ` (${notes})`;
-      }
+      } else if (notes) finalDescription += ` (${notes})`;
 
-      const payload = {
-        expense_type: type,
-        amount: amount,
-        paid_by: paidBy,
-        paid_to: paidTo,
-        commission_partner: commissionPartner,
-        notes: finalDescription
-      };
-
+      const payload = { expense_type: type, amount: amount, paid_by: paidBy, paid_to: paidTo, commission_partner: commissionPartner, notes: finalDescription };
       const { error } = await client.from('expenses_account').insert([payload]);
-      btn.disabled = false;
-      btn.innerText = "Save Entry to Ledger";
+      btn.disabled = false; btn.innerText = "Save Entry to Ledger";
 
       if (error) alert("Error saving record: " + error.message);
       else {
@@ -2275,108 +1779,71 @@
 
     function renderExpenses() {
       const tbody = document.getElementById('expensesTableBody');
-      let totalDelivery = 0;
-      let totalFreight = 0;
-      let totalMarketing = 0;
-      let totalOtherExpense = 0;
-      let totalOperationalExpenses = 0;
-      let paidByAsif = 0;
-      let paidByKhalid = 0;
+      let totalDelivery = 0, totalFreight = 0, totalMarketing = 0, totalOtherExpense = 0, totalOperationalExpenses = 0;
 
       allExpenses.forEach(exp => {
         const amt = parseFloat(exp.amount) || 0;
-        
-        if (exp.paid_by === 'Asif Ali') paidByAsif += amt;
-        if (exp.paid_by === 'Khalid Saleem') paidByKhalid += amt;
-
-        if (exp.expense_type === 'Delivery Charges Paid') {
-          totalDelivery += amt;
-          totalOperationalExpenses += amt;
-        } else if (exp.expense_type === 'Supply Freight & Cargo') {
-          totalFreight += amt;
-          totalOperationalExpenses += amt;
-        } else if (exp.expense_type === 'Marketing & Promotions') {
-          totalMarketing += amt;
-          totalOperationalExpenses += amt;
-        } else if (exp.expense_type === 'Other Payment' || exp.expense_type === 'Miscellaneous Payment') {
-          totalOtherExpense += amt;
-          totalOperationalExpenses += amt;
-        }
+        if (exp.expense_type === 'Delivery Charges Paid') { totalDelivery += amt; totalOperationalExpenses += amt; }
+        else if (exp.expense_type === 'Supply Freight & Cargo') { totalFreight += amt; totalOperationalExpenses += amt; }
+        else if (exp.expense_type === 'Marketing & Promotions') { totalMarketing += amt; totalOperationalExpenses += amt; }
+        else if (exp.expense_type === 'Other Payment' || exp.expense_type === 'Miscellaneous Payment') { totalOtherExpense += amt; totalOperationalExpenses += amt; }
       });
 
-      // Calculate Total Cash Collected in Hand & Courier Deductions
-      let totalCustomerCash = 0;
-      let totalDispatchedUnits = 0;
-      let totalCourierTaxDeducted = 0;
+      // Sales / received / pending (only Confirmed, Dispatched, Closed orders)
+      let totalSales = 0, soldUnits = 0, paidUnits = 0;
+      let grossReceived = 0, cashInHand = 0, courierTax = 0, pendingAmount = 0;
 
       allOrders.forEach(o => {
-        const isClosedOrDispatched = o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed';
-        const qty = parseInt(o.quantity) || 1;
-
-        if (isClosedOrDispatched) {
-          totalDispatchedUnits += qty;
-        }
-
-        if (o.payment_status === 'Received') {
-          const isCourier = (o.delivery_channel || '').toLowerCase().includes('courier');
-          const collected = parseFloat(o.received_cash_amount) || (parseFloat(o.total_amount) || 0);
-          
-          if (isCourier) {
-            const tax = Math.round(collected * 0.04);
-            totalCourierTaxDeducted += tax;
-            totalCustomerCash += (collected - tax);
-          } else {
-            totalCustomerCash += collected;
-          }
-        }
+        if (!SETTLEMENT_STATUSES.includes(o.order_status)) return;
+        const m = orderMoney(o);
+        totalSales += m.total;
+        soldUnits += m.qty;
+        paidUnits += m.paidUnits;
+        grossReceived += m.collected;
+        cashInHand += m.net;
+        courierTax += m.tax;
+        pendingAmount += m.pending;
       });
 
       allInstallments.forEach(i => {
-        totalCustomerCash += (parseFloat(i.advance_amount) || 0);
+        totalSales += parseFloat(i.total_amount) || 0;
+        const adv = parseFloat(i.advance_amount) || 0;
+        grossReceived += adv;
+        cashInHand += adv;
+        pendingAmount += parseFloat(i.remaining_amount) || 0;
       });
 
-      // Purchasing Cost: Rs. 1,750 per unit sold
-      const totalPurchasingCost = totalDispatchedUnits * 1750;
+      const pendingUnits = Math.max(0, soldUnits - paidUnits);
 
-      // Partner Profit: Exactly Rs. 200 per sold unit for Asif, and Rs. 200 per sold unit for Khalid
-      const profitAsifEarned = totalDispatchedUnits * 200;
-      const profitKhalidEarned = totalDispatchedUnits * 200;
-      const totalPartnerProfits = profitAsifEarned + profitKhalidEarned;
+      // Cost & profit ONLY for units whose payment was received
+      const totalPurchasingCost = Math.round(paidUnits * 1750);
+      const profitEach = Math.round(paidUnits * 200);       // e.g. 15 paid units => Rs. 3,000 each
+      const totalPartnerProfits = profitEach * 2;
+      const reinvestmentProfit = cashInHand - totalOperationalExpenses - totalPurchasingCost - totalPartnerProfits;
 
-      // Net Reinvestment Profit Remaining:
-      // Cash in Hand - Operational Expenses - Purchasing Cost (1750/u) - Partner Profits (200/u each)
-      const reinvestmentProfit = totalCustomerCash - totalOperationalExpenses - totalPurchasingCost - totalPartnerProfits;
+      const set = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+      set('statAccCashReceived', rs(cashInHand));
+      set('statAccTotalExpenses', rs(totalOperationalExpenses));
+      set('statAccTotalProfitShare', rs(totalPartnerProfits));
+      set('statAccProfitSub', `Asif (${rs(profitEach)}) + Khalid (${rs(profitEach)})`);
+      set('statAccNetRetainedProfit', rs(reinvestmentProfit));
+      set('statTotalDeliveryExpense', rs(totalDelivery));
+      set('statTotalFreightExpense', rs(totalFreight));
+      set('statTotalMarketingExpense', rs(totalMarketing));
+      set('statTotalOtherExpense', rs(totalOtherExpense));
+      set('statTotalPurchasingCost', rs(totalPurchasingCost));
+      set('statTotalCourierTax', rs(courierTax));
+      set('statProfitAsif', rs(profitEach));
+      set('statProfitKhalid', rs(profitEach));
 
-      const accCash = document.getElementById('statAccCashReceived');
-      const accExp = document.getElementById('statAccTotalExpenses');
-      const accProf = document.getElementById('statAccTotalProfitShare');
-      const accRet = document.getElementById('statAccNetRetainedProfit');
-
-      if (accCash) accCash.innerText = 'Rs. ' + totalCustomerCash.toLocaleString();
-      if (accExp) accExp.innerText = 'Rs. ' + totalOperationalExpenses.toLocaleString();
-      if (accProf) accProf.innerText = 'Rs. ' + totalPartnerProfits.toLocaleString();
-      if (accRet) accRet.innerText = 'Rs. ' + reinvestmentProfit.toLocaleString();
-
-      const delEl = document.getElementById('statTotalDeliveryExpense');
-      const frEl = document.getElementById('statTotalFreightExpense');
-      const mktEl = document.getElementById('statTotalMarketingExpense');
-      const othEl = document.getElementById('statTotalOtherExpense');
-      const purEl = document.getElementById('statTotalPurchasingCost');
-      const taxEl = document.getElementById('statTotalCourierTax');
-      const profAEl = document.getElementById('statProfitAsif');
-      const profKEl = document.getElementById('statProfitKhalid');
-
-      if (delEl) delEl.innerText = 'Rs. ' + totalDelivery.toLocaleString();
-      if (frEl) frEl.innerText = 'Rs. ' + totalFreight.toLocaleString();
-      if (mktEl) mktEl.innerText = 'Rs. ' + totalMarketing.toLocaleString();
-      if (othEl) othEl.innerText = 'Rs. ' + totalOtherExpense.toLocaleString();
-      if (purEl) purEl.innerText = 'Rs. ' + totalPurchasingCost.toLocaleString();
-      if (taxEl) taxEl.innerText = 'Rs. ' + totalCourierTaxDeducted.toLocaleString();
-      if (profAEl) profAEl.innerText = 'Rs. ' + profitAsifEarned.toLocaleString();
-      if (profKEl) profKEl.innerText = 'Rs. ' + profitKhalidEarned.toLocaleString();
+      set('accTotalSales', rs(totalSales));
+      set('accSoldUnits', `${fmtUnits(soldUnits)} units sold`);
+      set('accReceivedGross', rs(grossReceived));
+      set('accPaidUnits', `${fmtUnits(paidUnits)} units paid`);
+      set('accPendingAmount', rs(pendingAmount));
+      set('accPendingUnits', `${fmtUnits(pendingUnits)} units pending`);
 
       if (!tbody) return;
-
       if (allExpenses.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No records found.</td></tr>`;
         return;
@@ -2384,28 +1851,18 @@
 
       tbody.innerHTML = allExpenses.map(exp => {
         let badge = `<span class="font-bold text-slate-800">${exp.paid_by || 'Business'}</span>`;
-        if (exp.expense_type === 'Internal Partner Transfer' && exp.paid_to) {
-          badge = `<span class="bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded-md font-bold text-xs">${exp.paid_by} ➔ ${exp.paid_to}</span>`;
-        } else if (exp.expense_type === 'Marketing & Promotions') {
-          badge = `<span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded-md font-bold text-xs">📢 ${exp.commission_partner || 'Marketing'}</span>`;
-        } else if (exp.expense_type === 'Other Payment') {
-          badge = `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md font-bold text-xs">📝 ${exp.paid_by || 'Business'}</span>`;
-        }
-
+        if (exp.expense_type === 'Internal Partner Transfer' && exp.paid_to) badge = `<span class="bg-indigo-100 text-indigo-900 px-2 py-0.5 rounded-md font-bold text-xs">${exp.paid_by} ➔ ${exp.paid_to}</span>`;
+        else if (exp.expense_type === 'Marketing & Promotions') badge = `<span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded-md font-bold text-xs">📢 ${exp.commission_partner || 'Marketing'}</span>`;
+        else if (exp.expense_type === 'Other Payment') badge = `<span class="bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md font-bold text-xs">📝 ${exp.paid_by || 'Business'}</span>`;
         return `
           <tr class="hover:bg-slate-50 transition border-b">
             <td class="py-2.5 px-3 text-slate-500 font-medium">${exp.created_at ? new Date(exp.created_at).toLocaleDateString() : 'Today'}</td>
             <td class="py-2.5 px-3 font-bold text-slate-800">${exp.expense_type}</td>
             <td class="py-2.5 px-3 text-slate-600">${exp.notes || '—'}</td>
             <td class="py-2.5 px-3">${badge}</td>
-            <td class="py-2.5 px-3 text-right font-black text-rose-600">
-              Rs. ${Number(exp.amount).toLocaleString()}
-            </td>
-            <td class="py-2.5 px-3 text-center no-print">
-              <button onclick="deleteExpense(${exp.id})" class="text-slate-400 hover:text-rose-600 text-xs font-bold" title="Delete">🗑</button>
-            </td>
-          </tr>
-        `;
+            <td class="py-2.5 px-3 text-right font-black text-rose-600">Rs. ${Number(exp.amount).toLocaleString()}</td>
+            <td class="py-2.5 px-3 text-center no-print"><button onclick="deleteExpense(${exp.id})" class="text-slate-400 hover:text-rose-600 text-xs font-bold" title="Delete">🗑</button></td>
+          </tr>`;
       }).join('');
     }
 
@@ -2416,25 +1873,21 @@
       else await loadExpenses();
     }
 
-    // --- INSTALLMENTS & KHATA SYSTEM ---
+    // --- INSTALLMENTS & KHATA ---
     function calcRemainingInstallment() {
       const total = parseFloat(document.getElementById('instTotalBill').value) || 0;
       const adv = parseFloat(document.getElementById('instAdvanceAmount').value) || 0;
-      const remaining = Math.max(0, total - adv);
       const remEl = document.getElementById('instRemainingText');
-      if (remEl) remEl.innerText = 'Rs. ' + remaining.toLocaleString();
+      if (remEl) remEl.innerText = 'Rs. ' + Math.max(0, total - adv).toLocaleString();
     }
 
     async function handleRecordInstallment(e) {
       e.preventDefault();
       const btn = document.getElementById('saveInstallmentBtn');
-      btn.disabled = true;
-      btn.innerText = "Creating Account...";
-
+      btn.disabled = true; btn.innerText = "Creating Account...";
       const total = parseFloat(document.getElementById('instTotalBill').value) || 0;
       const advance = parseFloat(document.getElementById('instAdvanceAmount').value) || 0;
       const remaining = Math.max(0, total - advance);
-
       const payload = {
         customer_name: document.getElementById('instCustName').value.trim(),
         customer_phone: document.getElementById('instCustPhone').value.trim(),
@@ -2446,20 +1899,12 @@
         installment_status: remaining === 0 ? 'Completed' : 'Active',
         notes: document.getElementById('instNotes').value.trim()
       };
-
       const { error } = await client.from('installment_orders').insert([payload]);
-      btn.disabled = false;
-      btn.innerText = "Create Installment Account";
-
+      btn.disabled = false; btn.innerText = "Create Installment Account";
       if (error) alert("Error creating installment: " + error.message);
       else {
         alert("Installment account created! Advance payment added to cash on hand.");
-        document.getElementById('instCustName').value = '';
-        document.getElementById('instCustPhone').value = '';
-        document.getElementById('instCustAddress').value = '';
-        document.getElementById('instTotalBill').value = '';
-        document.getElementById('instAdvanceAmount').value = '';
-        document.getElementById('instNotes').value = '';
+        ['instCustName', 'instCustPhone', 'instCustAddress', 'instTotalBill', 'instAdvanceAmount', 'instNotes'].forEach(id => document.getElementById(id).value = '');
         calcRemainingInstallment();
         await loadAllData();
       }
@@ -2468,34 +1913,22 @@
     function renderInstallments() {
       const tbody = document.getElementById('installmentsTableBody');
       if (!tbody) return;
-      let totalBooked = 0;
-      let totalAdvance = 0;
-      let totalRemaining = 0;
-      let activeCount = 0;
+      let totalBooked = 0, totalAdvance = 0, totalRemaining = 0, activeCount = 0;
 
       allInstallments.forEach(item => {
         const tot = parseFloat(item.total_amount) || 0;
         const adv = parseFloat(item.advance_amount) || 0;
         const rem = parseFloat(item.remaining_amount) || 0;
-
-        totalBooked += tot;
-        totalAdvance += adv;
-        totalRemaining += rem;
-
+        totalBooked += tot; totalAdvance += adv; totalRemaining += rem;
         if (item.installment_status === 'Active' && rem > 0) activeCount++;
       });
 
-      const tbEl = document.getElementById('statInstTotalBooked');
-      const taEl = document.getElementById('statInstAdvanceCollected');
-      const trEl = document.getElementById('statInstRemainingDue');
-      const acEl = document.getElementById('statInstActiveCount');
-      const cbEl = document.getElementById('installmentsCountBadge');
-
-      if (tbEl) tbEl.innerText = 'Rs. ' + totalBooked.toLocaleString();
-      if (taEl) taEl.innerText = 'Rs. ' + totalAdvance.toLocaleString();
-      if (trEl) trEl.innerText = 'Rs. ' + totalRemaining.toLocaleString();
-      if (acEl) acEl.innerText = activeCount;
-      if (cbEl) cbEl.innerText = activeCount;
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+      set('statInstTotalBooked', 'Rs. ' + totalBooked.toLocaleString());
+      set('statInstAdvanceCollected', 'Rs. ' + totalAdvance.toLocaleString());
+      set('statInstRemainingDue', 'Rs. ' + totalRemaining.toLocaleString());
+      set('statInstActiveCount', activeCount);
+      set('installmentsCountBadge', activeCount);
 
       if (allInstallments.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-400">No installment accounts recorded yet.</td></tr>`;
@@ -2507,12 +1940,9 @@
         const formattedPhone = cleanPhone.startsWith('0') ? '92' + cleanPhone.slice(1) : cleanPhone;
         const rem = parseFloat(item.remaining_amount) || 0;
         const isCompleted = item.installment_status === 'Completed' || rem <= 0;
-
-        let statusBadge = `<span class="bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold text-xs">Active Due</span>`;
-        if (isCompleted) {
-          statusBadge = `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold text-xs">Completed</span>`;
-        }
-
+        const statusBadge = isCompleted
+          ? `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold text-xs">Completed</span>`
+          : `<span class="bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold text-xs">Active Due</span>`;
         return `
           <tr class="hover:bg-slate-50 transition border-b">
             <td class="py-2.5 px-3">
@@ -2531,39 +1961,25 @@
             <td class="py-2.5 px-3">${statusBadge}</td>
             <td class="py-2.5 px-3 text-center no-print">
               <div class="flex items-center justify-center gap-1.5">
-                ${!isCompleted ? `
-                  <button onclick="collectInstallmentPayment(${item.id},${rem})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm transition">
-                    💵 Collect Cash
-                  </button>
-                ` : '<span class="text-xs text-slate-400 font-bold">Clear</span>'}
+                ${!isCompleted ? `<button onclick="collectInstallmentPayment(${item.id},${rem})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-lg text-xs font-bold shadow-sm transition">💵 Collect Cash</button>` : '<span class="text-xs text-slate-400 font-bold">Clear</span>'}
                 <button onclick="deleteInstallment(${item.id})" class="text-slate-400 hover:text-rose-600 text-xs font-bold ml-1" title="Delete">🗑</button>
               </div>
             </td>
-          </tr>
-        `;
+          </tr>`;
       }).join('');
     }
 
     async function collectInstallmentPayment(id, currentRemaining) {
       const payment = prompt(`Current Remaining Due: Rs. ${currentRemaining}\nEnter amount customer is paying now (Rs.):`, currentRemaining);
       if (!payment) return;
-
       const paidAmount = parseFloat(payment);
       if (isNaN(paidAmount) || paidAmount <= 0) return alert("Please enter a valid payment amount.");
-
       const item = allInstallments.find(i => i.id === id);
       if (!item) return;
-
       const newRemaining = Math.max(0, currentRemaining - paidAmount);
       const newAdvance = (parseFloat(item.advance_amount) || 0) + paidAmount;
       const newStatus = newRemaining === 0 ? 'Completed' : 'Active';
-
-      const { error } = await client.from('installment_orders').update({
-        remaining_amount: newRemaining,
-        advance_amount: newAdvance,
-        installment_status: newStatus
-      }).eq('id', id);
-
+      const { error } = await client.from('installment_orders').update({ remaining_amount: newRemaining, advance_amount: newAdvance, installment_status: newStatus }).eq('id', id);
       if (error) alert("Error updating payment: " + error.message);
       else {
         alert(`Collected Rs. ${paidAmount.toLocaleString()}! Remaining balance: Rs. ${newRemaining.toLocaleString()}. Added directly to cash drawer.`);
@@ -2579,125 +1995,62 @@
     }
 
     // --- EXPORTS ---
-    function exportInstallmentsCSV() {
-      if (allInstallments.length === 0) return alert("No installment records to export.");
-      const headers = ["ID", "Customer Name", "Phone", "Address", "Total Bill (PKR)", "Advance (PKR)", "Remaining (PKR)", "Due Date", "Status", "Notes"];
-      const rows = allInstallments.map(i => [
-        i.id,
-        `"${(i.customer_name || '').replace(/"/g, '""')}"`,
-        `"${(i.customer_phone || '').replace(/"/g, '""')}"`,
-        `"${(i.customer_address || '').replace(/"/g, '""')}"`,
-        i.total_amount,
-        i.advance_amount,
-        i.remaining_amount,
-        i.due_date,
-        i.installment_status,
-        `"${(i.notes || '').replace(/"/g, '""')}"`
-      ]);
+    function downloadCSV(headers, rows, name) {
       const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
       const link = document.createElement("a");
       link.setAttribute("href", encodeURI(csvContent));
-      link.setAttribute("download", `KS_Traders_Installments_Khata_${new Date().toISOString().slice(0,10)}.csv`);
+      link.setAttribute("download", `${name}_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+    const q = v => `"${String(v === null || v === undefined ? '' : v).replace(/"/g, '""')}"`;
+
+    function exportInstallmentsCSV() {
+      if (allInstallments.length === 0) return alert("No installment records to export.");
+      const headers = ["ID", "Customer Name", "Phone", "Address", "Total Bill (PKR)", "Advance (PKR)", "Remaining (PKR)", "Due Date", "Status", "Notes"];
+      const rows = allInstallments.map(i => [i.id, q(i.customer_name), q(i.customer_phone), q(i.customer_address), i.total_amount, i.advance_amount, i.remaining_amount, i.due_date, i.installment_status, q(i.notes)]);
+      downloadCSV(headers, rows, 'KS_Traders_Installments_Khata');
     }
 
     function exportAccountsCSV() {
       if (allExpenses.length === 0) return alert("No expenses to export.");
       const headers = ["ID", "Date", "Expense Type", "Description / Details", "Paid By", "Amount (PKR)"];
-      const rows = allExpenses.map(e => [
-        e.id,
-        e.created_at ? new Date(e.created_at).toLocaleDateString() : '',
-        `"${(e.expense_type || '').replace(/"/g, '""')}"`,
-        `"${(e.notes || '').replace(/"/g, '""')}"`,
-        `"${(e.paid_by || '').replace(/"/g, '""')}"`,
-        e.amount
-      ]);
-      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csvContent));
-      link.setAttribute("download", `KS_Traders_Accounts_Expenses_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const rows = allExpenses.map(e => [e.id, e.created_at ? new Date(e.created_at).toLocaleDateString() : '', q(e.expense_type), q(e.notes), q(e.paid_by), e.amount]);
+      downloadCSV(headers, rows, 'KS_Traders_Accounts_Expenses');
     }
 
     function exportConfirmedCustomersCSV() {
-      const confirmedList = allOrders.filter(o => o.order_status === 'Confirmed' || o.order_status === 'Dispatched' || o.order_status === 'Delivered / Closed');
+      const confirmedList = allOrders.filter(o => SETTLEMENT_STATUSES.includes(o.order_status));
       if (confirmedList.length === 0) return alert("No confirmed orders to export.");
       const headers = ["Order ID", "Customer Name", "Phone / WhatsApp", "Address", "Shade", "Quantity", "Total Bill (PKR)", "Route", "Payment Status", "Cash Collected", "Courier Tax (4%)", "Net In-Hand", "Remaining Balance", "Date"];
       const rows = confirmedList.map(o => {
-        const isCourier = (o.delivery_channel || '').toLowerCase().includes('courier');
-        const collected = parseFloat(o.received_cash_amount) || (o.payment_status === 'Received' ? o.total_amount : 0);
-        const tax = isCourier && collected > 0 ? Math.round(collected * 0.04) : 0;
-        const net = collected - tax;
-        const remaining = Math.max(0, (o.total_amount || 0) - collected);
-
-        return [
-          o.id,
-          `"${(o.customer_name || '').replace(/"/g, '""')}"`,
-          `"${(o.customer_phone || '').replace(/"/g, '""')}"`,
-          `"${(o.customer_address || '').replace(/"/g, '""')}"`,
-          `"${(o.shade_name || '').replace(/"/g, '""')}"`,
-          o.quantity,
-          o.total_amount || (o.quantity * 2500),
-          o.delivery_channel || 'Courier Service',
-          o.payment_status || 'Pending',
-          collected,
-          tax,
-          net,
-          remaining,
-          o.created_at ? new Date(o.created_at).toLocaleDateString() : ''
-        ];
+        const m = orderMoney(o);
+        return [o.id, q(o.customer_name), q(o.customer_phone), q(o.customer_address), q(o.shade_name), o.quantity, m.total, o.delivery_channel || 'Courier Service', o.payment_status || 'Pending', m.collected, m.tax, m.net, m.pending, o.created_at ? new Date(o.created_at).toLocaleDateString() : ''];
       });
-      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csvContent));
-      link.setAttribute("download", `KS_Traders_Confirmed_Orders_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      downloadCSV(headers, rows, 'KS_Traders_Confirmed_Orders');
     }
 
     function exportToCSV() {
       if (allOrders.length === 0) return alert("No orders available to export.");
       const headers = ["Order ID", "Date", "Customer Name", "Phone", "Address", "Shade", "Quantity", "Total Bill", "Sold By", "Status", "Delivery Route", "Payment Status", "Cash Received", "Remaining Cash"];
       const rows = allOrders.map(o => [
-        o.id,
-        o.created_at ? new Date(o.created_at).toLocaleDateString() : '',
-        `"${(o.customer_name || '').replace(/"/g, '""')}"`,
-        `"${(o.customer_phone || '').replace(/"/g, '""')}"`,
-        `"${(o.customer_address || '').replace(/"/g, '""')}"`,
-        `"${(o.shade_name || '').replace(/"/g, '""')}"`,
-        o.quantity,
-        o.total_amount,
-        `"${(o.sold_by || '').replace(/"/g, '""')}"`,
-        o.order_status,
-        o.delivery_channel || 'Courier Service',
-        o.payment_status || 'Pending',
+        o.id, o.created_at ? new Date(o.created_at).toLocaleDateString() : '',
+        q(o.customer_name), q(o.customer_phone), q(o.customer_address), q(o.shade_name),
+        o.quantity, o.total_amount, q(o.sold_by), o.order_status, o.delivery_channel || 'Courier Service', o.payment_status || 'Pending',
         (o.received_cash_amount !== null && o.received_cash_amount !== undefined) ? o.received_cash_amount : (o.payment_status === 'Received' ? o.total_amount : '0'),
         (o.remaining_cash_amount !== null && o.remaining_cash_amount !== undefined) ? o.remaining_cash_amount : (o.payment_status === 'Received' ? 0 : o.total_amount)
       ]);
-      const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const link = document.createElement("a");
-      link.setAttribute("href", encodeURI(csvContent));
-      link.setAttribute("download", `KS_Traders_All_Orders_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      downloadCSV(headers, rows, 'KS_Traders_All_Orders');
     }
 
     async function handleCSVImport(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = async function(e) {
-        const text = e.target.result;
-        const lines = text.split('\n').filter(line => line.trim() !== '');
+        const lines = e.target.result.split('\n').filter(line => line.trim() !== '');
         if (lines.length < 2) return alert("CSV file seems empty or invalid.");
-
         const rowsToInsert = [];
         for (let i = 1; i < lines.length; i++) {
           const cols = lines[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
@@ -2717,14 +2070,10 @@
             });
           }
         }
-
         if (confirm(`Found ${rowsToInsert.length} orders in CSV. Import them into Supabase?`)) {
           const { error } = await client.from('sales_orders').insert(rowsToInsert);
           if (error) alert("Error: " + error.message);
-          else {
-            alert(`Imported ${rowsToInsert.length} orders!`);
-            await loadAllData();
-          }
+          else { alert(`Imported ${rowsToInsert.length} orders!`); await loadAllData(); }
         }
       };
       reader.readAsText(file);
